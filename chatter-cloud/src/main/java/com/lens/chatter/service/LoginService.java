@@ -1,8 +1,8 @@
 package com.lens.chatter.service;
 
 import com.lens.chatter.constant.ErrorConstants;
+import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.mapper.LoginMapper;
-import com.lens.chatter.model.dto.LoginDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.repository.UserRepository;
@@ -23,20 +23,19 @@ public class LoginService {
     @Autowired
     private LoginMapper mapper;
 
-
-    public LoginResource login(LoginDto loginDto) throws IllegalAccessException {
-        User user = userRepository.findByEmail(loginDto.getEmail());
+    public LoginResource login(String password, String email) {
+        User user = userRepository.findByEmail(email);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if (encoder.matches(loginDto.getPassword(), user.getPassword())) {
-            if(!user.isConfirmed()){
-                throw new IllegalAccessException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
+        if (encoder.matches(password, user.getPassword())) {
+            if (!user.isConfirmed()) {
+                throw new UnauthorizedException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
             }
             String token = jwtGenerator.generateToken(user.getId(), user.getRole());
-            LoginResource resource = mapper.toResource(user);
+            LoginResource resource =  mapper.toResource(user);
             resource.setToken(token);
             return resource;
         } else {
-            throw new IllegalAccessException(ErrorConstants.WRONG_EMAIL_OR_PASSWORD);
+            throw new UnauthorizedException(ErrorConstants.WRONG_EMAIL_OR_PASSWORD);
         }
     }
 }

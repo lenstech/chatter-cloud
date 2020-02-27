@@ -1,7 +1,6 @@
 package com.lens.chatter.service;
 
-import com.lens.chatter.constant.ErrorConstants;
-import com.lens.chatter.exception.BadExceptionRequest;
+import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtResolver;
@@ -31,12 +30,12 @@ public class ResetPasswordService {
     public void resetPassword(String password, String confirmationToken) {
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         UUID id = jwtResolver.getIdFromToken(confirmationToken);
-        User user = userRepository.findById(id);
+        User user = userRepository.findUserById(id);
         if (user == null) {
-            throw new BadExceptionRequest(USER_NOT_EXIST);
+            throw new BadRequestException(USER_NOT_EXIST);
         }
         if(encoder.matches(password,user.getPassword())){
-            throw new BadExceptionRequest(NEW_PASSWORD_CANNOT_BE_SAME_AS_OLD);
+            throw new BadRequestException(NEW_PASSWORD_CANNOT_BE_SAME_AS_OLD);
         }
         user.setPassword(encoder.encode(password));
         user.setConfirmed(true);

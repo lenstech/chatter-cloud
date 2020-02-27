@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,String>, JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User,UUID>{
 
-    User findById(UUID id);
+    User findUserById(UUID id);
 
     User findByEmail(String email);
 

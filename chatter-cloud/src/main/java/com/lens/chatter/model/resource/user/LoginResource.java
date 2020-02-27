@@ -1,6 +1,7 @@
 package com.lens.chatter.model.resource.user;
 
 import com.lens.chatter.constant.Role;
+import com.lens.chatter.model.entity.Department;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +15,7 @@ import java.util.UUID;
 @Resource
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResource {
+public class LoginResource extends CompleteUserResource{
 
     private String token;
-
-    private UUID userId;
-
-    private Role role;
-
-    private String name;
-
-    private String surname;
-
-    private String department;
-
-    private String userFirmId;
-
 }

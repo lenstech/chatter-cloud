@@ -26,4 +26,6 @@ public class ErrorConstants {
     public static final String NOT_AUTHORIZED_FOR_OPERATION = "You are not authorized for this operation!";
     public static final String USER_NOT_EXIST = "User could not be found!";
 
+    public static final String ID_IS_NOT_EXIST = "Id is not exist";
+
 }

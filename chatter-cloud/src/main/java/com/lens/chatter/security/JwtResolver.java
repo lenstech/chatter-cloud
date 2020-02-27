@@ -1,7 +1,7 @@
 package com.lens.chatter.security;
 
 import com.lens.chatter.constant.Role;
-import com.lens.chatter.exception.BadExceptionRequest;
+import com.lens.chatter.exception.BadRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class JwtResolver {
         try{
          idString = getClaimFromToken(token, Claims::getSubject);
         } catch (Exception e){
-            throw new BadExceptionRequest(INVALID_TOKEN);
+            throw new BadRequestException(INVALID_TOKEN);
         }
         return UUID.fromString(idString);
     }
@@ -34,7 +34,7 @@ public class JwtResolver {
         try{
          return Role.valueOf(getClaimFromToken(token, Claims::getAudience));
         } catch (Exception e){
-            throw new BadExceptionRequest(INVALID_TOKEN);
+            throw new BadRequestException(INVALID_TOKEN);
         }
     }
 

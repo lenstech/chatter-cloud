@@ -3,14 +3,11 @@ package com.lens.chatter.model.entity;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.constant.Role;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * Created by Emir Gökdemir
@@ -19,7 +16,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User extends AbstractEntity {
 
     @NotNull
@@ -41,7 +38,9 @@ public class User extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String department;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Department department;
 
 // TODO: 16 Şub 2020  photo will be added
 

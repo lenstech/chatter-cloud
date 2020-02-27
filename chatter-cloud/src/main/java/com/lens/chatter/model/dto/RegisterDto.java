@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 /**
  * Created by Emir Gökdemir
  * on 11 Şub 2020
@@ -24,7 +26,7 @@ public class RegisterDto {
 
     private Role role;
 
-    private String department;
+    private UUID departmentId;
 
     private String userFirmId;
 

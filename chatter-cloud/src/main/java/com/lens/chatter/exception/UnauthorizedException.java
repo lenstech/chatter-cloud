@@ -7,12 +7,13 @@ import org.springframework.web.client.HttpClientErrorException;
 
 /**
  * Created by Emir Gökdemir
- * on 20 Şub 2020
+ * on 24 Şub 2020
  */
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class BadExceptionRequest extends HttpClientErrorException {
+@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+public class UnauthorizedException extends HttpClientErrorException {
 
-    public BadExceptionRequest(@Nullable String statusText) {
-        super(HttpStatus.BAD_REQUEST, statusText);
+    public UnauthorizedException(@Nullable String statusText) {
+        super(HttpStatus.UNAUTHORIZED, statusText);
     }
+
 }

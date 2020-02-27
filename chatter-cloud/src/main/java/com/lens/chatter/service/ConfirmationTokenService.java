@@ -1,7 +1,7 @@
 package com.lens.chatter.service;
 
 import com.lens.chatter.constant.ErrorConstants;
-import com.lens.chatter.exception.BadExceptionRequest;
+import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
@@ -65,7 +65,7 @@ public class ConfirmationTokenService {
         try {
             javaMailSender.send(mailMessage);
         } catch (MailException exception) {
-            throw new BadExceptionRequest(ErrorConstants.MAIL_SEND_FAILED);
+            throw new BadRequestException(ErrorConstants.MAIL_SEND_FAILED);
         }
     }
 }

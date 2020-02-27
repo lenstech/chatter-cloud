@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -25,7 +26,7 @@ import static com.lens.chatter.constant.GeneralConstants.ID_LENGTH;
 @AllArgsConstructor
 @ToString
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractEntity {
+public class AbstractEntity <ID extends Serializable> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "system-uuid")

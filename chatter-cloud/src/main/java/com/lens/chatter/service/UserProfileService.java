@@ -1,6 +1,6 @@
 package com.lens.chatter.service;
 
-import com.lens.chatter.exception.BadExceptionRequest;
+import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.MinimalUserMapper;
 import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.RegisterDto;
@@ -30,9 +30,9 @@ public class UserProfileService {
     private MinimalUserMapper minimalUserMapper;
 
     public CompleteUserResource getSelfProfile(UUID selfId) {
-        User selfUser = userRepository.findById(selfId);
+        User selfUser = userRepository.findUserById(selfId);
         if (selfUser == null) {
-            throw new BadExceptionRequest(USER_NOT_EXIST);
+            throw new BadRequestException(USER_NOT_EXIST);
         } else {
             return userMapper.toResource(selfUser);
         }
@@ -41,16 +41,16 @@ public class UserProfileService {
     public MinimalUserResource getOtherProfile(String email) {
         User otherUser = userRepository.findByEmail(email);
         if (otherUser == null) {
-            throw new BadExceptionRequest(USER_NOT_EXIST);
+            throw new BadRequestException(USER_NOT_EXIST);
         }
         return minimalUserMapper.toResource(otherUser);
     }
 
     @Transactional
     public CompleteUserResource updateProfile(UUID userId, RegisterDto dto) {
-        User oldUser = userRepository.findById(userId);
+        User oldUser = userRepository.findUserById(userId);
         if (oldUser == null) {
-            throw new BadExceptionRequest(USER_NOT_EXIST);
+            throw new BadRequestException(USER_NOT_EXIST);
         }
         User updatedUser = userMapper.toEntity(dto);
         updatedUser.setId(oldUser.getId());
@@ -62,16 +62,16 @@ public class UserProfileService {
 
     @Transactional
     public CompleteUserResource updatePassword(UUID userId, String oldPassword, String newPassword) {
-        User user = userRepository.findById(userId);
+        User user = userRepository.findUserById(userId);
         if (user == null) {
-            throw new BadExceptionRequest(USER_NOT_EXIST);
+            throw new BadRequestException(USER_NOT_EXIST);
         }
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
         if (!encoder.matches(oldPassword,user.getPassword())){
-            throw new BadExceptionRequest(OLD_PASSWORD_IS_WRONG);
+            throw new BadRequestException(OLD_PASSWORD_IS_WRONG);
         }
         if (encoder.matches(newPassword,user.getPassword())){
-            throw new BadExceptionRequest(NEW_PASSWORD_CANNOT_BE_SAME_AS_OLD);
+            throw new BadRequestException(NEW_PASSWORD_CANNOT_BE_SAME_AS_OLD);
         }
         user.setPassword(encoder.encode(newPassword));
         userRepository.save(user);
