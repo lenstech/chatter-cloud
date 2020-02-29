@@ -27,6 +27,4 @@ public class MinimalUserResource {
 
     private String title;
 
-    private Role role;
-
 }

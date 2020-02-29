@@ -1,16 +1,17 @@
 package com.lens.chatter.repository;
 
+import com.lens.chatter.model.entity.Department;
 import com.lens.chatter.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,UUID>{
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     User findUserById(UUID id);
 
@@ -22,7 +23,9 @@ public interface UserRepository extends JpaRepository<User,UUID>{
 
     Boolean existsByEmail(String email);
 
-    @Query(value = "select * from users where name like '%:name%'",nativeQuery = true)
+    Set<User> findUsersByDepartment(Department department);
+
+    @Query(value = "select * from users where name like '%:name%'", nativeQuery = true)
     List<User> findUsersByName(String name);
 
     List<User> findAll();

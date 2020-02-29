@@ -38,11 +38,11 @@ public class User extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Department department;
-
 // TODO: 16 Şub 2020  photo will be added
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     private String userFirmId;
 
@@ -54,7 +54,6 @@ public class User extends AbstractEntity {
     public String toStringForSearch() {
         return (" " + email +
                 " " + name +
-                " " + surname +
-                " " + department).toLowerCase(/*Locale.ENGLISH*/);
+                " " + surname).toLowerCase(/*Locale.ENGLISH*/);
     }
 }

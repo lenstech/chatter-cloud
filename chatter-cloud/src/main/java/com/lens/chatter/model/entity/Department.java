@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Emir Gökdemir
@@ -15,7 +16,9 @@ import javax.persistence.Table;
 @Table(name = "department")
 public class Department extends AbstractEntity {
 
+    @NotNull
     private String name;
 
+    @NotNull
     private String description;
 }

@@ -28,4 +28,8 @@ public class ErrorConstants {
 
     public static final String ID_IS_NOT_EXIST = "Id is not exist";
 
+    //Department
+    public static final String USER_ALREADY_ADDED_TO_DEPARTMENT = "User already added to department!";
+    public static final String USER_IS_NOT_EXIST = "User is not exist!";
+
 }

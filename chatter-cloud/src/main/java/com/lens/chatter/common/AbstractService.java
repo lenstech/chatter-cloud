@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.lens.chatter.constant.ErrorConstants.ID_IS_NOT_EXIST;
 
@@ -19,44 +17,45 @@ import static com.lens.chatter.constant.ErrorConstants.ID_IS_NOT_EXIST;
  * on 23 Şub 2020
  */
 
-public abstract class AbstractService<T extends AbstractEntity, ID extends Serializable, DTO extends Object, RES extends Object>  {
+public abstract class AbstractService<T extends AbstractEntity, ID extends Serializable, DTO, RES> {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractService.class);
 
     @Autowired
     protected JpaRepository<T, ID> genericRepository;
 
     @Autowired
-    private Converter<DTO,T, RES> genericMapper;
+    private Converter<DTO, T, RES> genericMapper;
 
-    public RES save(DTO dto){
-        this.LOGGER.debug(String.format("Saving the dto [%s].", dto));
+    public RES save(DTO dto) {
+        LOGGER.debug(String.format("Saving the dto [%s].", dto));
         return genericMapper.toResource(genericRepository.save(genericMapper.toEntity(dto)));
     }
 
 
-    public RES get(ID id){
+    public RES get(ID id) {
+        LOGGER.debug("Requesting {id} records.");
         return genericMapper.toResource(genericRepository.findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST)));
     }
 
-    public List<RES> getAll(){
-        this.LOGGER.debug("Requesting all records.");
+    public List<RES> getAll() {
+        LOGGER.debug("Requesting all records.");
         return genericMapper.toResources(genericRepository.findAll());
     }
 
     @Transactional
     public T put(ID id, DTO updatedDto) {
-        this.LOGGER.debug(String.format("Request to update the record [%s].", id));
+        LOGGER.debug(String.format("Request to update the record [%s].", id));
         T theReal = genericRepository.findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
-        if(updatedDto==null){
-            this.LOGGER.error("Entity can not be null.");
+        if (updatedDto == null) {
+            LOGGER.error("Entity can not be null.");
             return null;
         }
-        if(id==null){
-            this.LOGGER.error("ID can not be null.");
+        if (id == null) {
+            LOGGER.error("ID can not be null.");
             return null;
         }
-        T updated=genericMapper.toEntity(updatedDto);
+        T updated = genericMapper.toEntity(updatedDto);
         updated.setId(theReal.getId());
         updated.setCreatedDate(theReal.getCreatedDate());
         return genericRepository.save(updated);
@@ -65,9 +64,9 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
 
     @Transactional
     public void delete(ID id) {
-        this.LOGGER.debug(String.format("Request to delete the record [%s].", id));
-        if(id==null){
-            this.LOGGER.error("ID can not be null.");
+        LOGGER.debug(String.format("Request to delete the record [%s].", id));
+        if (id == null) {
+            LOGGER.error("ID can not be null.");
         }
         T entity = genericRepository.findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         genericRepository.delete(entity);

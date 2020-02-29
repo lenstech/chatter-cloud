@@ -79,4 +79,40 @@ public class DepartmentController {
         return ResponseEntity.ok(SUCCESSFULLY_DELETED);
     }
 
+
+    @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = DepartmentResource.class)
+    @GetMapping("/get-personals")
+    public ResponseEntity getPersonalsOfDepartment(@RequestHeader("Authorization") String token,
+                                                   @RequestParam UUID departmentId) {
+        Role role = jwtResolver.getRoleFromToken(token);
+        if (!role.equals(Role.ADMIN)) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        return ResponseEntity.ok(service.getPersonals(departmentId));
+    }
+
+    @ApiOperation(value = "Add Personal to a Department , it can be done by only Admin", response = DepartmentResource.class)
+    @PutMapping("/add-personal")
+    public ResponseEntity addPersonalToDepartment(@RequestHeader("Authorization") String token,
+                                                  @RequestParam UUID personalUserId,
+                                                  @RequestParam UUID departmentId) {
+        Role role = jwtResolver.getRoleFromToken(token);
+        if (!role.equals(Role.ADMIN)) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        return ResponseEntity.ok(service.addPersonal(departmentId, personalUserId));
+    }
+
+    @ApiOperation(value = "Remove Personal from a Department , it can be done by only Admin", response = DepartmentResource.class)
+    @PutMapping("/remove-personal")
+    public ResponseEntity removePersonalToDepartment(@RequestHeader("Authorization") String token,
+                                                     @RequestParam UUID personalUserId,
+                                                     @RequestParam UUID departmentId) {
+        Role role = jwtResolver.getRoleFromToken(token);
+        if (!role.equals(Role.ADMIN)) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        return ResponseEntity.ok(service.removePersonal(departmentId, personalUserId));
+    }
+
 }
