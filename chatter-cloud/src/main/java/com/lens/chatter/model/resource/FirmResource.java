@@ -7,14 +7,15 @@ import lombok.Setter;
 
 /**
  * Created by Emir Gökdemir
- * on 23 Şub 2020
+ * on 1 Mar 2020
  */
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class DepartmentResource extends AbstractResource {
+public class FirmResource extends AbstractResource {
 
-    private String description;
+    private String city;
 
-    private BranchResource branch;
+    private String taxId;
 }

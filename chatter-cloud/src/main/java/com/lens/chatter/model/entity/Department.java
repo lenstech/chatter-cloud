@@ -3,9 +3,9 @@ package com.lens.chatter.model.entity;
 import com.lens.chatter.common.AbstractEntity;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 /**
  * Created by Emir Gökdemir
@@ -14,11 +14,16 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "department")
-public class Department extends AbstractEntity {
+public class Department extends AbstractEntity<UUID> {
 
     @NotNull
     private String name;
 
     @NotNull
     private String description;
+
+    @NotNull(message = "Branch cannot be blank")
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 }

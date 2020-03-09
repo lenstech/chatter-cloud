@@ -1,14 +1,11 @@
 package com.lens.chatter.common;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 /**
  * DTO-Entity-Resource Converter Interface.
  */
-@Component
 public interface Converter<DTO, Entity, Resource> {
 
     Resource toResource(Entity entity);
@@ -16,4 +13,6 @@ public interface Converter<DTO, Entity, Resource> {
     Entity toEntity(DTO dto);
 
     List<Resource> toResources(List<Entity> entities);
+
+    Set<Resource> toResources(Set<Entity> entities);
 }

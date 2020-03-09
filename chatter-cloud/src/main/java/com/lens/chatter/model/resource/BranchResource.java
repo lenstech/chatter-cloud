@@ -1,20 +1,24 @@
 package com.lens.chatter.model.resource;
 
 import com.lens.chatter.common.AbstractResource;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * Created by Emir Gökdemir
- * on 23 Şub 2020
+ * on 29 Şub 2020
  */
 @Getter
 @Setter
 @NoArgsConstructor
-public class DepartmentResource extends AbstractResource {
+@AllArgsConstructor
+public class BranchResource extends AbstractResource {
 
-    private String description;
+    private String city;
 
-    private BranchResource branch;
+    private String address;
+
+    private FirmResource firm;
 }

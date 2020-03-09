@@ -1,6 +1,5 @@
 package com.lens.chatter.model.resource.user;
 
-import com.lens.chatter.constant.Role;
 import lombok.Getter;
 import lombok.Setter;
 

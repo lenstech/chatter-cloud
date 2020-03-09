@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 /**
  * Created by Emir Gökdemir
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
-public class User extends AbstractEntity {
+public class User extends AbstractEntity<UUID> {
 
     @NotNull
     @Email(message = "Please provide acceptable mail address")
@@ -40,8 +41,8 @@ public class User extends AbstractEntity {
 
 // TODO: 16 Şub 2020  photo will be added
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
+    @ManyToOne
+    @JoinColumn(name = "department")
     private Department department;
 
     private String userFirmId;

@@ -1,24 +1,23 @@
 package com.lens.chatter.model.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
  * Created by Emir Gökdemir
- * on 23 Şub 2020
+ * on 1 Mar 2020
  */
-
 @Getter
 @Setter
-public class DepartmentDto {
-
+@NoArgsConstructor
+public class FirmDto {
+    @NotNull
     private String name;
 
-    private String description;
+    private String city;
 
-    @NotNull(message = "BranchId cannot be blank")
-    private UUID BranchId;
+    private String taxId;
 }

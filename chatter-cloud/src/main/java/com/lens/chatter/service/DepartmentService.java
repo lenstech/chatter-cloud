@@ -1,6 +1,7 @@
 package com.lens.chatter.service;
 
 import com.lens.chatter.common.AbstractService;
+import com.lens.chatter.common.Converter;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.DepartmentMapper;
 import com.lens.chatter.mapper.MinimalUserMapper;
@@ -9,8 +10,11 @@ import com.lens.chatter.model.entity.Department;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.DepartmentResource;
 import com.lens.chatter.model.resource.user.MinimalUserResource;
+import com.lens.chatter.repository.BranchRepository;
 import com.lens.chatter.repository.DepartmentRepository;
 import com.lens.chatter.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.lens.chatter.constant.ErrorConstants.USER_ALREADY_ADDED_TO_DEPARTMENT;
-import static com.lens.chatter.constant.ErrorConstants.USER_IS_NOT_EXIST;
+import static com.lens.chatter.constant.ErrorConstants.*;
 
 /**
  * Created by Emir Gökdemir
@@ -28,17 +31,61 @@ import static com.lens.chatter.constant.ErrorConstants.USER_IS_NOT_EXIST;
 @Service
 public class DepartmentService extends AbstractService<Department, UUID, DepartmentDto, DepartmentResource> {
 
-    @Autowired
-    private DepartmentRepository repository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentService.class);
 
     @Autowired
     private DepartmentMapper mapper;
 
     @Autowired
+    private DepartmentRepository repository;
+
+    @Autowired
+    private BranchRepository branchRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MinimalUserMapper userMapper;
+
+    @Override
+    public DepartmentRepository getRepository() {
+        return repository;
+    }
+
+    @Override
+    public Converter<DepartmentDto, Department, DepartmentResource> getConverter() {
+        return mapper;
+    }
+
+
+    @Override
+    public DepartmentResource save(DepartmentDto dto) {
+        LOGGER.debug(String.format("Saving the dto [%s].", dto));
+        Department department = getConverter().toEntity(dto);
+        department.setBranch(branchRepository.findBranchById(dto.getBranchId()));
+        return getConverter().toResource(getRepository().save(department));
+    }
+
+    @Transactional
+    @Override
+    public Department put(UUID departmentId, DepartmentDto dto) {
+        LOGGER.debug(String.format("Request to update the record [%s].", departmentId));
+        Department old = getRepository().findById(departmentId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
+        if (dto == null) {
+            LOGGER.error(DTO_CANNOT_BE_EMPTY);
+            throw new BadRequestException(DTO_CANNOT_BE_EMPTY);
+        }
+        if (departmentId == null) {
+            LOGGER.error(ID_CANNOT_BE_EMPTY);
+            throw new BadRequestException(ID_CANNOT_BE_EMPTY);
+        }
+        Department department = getConverter().toEntity(dto);
+        department.setId(old.getId());
+        department.setCreatedDate(old.getCreatedDate());
+        department.setBranch(branchRepository.findBranchById(dto.getBranchId()));
+        return getRepository().save(department);
+    }
 
     @Transactional
     public DepartmentResource addPersonal(UUID departmentId, UUID userId) {
