@@ -7,5 +7,5 @@ package com.lens.chatter.constant;
 
 public class ConfigConstants {
 
-    public static final String EYE_TRADE_URL="http://100.26.202.213:8080";
+    public static final String CHATTER_URL="http://100.26.202.213:8080";
 }

@@ -31,9 +31,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder()
-                .title("Eyetrade")
-                .description("Trading Management REST API")
-                .contact(new Contact("Eyetrade", "http://18.184.25.234:8090", "eyetrade451@gmail.com"))
+                .title("CHATTER")
+                .description("Mobile Solution For Industry REST API")
+                .contact(new Contact("Lens", "https://www.lenstech.vision/", "info@lensipt.co"))
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .version("1.0.0")

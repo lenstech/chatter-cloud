@@ -33,7 +33,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     public Role minRole;
 
     @ApiOperation(value = "Create Object, it can be done by authorization")
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
@@ -41,21 +41,21 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     }
 
     @ApiOperation(value = "Get Object")
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity get(@RequestHeader("Authorization") String token, @RequestParam ID objectId) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(getService().get(objectId));
     }
 
     @ApiOperation(value = "Get All Object", responseContainer = "List")
-    @GetMapping("/get-all")
+    @GetMapping("/all")
     public ResponseEntity getAll(@RequestHeader("Authorization") String token) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(getService().getAll());
     }
 
     @ApiOperation(value = "Update Object, it can be done by authorization")
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity update(@RequestHeader("Authorization") String token,
                                  @RequestBody DTO dto,
                                  @RequestParam ID objectId) {
@@ -65,7 +65,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     }
 
     @ApiOperation(value = "Delete Object,  it can be done by authorization", response = void.class)
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity delete(@RequestHeader("Authorization") String token,
                                  @RequestParam ID objectId) {
         setMinRole();

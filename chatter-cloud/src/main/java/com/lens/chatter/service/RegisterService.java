@@ -10,7 +10,6 @@ import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.repository.DepartmentRepository;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtResolver;
-import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,14 +48,14 @@ public class RegisterService {
     public CompleteUserResource save(RegisterDto registerDto, String password) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         User user = mapper.toEntity(registerDto);
-        if(registerDto.getDepartmentId()!=null){
-            Department department=departmentRepository.findDepartmentById(registerDto.getDepartmentId());
-            if(department==null){
+        if (registerDto.getDepartmentId() != null) {
+            Department department = departmentRepository.findDepartmentById(registerDto.getDepartmentId());
+            if (department == null) {
                 throw new BadRequestException(ID_IS_NOT_EXIST);
             }
             user.setDepartment(department);
         }
-        if(userRepository.existsByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException(MAIL_ALREADY_EXISTS);
         }
         user.setPassword(bCryptPasswordEncoder.encode(password));
