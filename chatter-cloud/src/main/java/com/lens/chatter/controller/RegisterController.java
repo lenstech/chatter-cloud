@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.lens.chatter.constant.HttpSuccesMessagesConstants.YOUR_MAIL_WAS_CONFIRMED;
+import static com.lens.chatter.constant.HttpSuccessMessagesConstants.YOUR_MAIL_WAS_CONFIRMED;
 
 /**
  * Created by Emir Gökdemir

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 
-import static com.lens.chatter.constant.HttpSuccesMessagesConstants.SUCCESSFULLY_DELETED;
+import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED;
 
 /**
  * Created by Emir Gökdemir
