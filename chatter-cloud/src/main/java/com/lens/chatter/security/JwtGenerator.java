@@ -17,10 +17,7 @@ import java.util.UUID;
 @Component
 public class JwtGenerator {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private static final long JWT_TOKEN_VALIDITY = 72 * 60 * 60 * 1000; // 72 hours
+    private static final long JWT_TOKEN_VALIDITY = 168 * 60 * 60 * 1000; // 168 hours, 7 days
 
     @Value("${jwt.secret}")
     private String secret;
@@ -32,7 +29,7 @@ public class JwtGenerator {
                 .setClaims(claims)
                 .setSubject(id.toString())
                 .setAudience(role.toString())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }

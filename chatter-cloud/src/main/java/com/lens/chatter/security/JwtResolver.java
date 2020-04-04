@@ -1,7 +1,7 @@
 package com.lens.chatter.security;
 
 import com.lens.chatter.constant.Role;
-import com.lens.chatter.exception.BadRequestException;
+import com.lens.chatter.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,35 +11,35 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static com.lens.chatter.constant.ErrorConstants.EXPIRED_TOKEN;
 import static com.lens.chatter.constant.ErrorConstants.INVALID_TOKEN;
 
 @Component
 public class JwtResolver {
 
-    @Value("${jwt.secret}") private String secret;
+    @Value("${jwt.secret}")
+    private String secret;
 
     // Extracts the username(id) from the given token
     public UUID getIdFromToken(String token) {
+        tokenExpireCheck(token);
         String idString;
-        try{
-         idString = getClaimFromToken(token, Claims::getSubject);
-        } catch (Exception e){
-            throw new BadRequestException(INVALID_TOKEN);
+        try {
+            idString = getClaimFromToken(token, Claims::getSubject);
+        } catch (Exception e) {
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
         return UUID.fromString(idString);
     }
 
     // Extracts the role from the given token
     public Role getRoleFromToken(String token) {
-        try{
-         return Role.valueOf(getClaimFromToken(token, Claims::getAudience));
-        } catch (Exception e){
-            throw new BadRequestException(INVALID_TOKEN);
+        tokenExpireCheck(token);
+        try {
+            return Role.valueOf(getClaimFromToken(token, Claims::getAudience));
+        } catch (Exception e) {
+            throw new UnauthorizedException(INVALID_TOKEN);
         }
-    }
-
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -51,5 +51,14 @@ public class JwtResolver {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
+    private void tokenExpireCheck(String token) {
+        try {
+            if (new Date().after(getClaimFromToken(token, Claims::getExpiration))) {
+                throw new UnauthorizedException(EXPIRED_TOKEN);
+            }
+        } catch (Exception e) {
+            throw new UnauthorizedException(INVALID_TOKEN);
+        }
+    }
 
 }
