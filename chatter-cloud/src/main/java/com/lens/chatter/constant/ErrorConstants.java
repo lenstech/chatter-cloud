@@ -40,4 +40,8 @@ public class ErrorConstants {
     public static final String DTO_CANNOT_BE_EMPTY = "Dto cannot be Empty";
     public static final String ID_CANNOT_BE_EMPTY = "Id cannot be Empty";
 
+    //Photo
+    public static final String THERE_IS_NO_PROFILE_PHOTO_OF_THIS_USER = "There is no photo of this user!";
+
+
 }

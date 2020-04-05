@@ -1,5 +1,6 @@
 package com.lens.chatter.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.constant.Role;
 import lombok.Data;
@@ -39,7 +40,9 @@ public class User extends AbstractEntity<UUID> {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-// TODO: 16 Şub 2020  photo will be added
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    private ProfilePhoto profilePhoto;
 
     @ManyToOne
     @JoinColumn(name = "department")
