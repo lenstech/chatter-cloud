@@ -14,5 +14,5 @@ public interface BranchRepository extends JpaRepository<Branch, UUID> {
 
     Branch findBranchById(UUID id);
 
-    Set<Branch> findBranchesByFirm(Firm firm);
+    Set<Branch> findBranchesByFirmId(UUID firmId);
 }

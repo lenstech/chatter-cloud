@@ -13,5 +13,5 @@ public interface DepartmentRepository extends JpaRepository<Department, UUID> {
 
     Department findDepartmentById(UUID id);
 
-    Set<Department> findDepartmentsByBranch(Branch branch);
+    Set<Department> findDepartmentsByBranchId(UUID branchId);
 }

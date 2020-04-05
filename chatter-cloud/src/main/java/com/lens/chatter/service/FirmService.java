@@ -47,6 +47,6 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
     }
 
     public Set<BranchResource> getBranches(UUID firmId) {
-        return branchMapper.toResources(branchRepository.findBranchesByFirm(repository.findFirmById(firmId)));
+        return branchMapper.toResources(branchRepository.findBranchesByFirmId(firmId));
     }
 }

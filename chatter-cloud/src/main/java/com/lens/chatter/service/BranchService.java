@@ -111,7 +111,6 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
     }
 
     public Set<DepartmentResource> getDepartments(UUID branchId) {
-        Branch branch = repository.findBranchById(branchId);
-        return departmentMapper.toResources(departmentRepository.findDepartmentsByBranch(branch));
+        return departmentMapper.toResources(departmentRepository.findDepartmentsByBranchId(branchId));
     }
 }
