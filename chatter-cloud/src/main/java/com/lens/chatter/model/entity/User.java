@@ -1,6 +1,7 @@
 package com.lens.chatter.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.constant.Role;
 import lombok.Data;
@@ -9,6 +10,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -54,6 +57,10 @@ public class User extends AbstractEntity<UUID> {
 
     @Column(name = "confirmed")
     private boolean confirmed = false;
+
+    @ManyToMany(mappedBy = "users")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<UserGroup> userGroups = new HashSet<>();
 
     public String toStringForSearch() {
         return (" " + email +
