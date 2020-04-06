@@ -58,7 +58,7 @@ public class User extends AbstractEntity<UUID> {
     @Column(name = "confirmed")
     private boolean confirmed = false;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users",fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<UserGroup> userGroups = new HashSet<>();
 

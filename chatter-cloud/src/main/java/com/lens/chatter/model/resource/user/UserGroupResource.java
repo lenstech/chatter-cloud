@@ -1,5 +1,6 @@
 package com.lens.chatter.model.resource.user;
 
+import com.lens.chatter.common.AbstractResource;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserGroupResource {
-    private String name;
+public class UserGroupResource extends AbstractResource {
     private Set<MinimalUserResource> users;
+    private Boolean isPrivate;
+
 }

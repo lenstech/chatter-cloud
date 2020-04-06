@@ -16,4 +16,6 @@ public class UserGroupDto {
 
     private String name;
 
+    private Boolean isPrivate;
+
 }

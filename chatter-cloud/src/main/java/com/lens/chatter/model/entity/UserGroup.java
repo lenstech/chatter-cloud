@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,5 +29,7 @@ public class UserGroup extends AbstractEntity<UUID> {
             joinColumns = @JoinColumn(name = "user_group_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @JsonIgnore
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
+
+    private Boolean isPrivate = false;
 }
