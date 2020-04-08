@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.lens.chatter.constant.ErrorConstants.*;
 

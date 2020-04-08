@@ -1,11 +1,8 @@
 package com.lens.chatter.security;
 
 import com.lens.chatter.constant.Role;
-import com.lens.chatter.model.entity.User;
-import com.lens.chatter.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
