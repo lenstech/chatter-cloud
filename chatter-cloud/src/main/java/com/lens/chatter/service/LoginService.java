@@ -30,7 +30,7 @@ public class LoginService {
     public LoginResource login(String password, String email) {
         User user = userRepository.findByEmail(email);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if (encoder.matches(password, user.getPassword())) {
+        if (user != null && encoder.matches(password, user.getPassword())) {
             if (!user.isConfirmed()) {
                 throw new UnauthorizedException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
             }
