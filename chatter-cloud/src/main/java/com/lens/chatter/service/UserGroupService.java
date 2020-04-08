@@ -4,7 +4,7 @@ import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.UserGroupMapper;
-import com.lens.chatter.model.dto.UserGroupDto;
+import com.lens.chatter.model.dto.user.UserGroupDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.entity.UserGroup;
 import com.lens.chatter.model.resource.user.UserGroupResource;

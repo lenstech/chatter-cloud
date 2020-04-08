@@ -4,7 +4,7 @@ import com.lens.chatter.common.AbstractController;
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.constant.Role;
-import com.lens.chatter.model.dto.UserGroupDto;
+import com.lens.chatter.model.dto.user.UserGroupDto;
 import com.lens.chatter.model.entity.UserGroup;
 import com.lens.chatter.model.resource.user.UserGroupResource;
 import com.lens.chatter.service.UserGroupService;

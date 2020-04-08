@@ -1,4 +1,4 @@
-package com.lens.chatter.model.resource;
+package com.lens.chatter.model.resource.organization;
 
 import com.lens.chatter.common.AbstractResource;
 import lombok.AllArgsConstructor;

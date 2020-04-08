@@ -1,6 +1,6 @@
 package com.lens.chatter.controller;
 
-import com.lens.chatter.model.dto.RegisterDto;
+import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.service.RegisterService;
 import io.swagger.annotations.Api;

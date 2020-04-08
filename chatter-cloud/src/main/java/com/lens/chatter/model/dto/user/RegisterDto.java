@@ -1,4 +1,4 @@
-package com.lens.chatter.model.dto;
+package com.lens.chatter.model.dto.user;
 
 import com.lens.chatter.constant.Role;
 import lombok.AllArgsConstructor;

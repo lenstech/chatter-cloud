@@ -1,4 +1,4 @@
-package com.lens.chatter.model.dto;
+package com.lens.chatter.model.dto.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

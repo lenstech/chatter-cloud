@@ -1,7 +1,7 @@
 package com.lens.chatter.mapper;
 
 import com.lens.chatter.common.Converter;
-import com.lens.chatter.model.dto.RegisterDto;
+import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.user.CompleteUserResource;
 import org.mapstruct.Mapper;

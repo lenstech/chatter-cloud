@@ -3,7 +3,7 @@ package com.lens.chatter.service;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.MinimalUserMapper;
 import com.lens.chatter.mapper.UserMapper;
-import com.lens.chatter.model.dto.RegisterDto;
+import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.model.resource.user.MinimalUserResource;

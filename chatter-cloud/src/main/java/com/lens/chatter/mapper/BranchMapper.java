@@ -1,9 +1,9 @@
 package com.lens.chatter.mapper;
 
 import com.lens.chatter.common.Converter;
-import com.lens.chatter.model.dto.BranchDto;
+import com.lens.chatter.model.dto.organization.BranchDto;
 import com.lens.chatter.model.entity.Branch;
-import com.lens.chatter.model.resource.BranchResource;
+import com.lens.chatter.model.resource.organization.BranchResource;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

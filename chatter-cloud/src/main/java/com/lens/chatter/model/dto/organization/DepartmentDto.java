@@ -1,4 +1,4 @@
-package com.lens.chatter.model.dto;
+package com.lens.chatter.model.dto.organization;
 
 import lombok.Getter;
 import lombok.Setter;
