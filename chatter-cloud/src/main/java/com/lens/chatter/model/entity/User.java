@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.constant.Role;
 import lombok.Data;
+import org.eclipse.persistence.annotations.Index;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User extends AbstractEntity<UUID> {
 
+    @Index
     @NotNull
     @Email(message = "Please provide acceptable mail address")
     private String email;
