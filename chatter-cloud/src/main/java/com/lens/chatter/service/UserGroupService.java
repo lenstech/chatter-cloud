@@ -15,13 +15,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import static com.lens.chatter.constant.ErrorConstants.*;
-import static com.lens.chatter.constant.ErrorConstants.ID_CANNOT_BE_EMPTY;
 
 /**
  * Created by Emir Gökdemir
@@ -64,4 +62,21 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
         return getRepository().save(updated);
     }
 
+    @Transactional
+    public UserGroupResource addUsers(UUID groupId, List<UUID> userIds) {
+        UserGroup group = repository.findById(groupId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
+        Set<User> users = group.getUsers();
+        users.addAll(userRepository.findByIdIn(userIds));
+        group.setUsers(users);
+        return mapper.toResource(repository.save(group));
+    }
+
+    @Transactional
+    public UserGroupResource removeUsers(UUID groupId, List<UUID> userIds) {
+        UserGroup group = repository.findById(groupId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
+        Set<User> users = group.getUsers();
+        users.removeAll(userRepository.findByIdIn(userIds));
+        group.setUsers(users);
+        return mapper.toResource(repository.save(group));
+    }
 }
