@@ -45,7 +45,7 @@ public class RegisterService {
     private DepartmentRepository departmentRepository;
 
     @Transactional
-    public CompleteUserResource save(RegisterDto registerDto, String password) {
+    public CompleteUserResource save(RegisterDto registerDto) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         User user = mapper.toEntity(registerDto);
         if (registerDto.getDepartmentId() != null) {
@@ -58,7 +58,7 @@ public class RegisterService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException(MAIL_ALREADY_EXISTS);
         }
-        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         userRepository.saveAndFlush(user);
         confirmationTokenService.sendActivationToken(user);
         return mapper.toResource(user);

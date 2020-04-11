@@ -4,6 +4,7 @@ import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.MinimalUserMapper;
 import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.user.RegisterDto;
+import com.lens.chatter.model.dto.user.UpdatePasswordDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.model.resource.user.MinimalUserResource;
@@ -61,15 +62,16 @@ public class UserProfileService {
     }
 
     @Transactional
-    public CompleteUserResource updatePassword(UUID userId, String oldPassword, String newPassword) {
+    public CompleteUserResource updatePassword(UUID userId, UpdatePasswordDto dto) {
         User user = userRepository.findUserById(userId);
         if (user == null) {
             throw new BadRequestException(USER_NOT_EXIST);
         }
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
-        if (!encoder.matches(oldPassword,user.getPassword())){
+        if (!encoder.matches(dto.getOldPassword(),user.getPassword())){
             throw new BadRequestException(OLD_PASSWORD_IS_WRONG);
         }
+        String newPassword = dto.getNewPassword();
         if (encoder.matches(newPassword,user.getPassword())){
             throw new BadRequestException(NEW_PASSWORD_CANNOT_BE_SAME_AS_OLD);
         }

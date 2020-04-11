@@ -29,9 +29,8 @@ public class RegisterController {
 
     @ApiOperation(value = "Register a user with the needed information", response = CompleteUserResource.class)
     @PostMapping("/user")
-    public ResponseEntity<CompleteUserResource> registerUser(@RequestBody @Valid RegisterDto registerDto,
-                                                             @RequestHeader("password") String password) {
-        CompleteUserResource user = registerService.save(registerDto, password);
+    public ResponseEntity<CompleteUserResource> registerUser(@RequestBody @Valid RegisterDto registerDto) {
+        CompleteUserResource user = registerService.save(registerDto);
         return ResponseEntity.ok(user);
     }
 

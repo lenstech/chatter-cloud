@@ -29,7 +29,7 @@ public class ProfilePhotoController {
     private JwtResolver jwtResolver;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadProfilePhoto(@RequestParam("file") MultipartFile file, @RequestHeader String token) {
+    public ResponseEntity<String> uploadProfilePhoto(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(service.uploadImage(file, jwtResolver.getIdFromToken(token)));
     }
 

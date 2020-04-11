@@ -3,6 +3,7 @@ package com.lens.chatter.service;
 import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.mapper.LoginMapper;
+import com.lens.chatter.model.dto.user.LoginDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.repository.UserRepository;
@@ -27,10 +28,10 @@ public class LoginService {
     @Autowired
     private LoginMapper mapper;
 
-    public LoginResource login(String password, String email) {
-        User user = userRepository.findByEmail(email);
+    public LoginResource login(LoginDto dto) {
+        User user = userRepository.findByEmail(dto.getEmail());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if (user != null && encoder.matches(password, user.getPassword())) {
+        if (user != null && encoder.matches(dto.getPassword(), user.getPassword())) {
             if (!user.isConfirmed()) {
                 throw new UnauthorizedException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
             }

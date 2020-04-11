@@ -1,6 +1,7 @@
 package com.lens.chatter.controller;//package com.lens.chatter.controller;
 
 import com.lens.chatter.model.dto.user.RegisterDto;
+import com.lens.chatter.model.dto.user.UpdatePasswordDto;
 import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.security.JwtResolver;
@@ -37,7 +38,7 @@ public class UserProfileController {
     @ApiOperation(value = "Return profile of a given user. If the user is private and you don't follow it then returns null",
             response = MinimalUserResource.class)
     @GetMapping("/get-other-profile")
-    public ResponseEntity getOtherProfile(@RequestHeader("Authorization") String token, @RequestHeader("email") String email) {
+    public ResponseEntity getOtherProfile(@RequestHeader("Authorization") String token, @RequestParam("email") String email) {
         UUID userId = jwtResolver.getIdFromToken(token);
         MinimalUserResource user = userProfileService.getOtherProfile(email);
         return ResponseEntity.ok(user);
@@ -53,9 +54,9 @@ public class UserProfileController {
 
     @ApiOperation(value = "Update password with the old password and the new password", response = CompleteUserResource.class)
     @PutMapping("/update-password")
-    public ResponseEntity updatePassword(@RequestHeader("Authorization") String token, @RequestHeader  String oldPassword, @RequestHeader  String newPassword) {
+    public ResponseEntity updatePassword(@RequestHeader("Authorization") String token, @RequestBody UpdatePasswordDto updatePasswordDto) {
         UUID userId = jwtResolver.getIdFromToken(token);
-        CompleteUserResource user = userProfileService.updatePassword(userId, oldPassword, newPassword);
+        CompleteUserResource user = userProfileService.updatePassword(userId, updatePasswordDto);
         return ResponseEntity.ok(user);
     }
 }
