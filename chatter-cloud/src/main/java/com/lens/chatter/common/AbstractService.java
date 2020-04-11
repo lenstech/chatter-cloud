@@ -39,7 +39,7 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
     }
 
     @Transactional
-    public T put(ID id, DTO updatedDto) {
+    public RES put(ID id, DTO updatedDto) {
         LOGGER.debug(String.format("Request to update the record [%s].", id));
         T theReal = getRepository().findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         if (updatedDto == null) {
@@ -53,7 +53,7 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
         T updated = getConverter().toEntity(updatedDto);
         updated.setId(theReal.getId());
         updated.setCreatedDate(theReal.getCreatedDate());
-        return getRepository().save(updated);
+        return getConverter().toResource(getRepository().save(updated));
     }
 
 

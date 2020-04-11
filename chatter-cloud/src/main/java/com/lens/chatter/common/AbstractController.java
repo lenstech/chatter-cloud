@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED;
 
@@ -34,43 +35,43 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
 
     @ApiOperation(value = "Create Object, it can be done by authorization")
     @PostMapping
-    public ResponseEntity save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
+    public RES save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
-        return ResponseEntity.ok(getService().save(dto));
+        return getService().save(dto);
     }
 
     @ApiOperation(value = "Get Object")
     @GetMapping
-    public ResponseEntity get(@RequestHeader("Authorization") String token, @RequestParam ID objectId) {
+    public RES get(@RequestHeader("Authorization") String token, @RequestParam ID objectId) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(getService().get(objectId));
+        return getService().get(objectId);
     }
 
     @ApiOperation(value = "Get All Object", responseContainer = "List")
     @GetMapping("/all")
-    public ResponseEntity getAll(@RequestHeader("Authorization") String token) {
+    public List<RES> getAll(@RequestHeader("Authorization") String token) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(getService().getAll());
+        return getService().getAll();
     }
 
     @ApiOperation(value = "Update Object, it can be done by authorization")
     @PutMapping
-    public ResponseEntity update(@RequestHeader("Authorization") String token,
+    public RES update(@RequestHeader("Authorization") String token,
                                  @RequestBody DTO dto,
                                  @RequestParam ID objectId) {
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
-        return ResponseEntity.ok(getService().put(objectId, dto));
+        return getService().put(objectId, dto);
     }
 
     @ApiOperation(value = "Delete Object,  it can be done by authorization", response = void.class)
     @DeleteMapping
-    public ResponseEntity delete(@RequestHeader("Authorization") String token,
+    public String delete(@RequestHeader("Authorization") String token,
                                  @RequestParam ID objectId) {
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
         getService().delete(objectId);
-        return ResponseEntity.ok(SUCCESSFULLY_DELETED);
+        return SUCCESSFULLY_DELETED;
     }
 }

@@ -47,7 +47,7 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
     }
 
     @Override
-    public UserGroup put(UUID id, UserGroupDto updatedDto) {
+    public UserGroupResource put(UUID id, UserGroupDto updatedDto) {
         UserGroup theReal = repository.findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         if (updatedDto == null) {
             throw new BadRequestException(DTO_CANNOT_BE_EMPTY);
@@ -59,7 +59,7 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
         updated.setId(theReal.getId());
         updated.setUsers(theReal.getUsers());
         updated.setCreatedDate(theReal.getCreatedDate());
-        return getRepository().save(updated);
+        return mapper.toResource(getRepository().save(updated));
     }
 
     @Transactional
