@@ -2,6 +2,7 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.common.AbstractController;
 import com.lens.chatter.common.AbstractService;
+import com.lens.chatter.common.ListOfIdDto;
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.dto.user.UserGroupDto;
@@ -45,15 +46,15 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
 
     @ApiOperation(value = "Add users to an user group, with  group id, user ", response = UserGroupResource.class)
     @PutMapping("/add-users")
-    public ResponseEntity addUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody List<UUID> userIds) {
+    public ResponseEntity addUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody ListOfIdDto userIds) {
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
-        return ResponseEntity.ok(service.addUsers(groupId, userIds));
+        return ResponseEntity.ok(service.addUsers(groupId, userIds.getIds()));
     }
 
     @ApiOperation(value = "Remove users from an user group, with  group id, user ", response = UserGroupResource.class)
     @PutMapping("/remove-users")
-    public ResponseEntity removeUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody List<UUID> userIds) {
+    public ResponseEntity removeUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody ListOfIdDto userIds) {
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
-        return ResponseEntity.ok(service.removeUsers(groupId, userIds));
+        return ResponseEntity.ok(service.removeUsers(groupId, userIds.getIds()));
     }
 }
