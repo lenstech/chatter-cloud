@@ -1,6 +1,6 @@
 package com.lens.chatter.model.resource.user;
 
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.resource.organization.DepartmentResource;
 import lombok.Getter;
 import lombok.Setter;

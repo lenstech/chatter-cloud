@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.lens.chatter.constant.Role.BASIC_USER;
+import static com.lens.chatter.enums.Role.BASIC_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**

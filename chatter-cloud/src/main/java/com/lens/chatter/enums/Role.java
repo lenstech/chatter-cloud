@@ -1,4 +1,4 @@
-package com.lens.chatter.constant;
+package com.lens.chatter.enums;
 
 public enum Role {
     BASIC_USER(1),

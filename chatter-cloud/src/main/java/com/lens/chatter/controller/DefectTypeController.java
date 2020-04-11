@@ -2,7 +2,7 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.common.AbstractController;
 import com.lens.chatter.common.AbstractService;
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.dto.product.DefectTypeDto;
 import com.lens.chatter.model.entity.DefectType;
 import com.lens.chatter.model.resource.product.DefectTypeResource;

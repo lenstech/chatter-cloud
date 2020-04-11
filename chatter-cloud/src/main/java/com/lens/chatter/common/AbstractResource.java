@@ -1,10 +1,14 @@
 package com.lens.chatter.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import static com.lens.chatter.constant.GeneralConstants.RESOURCE_DATE_TIME_FORMAT;
 
 /**
  * Created by Emir Gökdemir
@@ -15,7 +19,12 @@ import java.util.UUID;
 public class AbstractResource {
     private UUID id;
 
+    private String name;
+
+    @JsonFormat(pattern = RESOURCE_DATE_TIME_FORMAT)
     private ZonedDateTime createdDate;
 
-    private String name;
+    @JsonFormat(pattern = RESOURCE_DATE_TIME_FORMAT)
+    private ZonedDateTime lastModifiedDate;
+
 }

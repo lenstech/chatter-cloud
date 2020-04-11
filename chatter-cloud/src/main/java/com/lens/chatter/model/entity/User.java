@@ -2,7 +2,7 @@ package com.lens.chatter.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lens.chatter.common.AbstractEntity;
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import lombok.Data;
 import org.eclipse.persistence.annotations.Index;
 

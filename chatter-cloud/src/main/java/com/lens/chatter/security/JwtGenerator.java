@@ -1,6 +1,6 @@
 package com.lens.chatter.security;
 
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;

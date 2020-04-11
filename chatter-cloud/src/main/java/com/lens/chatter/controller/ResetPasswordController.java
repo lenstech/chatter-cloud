@@ -1,7 +1,7 @@
 package com.lens.chatter.controller;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.service.ConfirmationTokenService;
 import com.lens.chatter.service.ResetPasswordService;
 import io.swagger.annotations.Api;

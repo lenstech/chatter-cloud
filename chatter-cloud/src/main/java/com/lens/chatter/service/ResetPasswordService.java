@@ -1,6 +1,6 @@
 package com.lens.chatter.service;
 
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.model.entity.User;

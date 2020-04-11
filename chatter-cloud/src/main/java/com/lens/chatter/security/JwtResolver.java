@@ -1,6 +1,6 @@
 package com.lens.chatter.security;
 
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

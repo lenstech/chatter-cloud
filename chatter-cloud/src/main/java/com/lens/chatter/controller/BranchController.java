@@ -3,7 +3,7 @@ package com.lens.chatter.controller;
 import com.lens.chatter.common.AbstractController;
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.configuration.AuthorizationConfig;
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.dto.organization.BranchDto;
 import com.lens.chatter.model.entity.Branch;
 import com.lens.chatter.model.resource.organization.BranchResource;

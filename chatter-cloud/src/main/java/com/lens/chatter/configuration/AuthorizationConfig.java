@@ -1,6 +1,6 @@
 package com.lens.chatter.configuration;
 
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.security.JwtResolver;
 import org.springframework.beans.factory.annotation.Autowired;

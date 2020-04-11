@@ -1,7 +1,7 @@
 package com.lens.chatter.common;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
-import com.lens.chatter.constant.Role;
+import com.lens.chatter.enums.Role;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
