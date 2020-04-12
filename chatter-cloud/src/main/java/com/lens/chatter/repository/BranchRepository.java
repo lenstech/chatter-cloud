@@ -9,7 +9,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface BranchRepository extends JpaRepository<Branch, UUID> {
+public interface BranchRepository extends ChatterRepository<Branch, UUID> {
 
     Branch findBranchById(UUID id);
 

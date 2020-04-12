@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface DepartmentRepository extends JpaRepository<Department, UUID> {
+public interface DepartmentRepository extends ChatterRepository<Department, UUID> {
 
     Department findDepartmentById(UUID id);
 

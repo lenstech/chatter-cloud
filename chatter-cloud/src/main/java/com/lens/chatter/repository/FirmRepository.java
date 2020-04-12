@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface FirmRepository extends JpaRepository<Firm, UUID> {
+public interface FirmRepository extends ChatterRepository<Firm, UUID> {
 
     Firm findFirmById(UUID id);
 }

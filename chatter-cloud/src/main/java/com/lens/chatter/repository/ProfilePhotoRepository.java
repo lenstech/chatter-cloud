@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ProfilePhotoRepository extends JpaRepository<ProfilePhoto, UUID> {
+public interface ProfilePhotoRepository extends ChatterRepository<ProfilePhoto, UUID> {
     ProfilePhoto findProfilePhotoById(UUID id);
 
     ProfilePhoto findProfilePhotoByUserId(UUID userId);

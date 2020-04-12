@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends ChatterRepository<User, UUID> {
 
     User findUserById(UUID id);
 
