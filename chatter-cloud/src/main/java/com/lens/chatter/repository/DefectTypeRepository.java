@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface DefectTypeRepository extends JpaRepository<DefectType, UUID> {
+public interface DefectTypeRepository extends ChatterRepository<DefectType, UUID> {
+
 }

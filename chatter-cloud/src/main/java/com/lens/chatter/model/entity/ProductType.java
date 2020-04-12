@@ -41,7 +41,5 @@ public class ProductType extends AbstractEntity<UUID> {
     @NumberFormat(style = NumberFormat.Style.CURRENCY)
     private Integer price;
 
-
-
     private String materialType;
 }

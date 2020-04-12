@@ -25,7 +25,11 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
 
     public RES save(DTO dto) {
         LOGGER.debug(String.format("Saving the dto [%s].", dto));
-        return getConverter().toResource(getRepository().save(getConverter().toEntity(dto)));
+        try {
+            return getConverter().toResource(getRepository().save(getConverter().toEntity(dto)));
+        }catch (Exception e){
+            throw new BadRequestException(ID_IS_NOT_EXIST);
+        }
     }
 
     public RES get(ID id) {
@@ -41,19 +45,23 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
     @Transactional
     public RES put(ID id, DTO updatedDto) {
         LOGGER.debug(String.format("Request to update the record [%s].", id));
+        if (id == null) {
+            LOGGER.error(ID_CANNOT_BE_EMPTY);
+            throw new BadRequestException(ID_CANNOT_BE_EMPTY);
+        }
         T theReal = getRepository().findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         if (updatedDto == null) {
             LOGGER.error(DTO_CANNOT_BE_EMPTY);
             throw new BadRequestException(DTO_CANNOT_BE_EMPTY);
         }
-        if (id == null) {
-            LOGGER.error(ID_CANNOT_BE_EMPTY);
+        try {
+            T updated = getConverter().toEntity(updatedDto);
+            updated.setId(theReal.getId());
+            updated.setCreatedDate(theReal.getCreatedDate());
+            return getConverter().toResource(getRepository().save(updated));
+        } catch (Exception e){
             throw new BadRequestException(ID_CANNOT_BE_EMPTY);
         }
-        T updated = getConverter().toEntity(updatedDto);
-        updated.setId(theReal.getId());
-        updated.setCreatedDate(theReal.getCreatedDate());
-        return getConverter().toResource(getRepository().save(updated));
     }
 
 
