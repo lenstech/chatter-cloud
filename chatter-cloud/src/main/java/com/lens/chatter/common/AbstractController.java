@@ -3,6 +3,8 @@ package com.lens.chatter.common;
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
 
     protected abstract AbstractService<T, ID, DTO, RES> getService();
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
+
     @Autowired
     private AuthorizationConfig authorizationConfig;
 
@@ -36,6 +40,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @ApiOperation(value = "Create Object, it can be done by authorization")
     @PostMapping
     public RES save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
+        LOGGER.debug(String.format("Saving the dto [%s].", dto));
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
         return getService().save(dto);
@@ -44,6 +49,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @ApiOperation(value = "Get Object")
     @GetMapping
     public RES get(@RequestHeader("Authorization") String token, @RequestParam ID objectId) {
+        LOGGER.debug("Requesting {id} records.");
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return getService().get(objectId);
     }
@@ -51,6 +57,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @ApiOperation(value = "Get All Object", responseContainer = "List")
     @GetMapping("/all")
     public List<RES> getAll(@RequestHeader("Authorization") String token) {
+        LOGGER.debug("Requesting all records.");
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return getService().getAll();
     }
@@ -60,6 +67,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     public RES update(@RequestHeader("Authorization") String token,
                                  @RequestBody DTO dto,
                                  @RequestParam ID objectId) {
+        LOGGER.debug(String.format("Request to update the record [%s].", objectId));
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
         return getService().put(objectId, dto);
@@ -69,6 +77,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @DeleteMapping
     public String delete(@RequestHeader("Authorization") String token,
                                  @RequestParam ID objectId) {
+        LOGGER.debug(String.format("Request to delete the record [%s].", objectId));
         setMinRole();
         authorizationConfig.permissionCheck(token, minRole);
         getService().delete(objectId);
