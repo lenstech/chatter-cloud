@@ -27,4 +27,5 @@ public class DefectDto {
     private Double size = 1D;
     private UUID defectTypeId;
     private LengthMeasureUnit measureUnit;
+    private UUID productId;
 }

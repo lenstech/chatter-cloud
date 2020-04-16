@@ -5,11 +5,9 @@ import com.lens.chatter.enums.LengthMeasureUnit;
 import lombok.Data;
 import org.springframework.format.annotation.NumberFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -31,6 +29,8 @@ public class ProductType extends AbstractEntity<UUID> {
 
     private Float height;
 
+    private Float length;
+
     private String color;
 
     @Enumerated(EnumType.STRING)
@@ -42,4 +42,7 @@ public class ProductType extends AbstractEntity<UUID> {
     private Integer price;
 
     private String materialType;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productType")
+    private Set<Product> product;
 }

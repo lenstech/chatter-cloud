@@ -23,6 +23,8 @@ public class ProductTypeDto {
 
     private Float height;
 
+    private Float length;
+
     private LengthMeasureUnit unit;
 
     private String color;

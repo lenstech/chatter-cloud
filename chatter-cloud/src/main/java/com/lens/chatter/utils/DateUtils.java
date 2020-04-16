@@ -13,18 +13,18 @@ import java.util.Date;
 @UtilityClass
 public class DateUtils {
 
-    public static String dateTimeFormatter(Date date, String newPattern){
+    public static String dateTimeFormatter(Date date, String newPattern) {
         SimpleDateFormat formatter = new SimpleDateFormat(newPattern);
         return formatter.format(date);
     }
 
-    public static Date getDateXDaysAgo(Integer days){
+    public static Date getDateXDaysAgo(Integer days) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, -days);
         return cal.getTime();
     }
 
-    public static String getDateXDaysAgoWithFormat(Integer days, String pattern){
-        return dateTimeFormatter(getDateXDaysAgo(days),pattern);
+    public static String getDateXDaysAgoWithFormat(Integer days, String pattern) {
+        return dateTimeFormatter(getDateXDaysAgo(days), pattern);
     }
 }

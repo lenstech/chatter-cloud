@@ -17,13 +17,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductTypeResource extends AbstractResource {
-    private String name;
 
     private String description;
 
     private Float width;
 
     private Float height;
+
+    private Float length;
 
     private LengthMeasureUnit unit;
 
