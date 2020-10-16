@@ -33,13 +33,33 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
     private AuthorizationConfig authorizationConfig;
 
     @Override
-    public void setMinRole() {
-        super.minRole = Role.ADMIN;
+    protected AbstractService<Firm, UUID, FirmDto, FirmResource> getService() {
+        return service;
     }
 
     @Override
-    protected AbstractService<Firm, UUID, FirmDto, FirmResource> getService() {
-        return service;
+    public void setSaveRole() {
+        super.saveRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setGetRole() {
+        super.getRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setGetAllRole() {
+        super.getAllRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setUpdateRole() {
+        super.updateRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setDeleteRole() {
+        super.deleteRole = Role.BASIC_USER;
     }
 
     @ApiOperation(value = "Get all Branches of a Firm , it can be seen by basic user", response = FirmResource.class)

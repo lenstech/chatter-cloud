@@ -6,6 +6,7 @@ import com.lens.chatter.mapper.DefectTypeMapper;
 import com.lens.chatter.model.dto.product.DefectTypeDto;
 import com.lens.chatter.model.entity.DefectType;
 import com.lens.chatter.model.resource.product.DefectTypeResource;
+import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.DefectTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class DefectTypeService extends AbstractService<DefectType, UUID, DefectT
     private DefectTypeMapper mapper;
 
     @Override
-    public JpaRepository<DefectType, UUID> getRepository() {
+    public ChatterRepository<DefectType, UUID> getRepository() {
         return repository;
     }
 

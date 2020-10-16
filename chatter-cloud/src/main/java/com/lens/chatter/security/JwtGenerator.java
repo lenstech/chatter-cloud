@@ -15,6 +15,7 @@ import java.util.UUID;
 public class JwtGenerator {
 
     private static final long JWT_TOKEN_VALIDITY = 168 * 60 * 60 * 1000; // 168 hours, 7 days
+    private static final long REGISTER_TOKEN_VALIDITY = 24 * 60 * 60 * 1000; // 168 hours, 7 days
 
     @Value("${jwt.secret}")
     private String secret;
@@ -37,6 +38,18 @@ public class JwtGenerator {
                 .setClaims(claims)
                 .setSubject(id.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS256, secret).compact();
+
+    }
+
+    public String generateInviteMailToken(String mail, Role role, String title) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role",role);
+        claims.put("title", title);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(mail)
+                .setExpiration(new Date(System.currentTimeMillis() + REGISTER_TOKEN_VALIDITY))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
 
     }

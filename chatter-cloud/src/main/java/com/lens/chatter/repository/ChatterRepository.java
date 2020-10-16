@@ -17,4 +17,8 @@ public interface ChatterRepository<T, ID extends Serializable> extends JpaReposi
 
     @Named("findOneById")
     T findOneById(ID id);
+
+    void deleteById(ID id);
+
+    void delete(T entity);
 }

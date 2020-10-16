@@ -10,4 +10,8 @@ import java.util.UUID;
 public interface FirmRepository extends ChatterRepository<Firm, UUID> {
 
     Firm findFirmById(UUID id);
+
+    Boolean existsByName(String name);
+
+    Firm findByName(String name);
 }

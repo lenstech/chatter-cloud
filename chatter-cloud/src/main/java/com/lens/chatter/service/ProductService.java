@@ -6,6 +6,7 @@ import com.lens.chatter.mapper.ProductMapper;
 import com.lens.chatter.model.dto.product.ProductDto;
 import com.lens.chatter.model.entity.Product;
 import com.lens.chatter.model.resource.product.ProductResource;
+import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.ProductRepository;
 import com.lens.chatter.repository.ProductTypeRepository;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class ProductService extends AbstractService<Product, UUID, ProductDto, P
     private ProductMapper mapper;
 
     @Override
-    public JpaRepository<Product, UUID> getRepository() {
+    public ChatterRepository<Product, UUID> getRepository() {
         return repository;
     }
 

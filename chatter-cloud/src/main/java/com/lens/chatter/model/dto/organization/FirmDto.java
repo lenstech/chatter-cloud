@@ -20,4 +20,11 @@ public class FirmDto {
     private String city;
 
     private String taxId;
+
+    private String email;
+
+    private String phone;
+
+    private String address;
+
 }

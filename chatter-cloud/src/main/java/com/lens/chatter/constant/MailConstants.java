@@ -7,15 +7,16 @@ package com.lens.chatter.constant;
 
 public class MailConstants {
     //HEADER
-    public static final String CONFIRM_ACCOUNT_HEADER = "Chatter Email Confirmation";
-    public static final String RESET_PASSWORD_HEADER  = "Chatter Reset Password Request";
+    public static final String CONFIRM_ACCOUNT_HEADER = "Chatter Hesabınızı Aktifleştirin";
+    public static final String RESET_PASSWORD_HEADER  = "Chatter Şifre Değişiklik Talebi";
 
     //BODY
-    public static final String CONFIRM_ACCOUNT_BODY = "To confirm your account, please click here : ";
-    public static final String RESET_PASSWORD_BODY  = "To reset your password, please click here : ";
+    public static final String CONFIRM_ACCOUNT_BODY = "Hesabınızın aktifleştirilmesi için linke tıklayınız: ";
+    public static final String RESET_PASSWORD_BODY  = "Şifrenizi yenilemek için tıklayınız: ";
 
     //URL
-    public static final String CONFIRM_ACCOUNT_URL = "/register/confirm-register?token=";
-    public static final String RESET_PASSWORD_URL  = "/reset-password/confirm?token=" ;
+    public static final String CONFIRM_ACCOUNT_URL = "/kayit-onay?token=%s/";
+    public static final String RESET_PASSWORD_URL  = "/hesap/sifre-yenile?activationToken=%s/" ;
+    public static final String CLIENT_URL = "https://lenstech.vision/";
 
 }

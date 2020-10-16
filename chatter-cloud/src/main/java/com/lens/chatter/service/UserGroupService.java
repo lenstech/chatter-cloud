@@ -8,6 +8,7 @@ import com.lens.chatter.model.dto.user.UserGroupDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.entity.UserGroup;
 import com.lens.chatter.model.resource.user.UserGroupResource;
+import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.UserGroupRepository;
 import com.lens.chatter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
     private UserRepository userRepository;
 
     @Override
-    public JpaRepository<UserGroup, UUID> getRepository() {
+    public ChatterRepository<UserGroup, UUID> getRepository() {
         return repository;
     }
 
@@ -47,7 +48,7 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
     }
 
     @Override
-    public UserGroupResource put(UUID id, UserGroupDto updatedDto) {
+    public UserGroupResource put(UUID id, UserGroupDto updatedDto, UUID userId) {
         UserGroup theReal = repository.findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         if (updatedDto == null) {
             throw new BadRequestException(DTO_CANNOT_BE_EMPTY);

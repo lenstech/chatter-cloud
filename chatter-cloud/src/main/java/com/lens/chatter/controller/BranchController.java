@@ -27,21 +27,42 @@ import java.util.UUID;
 @Api(value = "Branch", tags = {"Branch Operations"})
 public class BranchController extends AbstractController<Branch, UUID, BranchDto, BranchResource> {
 
+    @Autowired
+    private BranchService branchService;
+
+    @Autowired
+    private AuthorizationConfig authorizationConfig;
+
     @Override
     protected AbstractService<Branch, UUID, BranchDto, BranchResource> getService() {
         return branchService;
     }
 
     @Override
-    public void setMinRole() {
-        super.minRole = Role.FIRM_ADMIN;
+    public void setSaveRole() {
+        super.saveRole = Role.BASIC_USER;
     }
 
-    @Autowired
-    private BranchService branchService;
+    @Override
+    public void setGetRole() {
+        super.getRole = Role.BASIC_USER;
+    }
 
-    @Autowired
-    private AuthorizationConfig authorizationConfig;
+    @Override
+    public void setGetAllRole() {
+        super.getAllRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setUpdateRole() {
+        super.updateRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setDeleteRole() {
+        super.deleteRole = Role.BASIC_USER;
+    }
+
 
     @ApiOperation(value = "Get all Departments of a Branch , it can be seen by only Admin", response = DepartmentResource.class, responseContainer = "Set")
     @GetMapping("/get-departments")

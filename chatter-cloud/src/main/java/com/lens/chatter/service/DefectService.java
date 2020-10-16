@@ -8,6 +8,7 @@ import com.lens.chatter.model.dto.product.DefectDto;
 import com.lens.chatter.model.entity.Defect;
 import com.lens.chatter.model.entity.DefectType;
 import com.lens.chatter.model.resource.product.DefectResource;
+import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.DefectRepository;
 import com.lens.chatter.repository.DefectTypeRepository;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class DefectService extends AbstractService<Defect, UUID, DefectDto, Defe
     private DefectTypeRepository typeRepository;
 
     @Override
-    public JpaRepository<Defect, UUID> getRepository() {
+    public ChatterRepository<Defect, UUID> getRepository() {
         return repository;
     }
 

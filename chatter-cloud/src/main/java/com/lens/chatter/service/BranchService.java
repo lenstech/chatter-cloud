@@ -59,7 +59,7 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
     }
 
     @Override
-    public BranchResource save(BranchDto dto) {
+    public BranchResource save(BranchDto dto, UUID userId) {
         LOGGER.debug(String.format("Saving the dto [%s].", dto));
         Branch branch = getConverter().toEntity(dto);
         branch.setFirm(firmRepository.findFirmById(dto.getFirmId()));
@@ -68,7 +68,7 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
 
     @Transactional
     @Override
-    public BranchResource put(UUID branchId, BranchDto dto) {
+    public BranchResource put(UUID branchId, BranchDto dto, UUID userId) {
         LOGGER.debug(String.format("Request to update the record [%s].", branchId));
         Branch old = getRepository().findById(branchId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         if (dto == null) {

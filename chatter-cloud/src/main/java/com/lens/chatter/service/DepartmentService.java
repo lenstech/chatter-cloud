@@ -60,7 +60,7 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
 
 
     @Override
-    public DepartmentResource save(DepartmentDto dto) {
+    public DepartmentResource save(DepartmentDto dto, UUID userId) {
         LOGGER.debug(String.format("Saving the dto [%s].", dto));
         Department department = getConverter().toEntity(dto);
         department.setBranch(branchRepository.findBranchById(dto.getBranchId()));
@@ -69,7 +69,7 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
 
     @Transactional
     @Override
-    public DepartmentResource put(UUID departmentId, DepartmentDto dto) {
+    public DepartmentResource put(UUID departmentId, DepartmentDto dto, UUID userId) {
         LOGGER.debug(String.format("Request to update the record [%s].", departmentId));
         Department old = getRepository().findById(departmentId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
         if (dto == null) {

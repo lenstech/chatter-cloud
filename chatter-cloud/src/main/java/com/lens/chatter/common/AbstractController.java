@@ -2,17 +2,22 @@ package com.lens.chatter.common;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
+import com.lens.chatter.exception.UnauthorizedException;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
+import static com.lens.chatter.constant.ErrorConstants.NOT_AUTHORIZED_FOR_OPERATION;
 import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED;
 
 /**
@@ -29,58 +34,95 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @Autowired
     private AuthorizationConfig authorizationConfig;
 
-    public Role getMinRole() {
-        return minRole;
-    }
+    public abstract void setSaveRole();
 
-    public abstract void setMinRole();
+    public abstract void setGetRole();
 
-    public Role minRole;
+    public abstract void setGetAllRole();
+
+    public abstract void setUpdateRole();
+
+    public abstract void setDeleteRole();
+
+    protected Role saveRole;
+    protected Role getRole;
+    protected Role getAllRole;
+    protected Role updateRole;
+    protected Role deleteRole;
 
     @ApiOperation(value = "Create Object, it can be done by authorization")
     @PostMapping
     public RES save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
         LOGGER.debug(String.format("Saving the dto [%s].", dto));
-        setMinRole();
-        authorizationConfig.permissionCheck(token, minRole);
-        return getService().save(dto);
+        setSaveRole();
+        UUID userId = authorizationConfig.permissionCheck(token, saveRole);
+        return getService().save(dto, userId);
     }
 
     @ApiOperation(value = "Get Object")
     @GetMapping
-    public RES get(@RequestHeader("Authorization") String token, @RequestParam ID objectId) {
+    public RES get(@RequestHeader(value = "Authorization", required = false) String token, @RequestParam ID objectId) {
         LOGGER.debug("Requesting {id} records.");
-        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        setGetRole();
+        if (getRole == null) {
+            return getService().get(objectId);
+        } else if (token == null) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        authorizationConfig.permissionCheck(token, getRole);
         return getService().get(objectId);
     }
 
     @ApiOperation(value = "Get All Object", responseContainer = "List")
     @GetMapping("/all")
-    public List<RES> getAll(@RequestHeader("Authorization") String token) {
+    public List<RES> getAll(@RequestHeader(value = "Authorization", required = false) String token) {
+        setGetAllRole();
         LOGGER.debug("Requesting all records.");
-        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        if (getAllRole == null) {
+            return getService().getAll();
+        } else if (token == null) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        authorizationConfig.permissionCheck(token, getAllRole);
         return getService().getAll();
     }
 
+    @ApiOperation(value = "Get All Object", responseContainer = "List")
+    @GetMapping("/all/{page}")
+    public Page<RES> getAllWithPage(@RequestHeader(value = "Authorization", required = false) String token,
+                                    @PathVariable("page") int pageNo,
+                                    @RequestParam(required = false) String sortBy,
+                                    @RequestParam(required = false) Boolean desc) {
+        setGetAllRole();
+        LOGGER.debug("Requesting all records.");
+        if (getAllRole == null) {
+            return getService().getAllWithPage(pageNo, sortBy, desc);
+        } else if (token == null) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        authorizationConfig.permissionCheck(token, getAllRole);
+        return getService().getAllWithPage(pageNo, sortBy, desc);
+    }
+
     @ApiOperation(value = "Update Object, it can be done by authorization")
-    @PutMapping
+    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public RES update(@RequestHeader("Authorization") String token,
-                                 @RequestBody DTO dto,
-                                 @RequestParam ID objectId) {
+                      @RequestBody DTO dto,
+                      @RequestParam ID objectId) {
         LOGGER.debug(String.format("Request to update the record [%s].", objectId));
-        setMinRole();
-        authorizationConfig.permissionCheck(token, minRole);
-        return getService().put(objectId, dto);
+        setUpdateRole();
+        UUID userId = authorizationConfig.permissionCheck(token, updateRole);
+        return getService().put(objectId, dto, userId);
     }
 
     @ApiOperation(value = "Delete Object,  it can be done by authorization", response = void.class)
     @DeleteMapping
     public String delete(@RequestHeader("Authorization") String token,
-                                 @RequestParam ID objectId) {
+                         @RequestParam ID objectId) {
         LOGGER.debug(String.format("Request to delete the record [%s].", objectId));
-        setMinRole();
-        authorizationConfig.permissionCheck(token, minRole);
-        getService().delete(objectId);
+        setDeleteRole();
+        UUID userId = authorizationConfig.permissionCheck(token, deleteRole);
+        getService().delete(objectId, userId);
         return SUCCESSFULLY_DELETED;
     }
 }

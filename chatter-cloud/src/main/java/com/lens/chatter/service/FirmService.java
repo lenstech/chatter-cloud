@@ -9,6 +9,7 @@ import com.lens.chatter.model.entity.Firm;
 import com.lens.chatter.model.resource.organization.BranchResource;
 import com.lens.chatter.model.resource.organization.FirmResource;
 import com.lens.chatter.repository.BranchRepository;
+import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.FirmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,7 +38,7 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
     private BranchMapper branchMapper;
 
     @Override
-    public JpaRepository<Firm, UUID> getRepository() {
+    public ChatterRepository<Firm, UUID> getRepository() {
         return repository;
     }
 

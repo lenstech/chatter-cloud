@@ -32,7 +32,27 @@ public class DefectTypeController extends AbstractController<DefectType, UUID, D
     }
 
     @Override
-    public void setMinRole() {
-        super.minRole = Role.ADMIN;
+    public void setSaveRole() {
+        super.saveRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setGetRole() {
+        super.getRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setGetAllRole() {
+        super.getAllRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setUpdateRole() {
+        super.updateRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setDeleteRole() {
+        super.deleteRole = Role.BASIC_USER;
     }
 }

@@ -44,6 +44,9 @@ public class AbstractEntity <ID extends Serializable> {
     @JsonIgnore
     protected ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 
+    @Version
+    private Integer version;
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

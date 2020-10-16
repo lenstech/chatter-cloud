@@ -39,8 +39,28 @@ public class DepartmentController extends AbstractController<Department, UUID, D
     }
 
     @Override
-    public void setMinRole() {
-        super.minRole = Role.BRANCH_ADMIN;
+    public void setSaveRole() {
+        super.saveRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setGetRole() {
+        super.getRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setGetAllRole() {
+        super.getAllRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setUpdateRole() {
+        super.updateRole = Role.BASIC_USER;
+    }
+
+    @Override
+    public void setDeleteRole() {
+        super.deleteRole = Role.BASIC_USER;
     }
 
     @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = DepartmentResource.class)
