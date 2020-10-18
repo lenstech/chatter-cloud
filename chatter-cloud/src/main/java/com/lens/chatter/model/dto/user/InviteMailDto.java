@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendInviteMailDto {
+public class InviteMailDto {
     private String mail;
     private String title;
     private Role role;

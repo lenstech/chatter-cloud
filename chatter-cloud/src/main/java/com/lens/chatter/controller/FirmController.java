@@ -6,7 +6,9 @@ import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.dto.organization.FirmDto;
 import com.lens.chatter.model.entity.Firm;
+import com.lens.chatter.model.resource.organization.BranchResource;
 import com.lens.chatter.model.resource.organization.FirmResource;
+import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.service.FirmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,11 +64,22 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
         super.deleteRole = Role.BASIC_USER;
     }
 
-    @ApiOperation(value = "Get all Branches of a Firm , it can be seen by basic user", response = FirmResource.class)
+    @ApiOperation(value = "Get all Branches of a Firm, it can be seen by basic user", response = BranchResource.class, responseContainer = "List")
     @GetMapping("/get-branches")
     public ResponseEntity getBranchesOfFirm(@RequestHeader("Authorization") String token, @RequestParam UUID firmId) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getBranches(firmId));
+    }
+
+    @ApiOperation(value = "Get all Users of a Firm, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
+    @GetMapping("/get-users/{page}")
+    public ResponseEntity getPersonalsOfFirm(@RequestHeader("Authorization") String token,
+                                         @RequestParam UUID firmId,
+                                         @PathVariable("page") int pageNo,
+                                         @RequestParam(required = false) String sortBy,
+                                         @RequestParam(required = false) Boolean desc) {
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.getPersonalsOfFirm(firmId, pageNo, sortBy, desc));
     }
 
 }

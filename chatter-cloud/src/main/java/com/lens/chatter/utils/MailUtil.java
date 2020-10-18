@@ -6,6 +6,7 @@ package com.lens.chatter.utils;
  */
 
 import com.lens.chatter.exception.BadRequestException;
+import com.lens.chatter.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,7 +24,7 @@ public class MailUtil {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendMail(String email, String activationToken, String subject, String text) {
+    public void sendTokenMail(String email, String activationToken, String subject, String text) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);

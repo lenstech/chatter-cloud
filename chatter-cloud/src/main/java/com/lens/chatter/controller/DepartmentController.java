@@ -63,7 +63,7 @@ public class DepartmentController extends AbstractController<Department, UUID, D
         super.deleteRole = Role.BASIC_USER;
     }
 
-    @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = DepartmentResource.class)
+    @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
     @GetMapping("/get-personals")
     public ResponseEntity getPersonalsOfDepartment(@RequestHeader("Authorization") String token,
                                                    @RequestParam UUID departmentId) {

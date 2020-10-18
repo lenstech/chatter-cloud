@@ -7,6 +7,7 @@ import com.lens.chatter.model.entity.User;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,19 @@ public class ResetPasswordService {
     private UserRepository userRepository;
 
     @Autowired
-    private ConfirmationTokenService confirmationTokenService;
-
-    @Autowired
     private JwtResolver jwtResolver;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Transactional
-    public void resetPassword(String password, String confirmationToken) {
+    public void resetPasswordRequest(String email){
+        tokenService.sendResetPasswordTokenToMail(email);
+    }
+
+    @Transactional
+    @Modifying
+    public void changePassword(String password, String confirmationToken) {
         User user = userRepository.findUserById(jwtResolver.getIdFromToken(confirmationToken));
         if (user == null) {
             throw new BadRequestException(USER_NOT_EXIST);
@@ -42,7 +49,7 @@ public class ResetPasswordService {
     }
 
     @Transactional
-    public void resetPasswordByAdmin(String email, String newPassword, String token) {
+    public void changePasswordByAdmin(String email, String newPassword, String token) {
         User admin = userRepository.findUserById(jwtResolver.getIdFromToken(token));
         User user = userRepository.findByEmail(email);
         if (admin == null || user == null) {

@@ -8,6 +8,7 @@ import com.lens.chatter.model.dto.organization.BranchDto;
 import com.lens.chatter.model.entity.Branch;
 import com.lens.chatter.model.resource.organization.BranchResource;
 import com.lens.chatter.model.resource.organization.DepartmentResource;
+import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.service.BranchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,14 +29,14 @@ import java.util.UUID;
 public class BranchController extends AbstractController<Branch, UUID, BranchDto, BranchResource> {
 
     @Autowired
-    private BranchService branchService;
+    private BranchService service;
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
 
     @Override
     protected AbstractService<Branch, UUID, BranchDto, BranchResource> getService() {
-        return branchService;
+        return service;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     public ResponseEntity getDepartmentsOfBranch(@RequestHeader("Authorization") String token,
                                                  @RequestParam UUID branchId) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(branchService.getDepartments(branchId));
+        return ResponseEntity.ok(service.getDepartments(branchId));
     }
 
     @ApiOperation(value = "Add Department to a Branch , it can be done by only Admin", response = DepartmentResource.class)
@@ -78,7 +79,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
                                                 @RequestParam UUID departmentId,
                                                 @RequestParam UUID branchId) {
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
-        return ResponseEntity.ok(branchService.addDepartment(branchId, departmentId));
+        return ResponseEntity.ok(service.addDepartment(branchId, departmentId));
     }
 
     @ApiOperation(value = "Remove Department from Branch, it can be done by only Admin", response = DepartmentResource.class)
@@ -88,6 +89,17 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
                                                      @RequestParam UUID branchId) {
 
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
-        return ResponseEntity.ok(branchService.removeDepartment(branchId, departmentId));
+        return ResponseEntity.ok(service.removeDepartment(branchId, departmentId));
+    }
+
+    @ApiOperation(value = "Get all Users of a Branch, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
+    @GetMapping("/get-users/{page}")
+    public ResponseEntity getPersonalsOfBranch(@RequestHeader("Authorization") String token,
+                                         @RequestParam UUID branchId,
+                                         @PathVariable("page") int pageNo,
+                                         @RequestParam(required = false) String sortBy,
+                                         @RequestParam(required = false) Boolean desc) {
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.getPersonalsOfBranch(branchId, pageNo, sortBy, desc));
     }
 }

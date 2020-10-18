@@ -20,13 +20,31 @@ public class JwtGenerator {
     @Value("${jwt.secret}")
     private String secret;
 
+    /*
+    Subject: Id
+    Audience: Role
+    IssuedAt: CreatedDate
+    Issuer: Mail
+    "title": Title
+    */
+
     // Generates a token with the given user's id and current time
-    public String generateToken(UUID id, Role role) {
+    public String generateLoginToken(UUID id, Role role) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(id.toString())
                 .setAudience(role.toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
+    }
+
+    public String generateResetPasswordToken(UUID id) {
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(id.toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
@@ -44,11 +62,11 @@ public class JwtGenerator {
 
     public String generateInviteMailToken(String mail, Role role, String title) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role",role);
         claims.put("title", title);
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(mail)
+                .setAudience(role.toString())
+                .setIssuer(mail)
                 .setExpiration(new Date(System.currentTimeMillis() + REGISTER_TOKEN_VALIDITY))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
 

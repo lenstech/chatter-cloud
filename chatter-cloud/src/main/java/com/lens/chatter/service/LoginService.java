@@ -3,8 +3,10 @@ package com.lens.chatter.service;
 import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.mapper.LoginMapper;
+import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.user.LoginDto;
 import com.lens.chatter.model.entity.User;
+import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
@@ -28,6 +30,9 @@ public class LoginService {
     @Autowired
     private LoginMapper mapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public LoginResource login(LoginDto dto) {
         User user = userRepository.findByEmail(dto.getEmail());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -35,16 +40,15 @@ public class LoginService {
             if (!user.isConfirmed()) {
                 throw new UnauthorizedException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
             }
-            String token = jwtGenerator.generateToken(user.getId(), user.getRole());
-            LoginResource resource = mapper.toResource(user);
-            resource.setToken(token);
-            return resource;
+            String token = jwtGenerator.generateLoginToken(user.getId(), user.getRole());
+            CompleteUserResource userResource = userMapper.toResource(user);
+            return new LoginResource(userResource, token);
         } else {
             throw new UnauthorizedException(ErrorConstants.WRONG_EMAIL_OR_PASSWORD);
         }
     }
 
     public String updateToken(String token) {
-        return jwtGenerator.generateToken(jwtResolver.getIdFromToken(token), jwtResolver.getRoleFromToken(token));
+        return jwtGenerator.generateLoginToken(jwtResolver.getIdFromToken(token), jwtResolver.getRoleFromToken(token));
     }
 }

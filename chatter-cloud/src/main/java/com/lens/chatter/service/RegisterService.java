@@ -4,7 +4,7 @@ import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.user.RegisterDto;
-import com.lens.chatter.model.dto.user.SendInviteMailDto;
+import com.lens.chatter.model.dto.user.InviteMailDto;
 import com.lens.chatter.model.entity.Department;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.model.resource.user.CompleteUserResource;
@@ -22,8 +22,6 @@ import java.util.UUID;
 
 import static com.lens.chatter.constant.ErrorConstants.ID_IS_NOT_EXIST;
 import static com.lens.chatter.constant.ErrorConstants.MAIL_ALREADY_EXISTS;
-import static com.lens.chatter.constant.MailConstants.*;
-
 
 /**
  * Created by Emir Gökdemir
@@ -37,7 +35,7 @@ public class RegisterService {
     private UserRepository userRepository;
 
     @Autowired
-    private ConfirmationTokenService confirmationTokenService;
+    private TokenService tokenService;
 
     @Autowired
     private JwtResolver jwtResolver;
@@ -70,17 +68,10 @@ public class RegisterService {
         }
         user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
         userRepository.saveAndFlush(user);
-        confirmationTokenService.sendActivationToken(user);
+        tokenService.sendActivationTokenToMail(user);
         return mapper.toResource(user);
     }
 
-    public void sendInviteMail(UUID senderId, SendInviteMailDto inviteMailDto) {
-        mailUtil.sendMail(inviteMailDto.getMail(),
-                jwtGenerator.generateInviteMailToken(inviteMailDto.getMail(), inviteMailDto.getRole(), inviteMailDto.getTitle()),
-                CONFIRM_ACCOUNT_HEADER,
-                CONFIRM_ACCOUNT_BODY + "\n" + CLIENT_URL + CONFIRM_ACCOUNT_URL);
-
-    }
 
     @Transactional
     public void confirmRegister(String confirmationToken) {
@@ -93,4 +84,15 @@ public class RegisterService {
         userRepository.save(user);
     }
 
+    public void sendInviteMail(String token, InviteMailDto inviteMailDto) {
+        UUID senderId = jwtResolver.getIdFromToken(token);
+        if (userRepository.existsByEmail(inviteMailDto.getMail())) {
+            throw new BadRequestException(MAIL_ALREADY_EXISTS);
+        }
+        tokenService.sendInviteTokenToMail(senderId, inviteMailDto);
+    }
+
+    public InviteMailDto getInviteTokenInfo(String inviteToken) {
+        return jwtResolver.getInviteTokensInfo(inviteToken);
+    }
 }

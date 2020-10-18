@@ -1,6 +1,5 @@
 package com.lens.chatter.common;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,7 +26,7 @@ import static com.lens.chatter.constant.GeneralConstants.ID_LENGTH;
 @AllArgsConstructor
 @ToString
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractEntity <ID extends Serializable> {
+public class AbstractEntity<ID extends Serializable> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "system-uuid")
@@ -37,12 +37,11 @@ public class AbstractEntity <ID extends Serializable> {
 
     @CreatedDate
     @Column(name = "created_date", nullable = false)
-    protected ZonedDateTime createdDate = ZonedDateTime.now();
+    protected ZonedDateTime createdDate = ZonedDateTime.now(ZoneId.of("Asia/Istanbul"));
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    @JsonIgnore
-    protected ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+    protected ZonedDateTime lastModifiedDate = ZonedDateTime.now(ZoneId.of("Asia/Istanbul"));
 
     @Version
     private Integer version;

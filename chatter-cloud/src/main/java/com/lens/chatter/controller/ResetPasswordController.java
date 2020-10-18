@@ -2,7 +2,7 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
-import com.lens.chatter.service.ConfirmationTokenService;
+import com.lens.chatter.service.TokenService;
 import com.lens.chatter.service.ResetPasswordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,11 +19,11 @@ import static com.lens.chatter.constant.HttpSuccessMessagesConstants.*;
 
 @RestController
 @RequestMapping(value = {"/reset-password"})
-@Api(value = "Reset Forgotten Password", tags = {"Password Reset For Forgotten"})
+@Api(value = "Reset Forgotten Password", tags = {"Password Reset"})
 public class ResetPasswordController {
 
     @Autowired
-    private ConfirmationTokenService confirmationTokenService;
+    private TokenService tokenService;
 
     @Autowired
     private ResetPasswordService resetPasswordService;
@@ -32,17 +32,17 @@ public class ResetPasswordController {
     private AuthorizationConfig authorizationConfig;
 
     @ApiOperation(value = "Send a reset password URL to the email of the user", response = String.class)
-    @GetMapping("/send-mail")
+    @GetMapping("/mail-request")
     public ResponseEntity<String> resetPasswordRequest(@RequestParam("email") String email) {
-        confirmationTokenService.sendResetPasswordsToken(email);
+        resetPasswordService.resetPasswordRequest(email);
         return ResponseEntity.ok(MAIL_SEND_YOUR_EMAIL);
     }
 
-    @ApiOperation(value = "User can reset his password by using the token sent his mail address and new password", response = String.class)
-    @PostMapping("/confirm")
-    public ResponseEntity<String> resetForgottenPassword(@RequestParam("password") String password,
-                                                @RequestParam("token") String confirmationToken) {
-        resetPasswordService.resetPassword(password, confirmationToken);
+    @ApiOperation(value = "User can reset his password by new password and the token sent his mail address ", response = String.class)
+    @PutMapping("/confirm-and-change")
+    public ResponseEntity<String> changePassword(@RequestParam("password") String password,
+                                                @RequestHeader("Authorization") String confirmationToken) {
+        resetPasswordService.changePassword(password, confirmationToken);
         return ResponseEntity.ok(YOUR_PASSWORD_WAS_CHANGED);
     }
 
@@ -50,9 +50,9 @@ public class ResetPasswordController {
     @PostMapping("/by-admin")
     public ResponseEntity<String> resetPasswordByAdmin(@RequestParam("new-password") String newPassword,
                                                        @RequestParam("email") String email,
-                                                       @RequestParam("token") String token) {
+                                                       @RequestHeader("Authorization") String token) {
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
-        resetPasswordService.resetPasswordByAdmin(email,newPassword,token);
+        resetPasswordService.changePasswordByAdmin(email,newPassword,token);
         return ResponseEntity.ok(PASSWORD_WAS_CHANGED);
     }
 
