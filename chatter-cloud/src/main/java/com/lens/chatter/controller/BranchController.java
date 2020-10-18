@@ -13,9 +13,11 @@ import com.lens.chatter.service.BranchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -92,14 +94,22 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
         return ResponseEntity.ok(service.removeDepartment(branchId, departmentId));
     }
 
-    @ApiOperation(value = "Get all Users of a Branch, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
+    @ApiOperation(value = "Get all Users of a Branch page by page, it can be seen by basic user", responseContainer = "List")
     @GetMapping("/get-users/{page}")
-    public ResponseEntity getPersonalsOfBranch(@RequestHeader("Authorization") String token,
-                                         @RequestParam UUID branchId,
-                                         @PathVariable("page") int pageNo,
-                                         @RequestParam(required = false) String sortBy,
-                                         @RequestParam(required = false) Boolean desc) {
+    public Page<MinimalUserResource> getPersonalsOfBranch(@RequestHeader("Authorization") String token,
+                                                          @RequestParam UUID branchId,
+                                                          @PathVariable("page") int pageNo,
+                                                          @RequestParam(required = false) String sortBy,
+                                                          @RequestParam(required = false) Boolean desc) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(service.getPersonalsOfBranch(branchId, pageNo, sortBy, desc));
+        return service.getPersonalsOfBranch(branchId, pageNo, sortBy, desc);
+    }
+
+    @ApiOperation(value = "Get all Users of a Branch page by page, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
+    @GetMapping("/get-users")
+    public ResponseEntity<List<MinimalUserResource>> getPersonalsOfBranch(@RequestHeader("Authorization") String token,
+                                                     @RequestParam UUID branchId) {
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.getPersonalsOfBranch(branchId));
     }
 }

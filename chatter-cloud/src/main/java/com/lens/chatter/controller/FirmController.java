@@ -13,6 +13,7 @@ import com.lens.chatter.service.FirmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,15 +72,23 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
         return ResponseEntity.ok(service.getBranches(firmId));
     }
 
-    @ApiOperation(value = "Get all Users of a Firm, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
+    @ApiOperation(value = "Get all Users of a Firm page by page, it can be seen by basic user", responseContainer = "List")
     @GetMapping("/get-users/{page}")
-    public ResponseEntity getPersonalsOfFirm(@RequestHeader("Authorization") String token,
+    public Page<MinimalUserResource> getPersonalsOfFirmByPage(@RequestHeader("Authorization") String token,
                                          @RequestParam UUID firmId,
                                          @PathVariable("page") int pageNo,
                                          @RequestParam(required = false) String sortBy,
                                          @RequestParam(required = false) Boolean desc) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(service.getPersonalsOfFirm(firmId, pageNo, sortBy, desc));
+        return service.getPersonalsOfFirm(firmId, pageNo, sortBy, desc);
+    }
+
+    @ApiOperation(value = "Get all Users of a Firm, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
+    @GetMapping("/get-users")
+    public ResponseEntity getPersonalsOfFirm(@RequestHeader("Authorization") String token,
+                                         @RequestParam UUID firmId) {
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.getPersonalsOfFirm(firmId));
     }
 
 }

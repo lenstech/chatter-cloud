@@ -34,7 +34,9 @@ public interface UserRepository extends ChatterRepository<User, UUID> {
     List<User> findAll();
 
     Page<User> findUsersByDepartmentBranchId(Pageable pageable, UUID branchId);
+    List<User> findUsersByDepartmentBranchId(UUID branchId);
 
     Page<User> findUsersByDepartmentBranchFirmId(Pageable pageable, UUID firmId);
+    List<User> findUsersByDepartmentBranchFirmId(UUID firmId);
 
 }

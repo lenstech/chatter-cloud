@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -81,6 +82,10 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
             pageable = PageRequest.of(pageNumber, PAGE_SIZE);
             return userRepository.findUsersByDepartmentBranchFirmId(pageable, firmId).map(minimalUserMapper::toResource);
         }
+    }
+
+    public List<MinimalUserResource> getPersonalsOfFirm(UUID branchId){
+        return minimalUserMapper.toResource(userRepository.findUsersByDepartmentBranchFirmId(branchId));
     }
 
 }
