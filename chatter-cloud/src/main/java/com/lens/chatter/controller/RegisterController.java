@@ -2,9 +2,10 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
-import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.dto.user.InviteMailDto;
-import com.lens.chatter.model.resource.user.CompleteUserResource;
+import com.lens.chatter.model.dto.user.RegisterDto;
+import com.lens.chatter.model.resource.user.InviteMailResource;
+import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.RegisterService;
 import io.swagger.annotations.Api;
@@ -38,9 +39,9 @@ public class RegisterController {
     private JwtResolver resolver;
 
 
-    @ApiOperation(value = "Register a user with the needed information", response = CompleteUserResource.class)
+    @ApiOperation(value = "Register a user with the needed information", response = LoginResource.class)
     @PostMapping("/user")
-    public ResponseEntity<CompleteUserResource> registerUser(@RequestBody @Valid RegisterDto registerDto) {
+    public ResponseEntity<LoginResource> registerUser(@RequestBody @Valid RegisterDto registerDto) {
         return ResponseEntity.ok(registerService.register(registerDto));
     }
 
@@ -54,15 +55,15 @@ public class RegisterController {
     @ApiOperation(value = "Send registration mail", response = String.class)
     @PostMapping("/send-invite-mail")
     public ResponseEntity<String> sendInviteMail(@RequestHeader("Authorization") String token,
-                                                  @RequestBody InviteMailDto inviteMailDto) {
+                                                 @Valid @RequestBody InviteMailDto inviteMailDto) {
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         registerService.sendInviteMail(token, inviteMailDto);
         return ResponseEntity.ok(INVITATION_MAIL_IS_SENT);
     }
 
-    @ApiOperation(value = "Confirm invite mail and get the token's information.", response = InviteMailDto.class)
+    @ApiOperation(value = "Confirm invite mail and get the token's information.", response = InviteMailResource.class)
     @GetMapping("/get-invite-token-info")
-    public ResponseEntity<InviteMailDto> getInviteTokenInfo(@RequestHeader("Authorization") String inviteToken) {
+    public ResponseEntity<InviteMailResource> getInviteTokenInfo(@RequestHeader("Authorization") String inviteToken) {
         return ResponseEntity.ok(registerService.getInviteTokenInfo(inviteToken));
     }
 

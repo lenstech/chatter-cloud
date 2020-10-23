@@ -43,5 +43,7 @@ public class ErrorConstants {
     //Photo
     public static final String THERE_IS_NO_PROFILE_PHOTO_OF_THIS_USER = "There is no photo of this user!";
 
+    //Exist
+    public static final String PROVIDE_VALID_MAIL = "Please Provide Valid Mail Address";
 
 }

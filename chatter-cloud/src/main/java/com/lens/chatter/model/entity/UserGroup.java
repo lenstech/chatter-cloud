@@ -20,7 +20,6 @@ import java.util.UUID;
 @Table(name = "user_group")
 public class UserGroup extends AbstractEntity<UUID> {
 
-
     @NotNull
     private String name;
 

@@ -60,9 +60,10 @@ public class JwtGenerator {
 
     }
 
-    public String generateInviteMailToken(String mail, Role role, String title) {
+    public String generateInviteMailToken(String mail, Role role, String title, UUID departmentId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("title", title);
+        claims.put("department", departmentId);
         return Jwts.builder()
                 .setClaims(claims)
                 .setAudience(role.toString())

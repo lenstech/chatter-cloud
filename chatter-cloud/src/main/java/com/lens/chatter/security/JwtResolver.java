@@ -58,6 +58,7 @@ public class JwtResolver {
             inviteMailDto.setMail(claims.getIssuer());
             inviteMailDto.setRole(Role.valueOf(claims.getAudience()));
             inviteMailDto.setTitle(claims.get("title").toString());
+            inviteMailDto.setDepartmentId(UUID.fromString(claims.get("department").toString()));
             return inviteMailDto;
         } catch (Exception e) {
             throw new UnauthorizedException(INVALID_TOKEN);

@@ -1,6 +1,7 @@
 package com.lens.chatter.controller;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
+import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.enums.Role;
 import com.lens.chatter.service.TokenService;
 import com.lens.chatter.service.ResetPasswordService;
@@ -9,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Email;
 
 import static com.lens.chatter.constant.HttpSuccessMessagesConstants.*;
 
@@ -33,7 +36,7 @@ public class ResetPasswordController {
 
     @ApiOperation(value = "Send a reset password URL to the email of the user", response = String.class)
     @GetMapping("/mail-request")
-    public ResponseEntity<String> resetPasswordRequest(@RequestParam("email") String email) {
+    public ResponseEntity<String> resetPasswordRequest(@RequestParam("email")String email) {
         resetPasswordService.resetPasswordRequest(email);
         return ResponseEntity.ok(MAIL_SEND_YOUR_EMAIL);
     }

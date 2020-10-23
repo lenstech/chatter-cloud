@@ -3,6 +3,7 @@ package com.lens.chatter.common;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.exception.NotFoundException;
 import com.lens.chatter.repository.ChatterRepository;
+import org.mapstruct.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,7 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
         }
     }
 
+    @Named("resourceFromId")
     public RES get(ID id) {
         T entity;
         try {
@@ -124,4 +126,12 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
     protected void deleteOperations(ID id, UUID userId) {
     }
 
+    @Named("fromIdToEntity")
+    public T fromIdToEntity(ID id) {
+        try {
+            return getRepository().findOneById(id);
+        } catch (NullPointerException e) {
+            throw new NotFoundException(ID_IS_NOT_EXIST);
+        }
+    }
 }

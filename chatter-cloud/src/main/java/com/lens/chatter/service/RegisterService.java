@@ -2,12 +2,14 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.BadRequestException;
+import com.lens.chatter.mapper.InviteMailMapper;
 import com.lens.chatter.mapper.UserMapper;
-import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.dto.user.InviteMailDto;
+import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.entity.Department;
 import com.lens.chatter.model.entity.User;
-import com.lens.chatter.model.resource.user.CompleteUserResource;
+import com.lens.chatter.model.resource.user.InviteMailResource;
+import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.repository.DepartmentRepository;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
@@ -52,8 +54,11 @@ public class RegisterService {
     @Autowired
     private JwtGenerator jwtGenerator;
 
+    @Autowired
+    private InviteMailMapper inviteMailMapper;
+
     @Transactional
-    public CompleteUserResource register(RegisterDto registerDto) {
+    public LoginResource register(RegisterDto registerDto) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         User user = mapper.toEntity(registerDto);
         if (registerDto.getDepartmentId() != null) {
@@ -67,9 +72,10 @@ public class RegisterService {
             throw new BadRequestException(MAIL_ALREADY_EXISTS);
         }
         user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
+        user.setConfirmed(true);
         userRepository.saveAndFlush(user);
-        tokenService.sendActivationTokenToMail(user);
-        return mapper.toResource(user);
+//        tokenService.sendActivationTokenToMail(user);
+        return new LoginResource(mapper.toResource(user), jwtGenerator.generateLoginToken(user.getId(), user.getRole()));
     }
 
 
@@ -92,7 +98,7 @@ public class RegisterService {
         tokenService.sendInviteTokenToMail(senderId, inviteMailDto);
     }
 
-    public InviteMailDto getInviteTokenInfo(String inviteToken) {
-        return jwtResolver.getInviteTokensInfo(inviteToken);
+    public InviteMailResource getInviteTokenInfo(String inviteToken) {
+        return inviteMailMapper.DtoToResource(jwtResolver.getInviteTokensInfo(inviteToken));
     }
 }
