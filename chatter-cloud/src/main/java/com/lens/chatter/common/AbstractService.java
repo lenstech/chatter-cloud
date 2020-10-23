@@ -4,12 +4,9 @@ import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.exception.NotFoundException;
 import com.lens.chatter.repository.ChatterRepository;
 import org.mapstruct.Named;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +31,8 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
     public RES save(DTO dto, UUID userId) {
         try {
             T entity = getConverter().toEntity(dto);
-            return getConverter().toResource(getRepository().save(saveOperations(entity,dto,userId)));
-        }catch (Exception e){
+            return getConverter().toResource(getRepository().save(saveOperations(entity, dto, userId)));
+        } catch (Exception e) {
             throw new BadRequestException(ID_IS_NOT_EXIST);
         }
     }
@@ -129,7 +126,7 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
     @Named("fromIdToEntity")
     public T fromIdToEntity(ID id) {
         try {
-            return getRepository().findOneById(id);
+            return getRepository().findById(id).orElseThrow(() -> new NotFoundException(ID_IS_NOT_EXIST));
         } catch (NullPointerException e) {
             throw new NotFoundException(ID_IS_NOT_EXIST);
         }

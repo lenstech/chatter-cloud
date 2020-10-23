@@ -8,6 +8,7 @@ import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.dto.user.UserGroupDto;
 import com.lens.chatter.model.entity.UserGroup;
 import com.lens.chatter.model.resource.user.UserGroupResource;
+import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.UserGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,9 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
+
+    @Autowired
+    private JwtResolver jwtResolver;
 
     @Override
     public void setSaveRole() {
@@ -76,5 +80,11 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
     public ResponseEntity removeUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody ListOfIdDto userIds) {
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.removeUsers(groupId, userIds.getIds()));
+    }
+
+    @ApiOperation(value = "Get the user's  userGroups, with his/her token ", response = UserGroupResource.class, responseContainer = "List")
+    @GetMapping("/my-groups")
+    public ResponseEntity getMyUserGroups(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(service.getMyUserGroups(jwtResolver.getIdFromToken(token)));
     }
 }

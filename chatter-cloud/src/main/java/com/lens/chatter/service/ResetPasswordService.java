@@ -27,6 +27,9 @@ public class ResetPasswordService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private UserService userService;
+
     @Transactional
     public void resetPasswordRequest(String email){
         tokenService.sendResetPasswordTokenToMail(email);
@@ -35,7 +38,7 @@ public class ResetPasswordService {
     @Transactional
     @Modifying
     public void changePassword(String password, String confirmationToken) {
-        User user = userRepository.findUserById(jwtResolver.getIdFromToken(confirmationToken));
+        User user = userService.fromIdToEntity(jwtResolver.getIdFromToken(confirmationToken));
         if (user == null) {
             throw new BadRequestException(USER_NOT_EXIST);
         }
@@ -50,7 +53,7 @@ public class ResetPasswordService {
 
     @Transactional
     public void changePasswordByAdmin(String email, String newPassword, String token) {
-        User admin = userRepository.findUserById(jwtResolver.getIdFromToken(token));
+        User admin = userService.fromIdToEntity(jwtResolver.getIdFromToken(token));
         User user = userRepository.findByEmail(email);
         if (admin == null || user == null) {
             throw new BadRequestException(USER_NOT_EXIST);

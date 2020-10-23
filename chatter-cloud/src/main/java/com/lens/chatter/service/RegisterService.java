@@ -37,6 +37,9 @@ public class RegisterService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TokenService tokenService;
 
     @Autowired
@@ -82,7 +85,7 @@ public class RegisterService {
     @Transactional
     public void confirmRegister(String confirmationToken) {
         UUID id = jwtResolver.getIdFromToken(confirmationToken);
-        User user = userRepository.findUserById(id);
+        User user = userService.fromIdToEntity(id);
         if (user == null) {
             throw new BadRequestException(ErrorConstants.USER_NOT_EXIST);
         }

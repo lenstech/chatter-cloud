@@ -37,6 +37,9 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
     private DepartmentMapper mapper;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private DepartmentRepository repository;
 
     @Autowired
@@ -90,8 +93,7 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
     @Transactional
     public DepartmentResource addPersonal(UUID departmentId, UUID userId) {
         Department department = repository.findDepartmentById(departmentId);
-        User user = userRepository.findUserById(userId);
-
+        User user = userService.fromIdToEntity(userId);
         if (user.getDepartment().equals(department)) {
             throw new BadRequestException(USER_ALREADY_ADDED_TO_DEPARTMENT);
         }
@@ -103,7 +105,7 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
     @Transactional
     public DepartmentResource removePersonal(UUID departmentId, UUID userId) {
         Department department = repository.findDepartmentById(departmentId);
-        User user = userRepository.findUserById(userId);
+        User user = userService.fromIdToEntity(userId);
         if (!user.getDepartment().equals(department)) {
             throw new BadRequestException(USER_IS_NOT_EXIST);
         }

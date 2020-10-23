@@ -25,13 +25,16 @@ public class UserProfileService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private MinimalUserMapper minimalUserMapper;
 
     public CompleteUserResource getSelfProfile(UUID selfId) {
-        User selfUser = userRepository.findUserById(selfId);
+        User selfUser = userService.fromIdToEntity(selfId);
         if (selfUser == null) {
             throw new BadRequestException(USER_NOT_EXIST);
         } else {
@@ -49,7 +52,7 @@ public class UserProfileService {
 
     @Transactional
     public CompleteUserResource updateProfile(UUID userId, RegisterDto dto) {
-        User oldUser = userRepository.findUserById(userId);
+        User oldUser = userService.fromIdToEntity(userId);
         if (oldUser == null) {
             throw new BadRequestException(USER_NOT_EXIST);
         }
@@ -63,7 +66,7 @@ public class UserProfileService {
 
     @Transactional
     public CompleteUserResource updatePassword(UUID userId, UpdatePasswordDto dto) {
-        User user = userRepository.findUserById(userId);
+        User user = userService.fromIdToEntity(userId);
         if (user == null) {
             throw new BadRequestException(USER_NOT_EXIST);
         }

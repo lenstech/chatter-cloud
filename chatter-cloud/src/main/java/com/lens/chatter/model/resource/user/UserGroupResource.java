@@ -18,5 +18,6 @@ import java.util.Set;
 public class UserGroupResource extends AbstractResource {
     private Set<MinimalUserResource> users;
     private Boolean isPrivate;
+    private MinimalUserResource manager;
 
 }

@@ -2,7 +2,9 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
+import com.lens.chatter.enums.Role;
 import com.lens.chatter.exception.BadRequestException;
+import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.mapper.UserGroupMapper;
 import com.lens.chatter.model.dto.user.UserGroupDto;
 import com.lens.chatter.model.entity.User;
@@ -12,7 +14,6 @@ import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.UserGroupRepository;
 import com.lens.chatter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,9 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public ChatterRepository<UserGroup, UUID> getRepository() {
         return repository;
@@ -45,22 +49,6 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
     @Override
     public Converter<UserGroupDto, UserGroup, UserGroupResource> getConverter() {
         return mapper;
-    }
-
-    @Override
-    public UserGroupResource put(UUID id, UserGroupDto updatedDto, UUID userId) {
-        UserGroup theReal = repository.findById(id).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
-        if (updatedDto == null) {
-            throw new BadRequestException(DTO_CANNOT_BE_EMPTY);
-        }
-        if (id == null) {
-            throw new BadRequestException(ID_CANNOT_BE_EMPTY);
-        }
-        UserGroup updated = mapper.toEntity(updatedDto);
-        updated.setId(theReal.getId());
-        updated.setUsers(theReal.getUsers());
-        updated.setCreatedDate(theReal.getCreatedDate());
-        return mapper.toResource(getRepository().save(updated));
     }
 
     @Transactional
@@ -79,5 +67,35 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
         users.removeAll(userRepository.findByIdIn(userIds));
         group.setUsers(users);
         return mapper.toResource(repository.save(group));
+    }
+
+    public List<UserGroupResource> getMyUserGroups(UUID userId) {
+        return mapper.toResources(repository.findByUsers(userService.fromIdToEntity(userId)));
+    }
+
+    @Override
+    protected UserGroup putOperations(UserGroup oldEntity, UserGroup newEntity, UUID userId) {
+        newEntity.setUsers(oldEntity.getUsers());
+        User user = userService.fromIdToEntity(userId);
+        if (newEntity.getManager() == null){
+            if(oldEntity.getManager() != null){
+                newEntity.setManager(oldEntity.getManager());
+            } else {
+                newEntity.setManager(userService.fromIdToEntity(userId));
+            }
+        } else if ( newEntity.getManager() != oldEntity.getManager()){
+            if (!userId.equals(oldEntity.getManager().getId()) && !user.getRole().equals(Role.FIRM_ADMIN) ){
+                throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+            }
+        }
+        return newEntity;
+    }
+
+    @Override
+    protected UserGroup saveOperations(UserGroup entity, UserGroupDto userGroupDto, UUID userId) {
+        if (entity.getManager() == null){
+            entity.setManager(userService.fromIdToEntity(userId));
+        }
+        return entity;
     }
 }

@@ -27,6 +27,7 @@ public class ErrorConstants {
     public static final String USER_NOT_EXIST = "User could not be found!";
 
     public static final String ID_IS_NOT_EXIST = "Id is not exist";
+    public static final String USER_ID_IS_NOT_EXIST = "User id is not exist";
 
     //Department
     public static final String USER_ALREADY_ADDED_TO_DEPARTMENT = "User already added to department!";

@@ -23,7 +23,7 @@ public class UserGroup extends AbstractEntity<UUID> {
     @NotNull
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_user_group",
             joinColumns = @JoinColumn(name = "user_group_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
@@ -31,4 +31,8 @@ public class UserGroup extends AbstractEntity<UUID> {
     private Set<User> users = new HashSet<>();
 
     private Boolean isPrivate = false;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private User manager;
 }

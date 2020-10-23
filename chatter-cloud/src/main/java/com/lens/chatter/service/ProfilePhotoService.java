@@ -23,13 +23,13 @@ import java.util.UUID;
 public class ProfilePhotoService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ProfilePhotoRepository repository;
 
     public String uploadImage(MultipartFile file, UUID idFromToken) {
-        User user = userRepository.findUserById(idFromToken);
+        User user = userService.fromIdToEntity(idFromToken);
         if (user == null) {
             throw new UnauthorizedException(ErrorConstants.USER_NOT_EXIST);
         }
