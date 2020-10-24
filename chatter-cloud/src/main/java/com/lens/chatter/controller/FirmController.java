@@ -12,6 +12,8 @@ import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.service.FirmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,8 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
+
+    private static final Logger logger = LoggerFactory.getLogger(FirmController.class);
 
     @Override
     protected AbstractService<Firm, UUID, FirmDto, FirmResource> getService() {
@@ -65,9 +69,15 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
         super.deleteRole = Role.BASIC_USER;
     }
 
+    @Override
+    public void setEntityName() {
+        super.entityName = "Firm";
+    }
+
     @ApiOperation(value = "Get all Branches of a Firm, it can be seen by basic user", response = BranchResource.class, responseContainer = "List")
     @GetMapping("/get-branches")
     public ResponseEntity getBranchesOfFirm(@RequestHeader("Authorization") String token, @RequestParam UUID firmId) {
+        logger.info(String.format("Requesting getBranchesOfFirm firmId: %s ", firmId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getBranches(firmId));
     }
@@ -75,10 +85,11 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
     @ApiOperation(value = "Get all Users of a Firm page by page, it can be seen by basic user", responseContainer = "List")
     @GetMapping("/get-users/{page}")
     public Page<MinimalUserResource> getPersonalsOfFirmByPage(@RequestHeader("Authorization") String token,
-                                         @RequestParam UUID firmId,
-                                         @PathVariable("page") int pageNo,
-                                         @RequestParam(required = false) String sortBy,
-                                         @RequestParam(required = false) Boolean desc) {
+                                                              @RequestParam UUID firmId,
+                                                              @PathVariable("page") int pageNo,
+                                                              @RequestParam(required = false) String sortBy,
+                                                              @RequestParam(required = false) Boolean desc) {
+        logger.info(String.format("Requesting getPersonalsOfFirmByPage firmId: %s ", firmId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return service.getPersonalsOfFirm(firmId, pageNo, sortBy, desc);
     }
@@ -86,7 +97,8 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
     @ApiOperation(value = "Get all Users of a Firm, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
     @GetMapping("/get-users")
     public ResponseEntity getPersonalsOfFirm(@RequestHeader("Authorization") String token,
-                                         @RequestParam UUID firmId) {
+                                             @RequestParam UUID firmId) {
+        logger.info(String.format("Requesting getPersonalsOfFirm firmId: %s ", firmId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonalsOfFirm(firmId));
     }

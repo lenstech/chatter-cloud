@@ -12,11 +12,12 @@ import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.UserGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,6 +38,8 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
 
     @Autowired
     private JwtResolver jwtResolver;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserGroupController.class);
 
     @Override
     public void setSaveRole() {
@@ -64,6 +67,11 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
     }
 
     @Override
+    public void setEntityName() {
+        entityName = "UserGroup";
+    }
+
+    @Override
     protected AbstractService<UserGroup, UUID, UserGroupDto, UserGroupResource> getService() {
         return service;
     }
@@ -71,13 +79,15 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
     @ApiOperation(value = "Add users to an user group, with  group id, user ", response = UserGroupResource.class)
     @PutMapping("/add-users")
     public ResponseEntity addUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody ListOfIdDto userIds) {
+        logger.info(String.format("Requesting addUsersToGroup with groupId: %s ", groupId));
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.addUsers(groupId, userIds.getIds()));
     }
 
     @ApiOperation(value = "Remove users from an user group, with  group id, user ", response = UserGroupResource.class)
     @PutMapping("/remove-users")
-    public ResponseEntity removeUsersToGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody ListOfIdDto userIds) {
+    public ResponseEntity removeUsersFromGroup(@RequestHeader("Authorization") String token, @RequestParam UUID groupId, @RequestBody ListOfIdDto userIds) {
+        logger.info(String.format("Requesting removeUsersFromGroup with groupId: %s ", groupId));
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.removeUsers(groupId, userIds.getIds()));
     }
@@ -85,6 +95,8 @@ public class UserGroupController extends AbstractController<UserGroup, UUID, Use
     @ApiOperation(value = "Get the user's  userGroups, with his/her token ", response = UserGroupResource.class, responseContainer = "List")
     @GetMapping("/my-groups")
     public ResponseEntity getMyUserGroups(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.getMyUserGroups(jwtResolver.getIdFromToken(token)));
+        UUID userId = jwtResolver.getIdFromToken(token);
+        logger.info(String.format("Requesting getMyUserGroups with userId: %s ", userId));
+        return ResponseEntity.ok(service.getMyUserGroups(userId));
     }
 }

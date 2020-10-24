@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
 
     protected abstract AbstractService<T, ID, DTO, RES> getService();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractController.class);
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
@@ -44,16 +43,20 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
 
     public abstract void setDeleteRole();
 
+    public abstract void setEntityName();
+
     protected Role saveRole;
     protected Role getRole;
     protected Role getAllRole;
     protected Role updateRole;
     protected Role deleteRole;
+    protected String entityName;
 
     @ApiOperation(value = "Create Object, it can be done by authorization")
     @PostMapping
     public RES save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
-        LOGGER.debug(String.format("Saving the dto [%s].", dto));
+        setEntityName();
+        logger.info(String.format("Saving the " + entityName + "Dto with id: %s.", dto));
         setSaveRole();
         UUID userId = authorizationConfig.permissionCheck(token, saveRole);
         return getService().save(dto, userId);
@@ -62,7 +65,8 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @ApiOperation(value = "Get Object")
     @GetMapping
     public RES get(@RequestHeader(value = "Authorization", required = false) String token, @RequestParam ID objectId) {
-        LOGGER.debug("Requesting {id} records.");
+        setEntityName();
+        logger.info(String.format("Requesting " + entityName + " id: %s records.", objectId));
         setGetRole();
         if (getRole == null) {
             return getService().get(objectId);
@@ -76,8 +80,9 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @ApiOperation(value = "Get All Object", responseContainer = "List")
     @GetMapping("/all")
     public List<RES> getAll(@RequestHeader(value = "Authorization", required = false) String token) {
+        setEntityName();
         setGetAllRole();
-        LOGGER.debug("Requesting all records.");
+        logger.info("Requesting all records of " + entityName + ".");
         if (getAllRole == null) {
             return getService().getAll();
         } else if (token == null) {
@@ -93,8 +98,9 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
                                     @PathVariable("page") int pageNo,
                                     @RequestParam(required = false) String sortBy,
                                     @RequestParam(required = false) Boolean desc) {
+        setEntityName();
         setGetAllRole();
-        LOGGER.debug("Requesting all records.");
+        logger.info("Requesting all records" + entityName + " by page.");
         if (getAllRole == null) {
             return getService().getAllWithPage(pageNo, sortBy, desc);
         } else if (token == null) {
@@ -109,7 +115,8 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     public RES update(@RequestHeader("Authorization") String token,
                       @RequestBody DTO dto,
                       @RequestParam ID objectId) {
-        LOGGER.debug(String.format("Request to update the record [%s].", objectId));
+        setEntityName();
+        logger.info(String.format("Request to update a " + entityName + " object record with id: %s.", objectId));
         setUpdateRole();
         UUID userId = authorizationConfig.permissionCheck(token, updateRole);
         return getService().put(objectId, dto, userId);
@@ -119,7 +126,8 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @DeleteMapping
     public String delete(@RequestHeader("Authorization") String token,
                          @RequestParam ID objectId) {
-        LOGGER.debug(String.format("Request to delete the record [%s].", objectId));
+        setEntityName();
+        logger.info(String.format("Request to delete a " + entityName + "object record with id: %s.", objectId));
         setDeleteRole();
         UUID userId = authorizationConfig.permissionCheck(token, deleteRole);
         getService().delete(objectId, userId);

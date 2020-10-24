@@ -55,4 +55,10 @@ public class ProductController extends AbstractController<Product, UUID, Product
     public void setDeleteRole() {
         super.deleteRole = Role.BASIC_USER;
     }
+
+    @Override
+    public void setEntityName() {
+        super.entityName = "Product";
+    }
+
 }

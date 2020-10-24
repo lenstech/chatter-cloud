@@ -55,4 +55,9 @@ public class DefectController extends AbstractController<Defect, UUID, DefectDto
     public void setDeleteRole() {
         super.deleteRole = Role.BASIC_USER;
     }
+
+    @Override
+    public void setEntityName() {
+        super.entityName = "Defect";
+    }
 }

@@ -11,6 +11,8 @@ import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.service.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,8 @@ public class DepartmentController extends AbstractController<Department, UUID, D
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
+
+    private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
     @Override
     protected AbstractService<Department, UUID, DepartmentDto, DepartmentResource> getService() {
@@ -63,10 +67,16 @@ public class DepartmentController extends AbstractController<Department, UUID, D
         super.deleteRole = Role.BASIC_USER;
     }
 
+    @Override
+    public void setEntityName() {
+        super.entityName = "Department";
+    }
+
     @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
     @GetMapping("/get-personals")
     public ResponseEntity getPersonalsOfDepartment(@RequestHeader("Authorization") String token,
                                                    @RequestParam UUID departmentId) {
+        logger.info(String.format("Requesting getPersonalsOfDepartment departmentId: %s ", departmentId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonals(departmentId));
     }
@@ -76,15 +86,17 @@ public class DepartmentController extends AbstractController<Department, UUID, D
     public ResponseEntity addPersonalToDepartment(@RequestHeader("Authorization") String token,
                                                   @RequestParam UUID personalUserId,
                                                   @RequestParam UUID departmentId) {
+        logger.info(String.format("Requesting addPersonalToDepartment departmentId: %s ,personalUserId: %s ", departmentId, personalUserId));
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.addPersonal(departmentId, personalUserId));
     }
 
     @ApiOperation(value = "Remove Personal from a Department , it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/remove-personal")
-    public ResponseEntity removePersonalToDepartment(@RequestHeader("Authorization") String token,
-                                                     @RequestParam UUID personalUserId,
-                                                     @RequestParam UUID departmentId) {
+    public ResponseEntity removePersonalFromDepartment(@RequestHeader("Authorization") String token,
+                                                       @RequestParam UUID personalUserId,
+                                                       @RequestParam UUID departmentId) {
+        logger.info(String.format("Requesting removePersonalFromDepartment departmentId: %s ,personalUserId: %s ", departmentId, personalUserId));
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.removePersonal(departmentId, personalUserId));
     }

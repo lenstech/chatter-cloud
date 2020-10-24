@@ -10,6 +10,8 @@ import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.RegisterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +37,10 @@ public class RegisterController {
     @Autowired
     private AuthorizationConfig authorizationConfig;
 
+    private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
+
     @Autowired
     private JwtResolver resolver;
-
 
     @ApiOperation(value = "Register a user with the needed information", response = LoginResource.class)
     @PostMapping("/user")

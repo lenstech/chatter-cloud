@@ -12,6 +12,8 @@ import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.service.BranchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,8 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
+
+    private static final Logger logger = LoggerFactory.getLogger(BranchController.class);
 
     @Override
     protected AbstractService<Branch, UUID, BranchDto, BranchResource> getService() {
@@ -62,6 +66,11 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     }
 
     @Override
+    public void setEntityName() {
+        super.entityName = "Branch";
+    }
+
+    @Override
     public void setDeleteRole() {
         super.deleteRole = Role.BASIC_USER;
     }
@@ -71,6 +80,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     @GetMapping("/get-departments")
     public ResponseEntity getDepartmentsOfBranch(@RequestHeader("Authorization") String token,
                                                  @RequestParam UUID branchId) {
+        logger.info(String.format("Requesting getDepartmentsOfBranch branchId: %s.", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getDepartments(branchId));
     }
@@ -80,6 +90,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     public ResponseEntity addDepartmentToBranch(@RequestHeader("Authorization") String token,
                                                 @RequestParam UUID departmentId,
                                                 @RequestParam UUID branchId) {
+        logger.info(String.format("Requesting addDepartmentToBranch branchId: %s , departmentId: %s", branchId, departmentId));
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
         return ResponseEntity.ok(service.addDepartment(branchId, departmentId));
     }
@@ -89,7 +100,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     public ResponseEntity removeDepartmentFromBranch(@RequestHeader("Authorization") String token,
                                                      @RequestParam UUID departmentId,
                                                      @RequestParam UUID branchId) {
-
+        logger.info(String.format("Requesting removeDepartmentFromBranch branchId: %s , departmentId: %s", branchId, departmentId));
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
         return ResponseEntity.ok(service.removeDepartment(branchId, departmentId));
     }
@@ -101,6 +112,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
                                                           @PathVariable("page") int pageNo,
                                                           @RequestParam(required = false) String sortBy,
                                                           @RequestParam(required = false) Boolean desc) {
+        logger.info(String.format("Requesting getPersonalsOfBranch pageByPage branchId: %s ", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return service.getPersonalsOfBranch(branchId, pageNo, sortBy, desc);
     }
@@ -109,6 +121,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     @GetMapping("/get-users")
     public ResponseEntity<List<MinimalUserResource>> getPersonalsOfBranch(@RequestHeader("Authorization") String token,
                                                      @RequestParam UUID branchId) {
+        logger.info(String.format("Requesting getPersonalsOfBranch branchId: %s ", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonalsOfBranch(branchId));
     }
