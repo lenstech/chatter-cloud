@@ -3,8 +3,11 @@ package com.lens.chatter.service;
 import com.lens.chatter.enums.Role;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.exception.UnauthorizedException;
+import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.entity.User;
+import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.repository.UserRepository;
+import com.lens.chatter.security.JwtGenerator;
 import com.lens.chatter.security.JwtResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -30,6 +33,12 @@ public class ResetPasswordService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private JwtGenerator jwtGenerator;
+
     @Transactional
     public void resetPasswordRequest(String email){
         tokenService.sendResetPasswordTokenToMail(email);
@@ -37,7 +46,7 @@ public class ResetPasswordService {
 
     @Transactional
     @Modifying
-    public void changePassword(String password, String confirmationToken) {
+    public LoginResource changePassword(String password, String confirmationToken) {
         User user = userService.fromIdToEntity(jwtResolver.getIdFromToken(confirmationToken));
         if (user == null) {
             throw new BadRequestException(USER_NOT_EXIST);
@@ -49,6 +58,7 @@ public class ResetPasswordService {
         user.setPassword(encoder.encode(password));
         user.setConfirmed(true);
         userRepository.save(user);
+        return new LoginResource(userMapper.toResource(user),jwtGenerator.generateLoginToken(user.getId(), user.getRole()));
     }
 
     @Transactional

@@ -147,7 +147,7 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
     }
 
     public List<MinimalUserResource> getPersonalsOfBranch(UUID branchId){
-        return minimalUserMapper.toResource(userRepository.findUsersByDepartmentBranchId(branchId));
+        return minimalUserMapper.toResources(userRepository.findUsersByDepartmentBranchId(branchId));
     }
 
 }

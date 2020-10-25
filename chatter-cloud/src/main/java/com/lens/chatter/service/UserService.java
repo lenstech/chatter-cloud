@@ -2,8 +2,6 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
-import com.lens.chatter.constant.ErrorConstants;
-import com.lens.chatter.exception.NotFoundException;
 import com.lens.chatter.mapper.MinimalUserMapper;
 import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.user.RegisterDto;
@@ -22,7 +20,7 @@ import java.util.UUID;
  */
 
 @Service
-public class UserService extends AbstractService<User, UUID, RegisterDto, CompleteUserResource> {
+public class UserService extends AbstractService<User, UUID, RegisterDto, MinimalUserResource> {
 
     @Autowired
     private UserRepository repository;
@@ -40,8 +38,8 @@ public class UserService extends AbstractService<User, UUID, RegisterDto, Comple
     }
 
     @Override
-    public Converter<RegisterDto, User, CompleteUserResource> getConverter() {
-        return mapper;
+    public Converter<RegisterDto, User, MinimalUserResource> getConverter() {
+        return minimalUserMapper;
     }
 
     public MinimalUserResource findUserByIdToMinRes(UUID id) {

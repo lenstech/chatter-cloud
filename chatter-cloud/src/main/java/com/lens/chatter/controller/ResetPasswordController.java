@@ -2,6 +2,7 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
+import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.ResetPasswordService;
 import com.lens.chatter.service.TokenService;
@@ -47,13 +48,12 @@ public class ResetPasswordController {
         return ResponseEntity.ok(MAIL_SEND_YOUR_EMAIL);
     }
 
-    @ApiOperation(value = "User can reset his password by new password and the token sent his mail address ", response = String.class)
+    @ApiOperation(value = "User can reset his password by new password and the token sent his mail address ", response = LoginResource.class)
     @PutMapping("/confirm-and-change")
-    public ResponseEntity<String> changePassword(@RequestParam("password") String password,
-                                                 @RequestHeader("Authorization") String confirmationToken) {
+    public ResponseEntity<LoginResource> changePassword(@RequestParam("password") String password,
+                                                        @RequestHeader("Authorization") String confirmationToken) {
         logger.info(String.format("Requesting changePassword with userId: %s ", jwtResolver.getIdFromToken(confirmationToken)));
-        resetPasswordService.changePassword(password, confirmationToken);
-        return ResponseEntity.ok(YOUR_PASSWORD_WAS_CHANGED);
+        return ResponseEntity.ok(resetPasswordService.changePassword(password, confirmationToken));
     }
 
     @ApiOperation(value = "ADMIN or FIRM_ADMIN can reset an user password by its mail address and new password", response = String.class)

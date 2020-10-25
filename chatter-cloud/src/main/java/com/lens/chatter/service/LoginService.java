@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class LoginService {
 
@@ -33,6 +35,9 @@ public class LoginService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     public LoginResource login(LoginDto dto) {
         User user = userRepository.findByEmail(dto.getEmail());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -48,7 +53,9 @@ public class LoginService {
         }
     }
 
-    public String updateToken(String token) {
-        return jwtGenerator.generateLoginToken(jwtResolver.getIdFromToken(token), jwtResolver.getRoleFromToken(token));
+    public LoginResource updateToken(String token) {
+        UUID userId = jwtResolver.getIdFromToken(token);
+        User user = userService.fromIdToEntity(userId);
+        return new LoginResource(userMapper.toResource(user),jwtGenerator.generateLoginToken(userId, user.getRole()));
     }
 }

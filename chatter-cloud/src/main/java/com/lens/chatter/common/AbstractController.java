@@ -77,6 +77,21 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
         return getService().get(objectId);
     }
 
+
+    @ApiOperation(value = "Get Multiple Object")
+    @PostMapping("/multiple")
+    public List<RES> get(@RequestHeader(value = "Authorization", required = false) String token, @RequestBody List<ID> objectIds) {
+        logger.debug("Requesting  multiple " + entityName + " records.");
+        setGetRole();
+        if (getRole == null) {
+            return getService().getMultiple(objectIds);
+        } else if (token == null) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
+        }
+        authorizationConfig.permissionCheck(token, getRole);
+        return getService().getMultiple(objectIds);
+    }
+
     @ApiOperation(value = "Get All Object", responseContainer = "List")
     @GetMapping("/all")
     public List<RES> getAll(@RequestHeader(value = "Authorization", required = false) String token) {

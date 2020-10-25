@@ -48,6 +48,16 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
         return getConverter().toResource(entity);
     }
 
+    public List<RES> getMultiple(List<ID> ids) {
+        List<T> entities;
+        try {
+            entities = getRepository().findAllByIdIn(ids);
+        } catch (NullPointerException e) {
+            throw new NotFoundException(ID_IS_NOT_EXIST);
+        }
+        return getConverter().toResources(entities);
+    }
+
     public List<RES> getAll() {
         return getConverter().toResources(getRepository().findAll());
     }

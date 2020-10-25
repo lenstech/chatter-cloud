@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,7 +84,7 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
     }
 
     public List<MinimalUserResource> getPersonalsOfFirm(UUID branchId){
-        return minimalUserMapper.toResource(userRepository.findUsersByDepartmentBranchFirmId(branchId));
+        return minimalUserMapper.toResources(userRepository.findUsersByDepartmentBranchFirmId(branchId));
     }
 
 }
