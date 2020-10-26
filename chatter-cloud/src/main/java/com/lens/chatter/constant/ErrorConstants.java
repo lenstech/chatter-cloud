@@ -47,4 +47,7 @@ public class ErrorConstants {
     //Exist
     public static final String PROVIDE_VALID_MAIL = "Please Provide Valid Mail Address";
 
+    public static final String PRODUCT_NOT_EXIST = "Product Not Exist";
+    public static final String PRODUCT_PHOTO_NOT_EXIST = "Product Photo Not Exist";
+    public static final String PRODUCT_PHOTO_ALREADY_EXIST = "Product photo already exist";
 }
