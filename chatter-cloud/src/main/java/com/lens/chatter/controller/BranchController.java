@@ -127,7 +127,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     }
 
     @ApiOperation(value = "Get shift quantity of a Branch")
-    @GetMapping("/get-users")
+    @GetMapping("/get-daily-shift-quantity")
     public ResponseEntity<Integer> getDailyShiftQuantity(@RequestHeader("Authorization") String token,
                                                      @RequestParam UUID branchId) {
         logger.info(String.format("Requesting getDailyShiftQuantity branchId: %s ", branchId));
