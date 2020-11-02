@@ -150,4 +150,8 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
         return minimalUserMapper.toResources(userRepository.findUsersByDepartmentBranchId(branchId));
     }
 
+    public Integer getDailyShiftQuantity(UUID branchId){
+        return fromIdToEntity(branchId).getDailyShiftQuantity();
+    }
+
 }

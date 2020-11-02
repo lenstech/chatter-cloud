@@ -44,7 +44,7 @@ public class TokenService {
         String confirmationToken = jwtGenerator.generateMailConfirmationToken(user.getId());
         mailUtil.sendTokenMail(user.getEmail(), confirmationToken, CONFIRM_ACCOUNT_HEADER,
                 CONFIRM_ACCOUNT_BODY
-                        + this.environment.getProperty("spring.url")
+                        + CLIENT_URL
                         + CONFIRM_ACCOUNT_URL);
     }
 
@@ -55,8 +55,8 @@ public class TokenService {
         User user = userRepository.findByEmail(email);
         String resetToken = jwtGenerator.generateResetPasswordToken(user.getId());
         mailUtil.sendTokenMail(user.getEmail(), resetToken, RESET_PASSWORD_HEADER,
-                RESET_PASSWORD_BODY
-                        + this.environment.getProperty("spring.url")
+                RESET_PASSWORD_BODY + "\n"
+                        + CLIENT_URL
                         + RESET_PASSWORD_URL);
 
     }

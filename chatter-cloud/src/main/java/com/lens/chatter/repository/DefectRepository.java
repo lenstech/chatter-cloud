@@ -12,6 +12,4 @@ import java.util.UUID;
 @Repository
 public interface DefectRepository extends ChatterRepository<Defect, UUID> {
 
-    @Named("findByIdIn")
-    Set<Defect> findByIdIn(Collection<UUID> ids);
 }

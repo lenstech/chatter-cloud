@@ -5,14 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @NoRepositoryBean
 public interface ChatterRepository<T, ID extends Serializable> extends JpaRepository<T, ID> {
 
     @Override
-    default Optional<T> findById(ID id){
+    default Optional<T> findById(ID id) {
         return Optional.ofNullable(findOneById(id));
     }
 
@@ -21,7 +23,10 @@ public interface ChatterRepository<T, ID extends Serializable> extends JpaReposi
 
     @Named("findAllByIdIn")
     List<T> findAllByIdIn(List<ID> ids);
-    
+
+    @Named("findByIdIn")
+    Set<T> findByIdIn(Collection<ID> ids);
+
     void deleteById(ID id);
 
     void delete(T entity);

@@ -54,6 +54,7 @@ public class DbInitializeData {
             defaultBranch.setCity("İstanbul");
             defaultBranch.setAddress("Boğaziçi Teknopark");
             defaultBranch.setFirm(firmRepository.findByName("default firm"));
+            defaultBranch.setDailyShiftQuantity(3);
             branchRepository.save(defaultBranch);
         }
 

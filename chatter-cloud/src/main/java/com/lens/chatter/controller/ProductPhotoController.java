@@ -55,6 +55,7 @@ public class ProductPhotoController {
     @ApiOperation("Delete photo of product by productId")
     public ResponseEntity<String> deleteProductPhoto(@RequestParam("productId") UUID productId,
                                                      @RequestHeader("Authorization") String token) {
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         try {
             service.deletePhotoByProductId(productId);
         } catch (Exception e) {

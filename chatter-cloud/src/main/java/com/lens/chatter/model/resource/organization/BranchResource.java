@@ -20,5 +20,7 @@ public class BranchResource extends AbstractResource {
 
     private String address;
 
+    private Integer dailyShiftQuantity;
+
     private FirmResource firm;
 }

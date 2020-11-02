@@ -33,4 +33,6 @@ public class Branch extends AbstractEntity<UUID> {
     @ManyToOne
     @JoinColumn(name = "firm_id")
     private Firm firm;
+
+    private Integer dailyShiftQuantity = 3;
 }

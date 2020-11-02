@@ -125,4 +125,13 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonalsOfBranch(branchId));
     }
+
+    @ApiOperation(value = "Get shift quantity of a Branch")
+    @GetMapping("/get-users")
+    public ResponseEntity<Integer> getDailyShiftQuantity(@RequestHeader("Authorization") String token,
+                                                     @RequestParam UUID branchId) {
+        logger.info(String.format("Requesting getDailyShiftQuantity branchId: %s ", branchId));
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.getDailyShiftQuantity(branchId));
+    }
 }

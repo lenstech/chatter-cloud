@@ -26,4 +26,6 @@ public class BranchDto {
 
     @NotNull(message = "FirmId cannot be blank")
     private UUID firmId;
+
+    private Integer dailyShiftQuantity;
 }

@@ -29,4 +29,8 @@ public class ProductDto {
 
     @Nullable
     private Set<UUID> defectIds;
+
+    private Integer shift;
+
+    private UUID branchId;
 }

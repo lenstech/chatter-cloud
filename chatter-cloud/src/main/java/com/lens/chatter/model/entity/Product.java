@@ -30,4 +30,10 @@ public class Product extends AbstractEntity<UUID> {
 
     @OneToMany(mappedBy = "product")
     private Set<Defect> defects;
+
+    private Integer shift;
+
+    @ManyToOne
+    @JoinColumn(name = "branch_id", referencedColumnName = "id")
+    private Branch branch;
 }
