@@ -33,7 +33,7 @@ public class UserProfileController {
 
     @ApiOperation(value = "Return current users profile information", response = CompleteUserResource.class)
     @GetMapping("/get-self-profile")
-    public ResponseEntity getSelfProfile(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<CompleteUserResource> getSelfProfile(@RequestHeader("Authorization") String token) {
         UUID userId = jwtResolver.getIdFromToken(token);
         logger.info(String.format("Requesting getSelfProfile with userId: %s ", userId));
         CompleteUserResource user = userProfileService.getSelfProfile(userId);
@@ -43,7 +43,7 @@ public class UserProfileController {
     @ApiOperation(value = "Return profile of a given user. If the user is private and you don't follow it then returns null",
             response = MinimalUserResource.class)
     @GetMapping("/get-other-profile")
-    public ResponseEntity getOtherProfile(@RequestHeader("Authorization") String token, @RequestParam("email") String email) {
+    public ResponseEntity<MinimalUserResource> getOtherProfile(@RequestHeader("Authorization") String token, @RequestParam("email") String email) {
         UUID userId = jwtResolver.getIdFromToken(token);
         logger.info(String.format("Requesting getOtherProfile with userId: %s ", userId));
         MinimalUserResource user = userProfileService.getOtherProfile(email);
@@ -52,7 +52,7 @@ public class UserProfileController {
 
     @ApiOperation(value = "Update a profile with the given info", response = CompleteUserResource.class)
     @PutMapping("/update-profile")
-    public ResponseEntity updateUserProfile(@RequestHeader("Authorization") String token, @RequestBody @Valid RegisterDto userDto) {
+    public ResponseEntity<CompleteUserResource> updateUserProfile(@RequestHeader("Authorization") String token, @RequestBody @Valid RegisterDto userDto) {
         UUID userId = jwtResolver.getIdFromToken(token);
         logger.info(String.format("Requesting updateUserProfile with userId: %s ", userId));
         CompleteUserResource user = userProfileService.updateProfile(userId, userDto);
@@ -61,7 +61,7 @@ public class UserProfileController {
 
     @ApiOperation(value = "Update password with the old password and the new password", response = CompleteUserResource.class)
     @PutMapping("/update-password")
-    public ResponseEntity updatePassword(@RequestHeader("Authorization") String token, @RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<CompleteUserResource> updatePassword(@RequestHeader("Authorization") String token, @RequestBody UpdatePasswordDto updatePasswordDto) {
         UUID userId = jwtResolver.getIdFromToken(token);
         logger.info(String.format("Requesting updatePassword with userId: %s ", userId));
         CompleteUserResource user = userProfileService.updatePassword(userId, updatePasswordDto);

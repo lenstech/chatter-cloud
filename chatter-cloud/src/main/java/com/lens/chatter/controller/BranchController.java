@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -78,8 +79,8 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
 
     @ApiOperation(value = "Get all Departments of a Branch , it can be seen by only Admin", response = DepartmentResource.class, responseContainer = "Set")
     @GetMapping("/get-departments")
-    public ResponseEntity getDepartmentsOfBranch(@RequestHeader("Authorization") String token,
-                                                 @RequestParam UUID branchId) {
+    public ResponseEntity<Set<DepartmentResource>> getDepartmentsOfBranch(@RequestHeader("Authorization") String token,
+                                                      @RequestParam UUID branchId) {
         logger.info(String.format("Requesting getDepartmentsOfBranch branchId: %s.", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getDepartments(branchId));
@@ -87,7 +88,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
 
     @ApiOperation(value = "Add Department to a Branch , it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/add-department")
-    public ResponseEntity addDepartmentToBranch(@RequestHeader("Authorization") String token,
+    public ResponseEntity<BranchResource> addDepartmentToBranch(@RequestHeader("Authorization") String token,
                                                 @RequestParam UUID departmentId,
                                                 @RequestParam UUID branchId) {
         logger.info(String.format("Requesting addDepartmentToBranch branchId: %s , departmentId: %s", branchId, departmentId));
@@ -97,7 +98,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
 
     @ApiOperation(value = "Remove Department from Branch, it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/remove-department")
-    public ResponseEntity removeDepartmentFromBranch(@RequestHeader("Authorization") String token,
+    public ResponseEntity<BranchResource> removeDepartmentFromBranch(@RequestHeader("Authorization") String token,
                                                      @RequestParam UUID departmentId,
                                                      @RequestParam UUID branchId) {
         logger.info(String.format("Requesting removeDepartmentFromBranch branchId: %s , departmentId: %s", branchId, departmentId));

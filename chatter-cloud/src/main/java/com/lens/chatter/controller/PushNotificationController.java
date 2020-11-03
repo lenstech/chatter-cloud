@@ -32,14 +32,14 @@ public class PushNotificationController {
 
     @PostMapping("/notification")
     @ApiOperation(value = "Send push notification", response = String.class)
-    public ResponseEntity sendPushNotification(@RequestBody @Valid PushNotificationRequest request) {
+    public ResponseEntity<String> sendPushNotification(@RequestBody @Valid PushNotificationRequest request) {
         logger.info(String.format("Requesting sendPushNotification request: %s ", request.toString()));
         return ResponseEntity.ok(pushNotificationService.sendPushNotification(request));
     }
 
     @GetMapping("/notification")
     @ApiOperation(value = "Send sample notification", response = String.class)
-    public ResponseEntity sendSampleNotification() {
+    public ResponseEntity<StringBuilder> sendSampleNotification() {
         logger.info("Requesting sendSampleNotification");
         pushNotificationService.sendSamplePushNotification();
         return ResponseEntity.ok(new StringBuilder("Sample Push Notification is sent!"));

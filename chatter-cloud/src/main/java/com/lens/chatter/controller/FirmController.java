@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -76,7 +78,7 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
 
     @ApiOperation(value = "Get all Branches of a Firm, it can be seen by basic user", response = BranchResource.class, responseContainer = "List")
     @GetMapping("/get-branches")
-    public ResponseEntity getBranchesOfFirm(@RequestHeader("Authorization") String token, @RequestParam UUID firmId) {
+    public ResponseEntity<Set<BranchResource>> getBranchesOfFirm(@RequestHeader("Authorization") String token, @RequestParam UUID firmId) {
         logger.info(String.format("Requesting getBranchesOfFirm firmId: %s ", firmId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getBranches(firmId));
@@ -96,8 +98,8 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
 
     @ApiOperation(value = "Get all Users of a Firm, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
     @GetMapping("/get-users")
-    public ResponseEntity getPersonalsOfFirm(@RequestHeader("Authorization") String token,
-                                             @RequestParam UUID firmId) {
+    public ResponseEntity<List<MinimalUserResource>> getPersonalsOfFirm(@RequestHeader("Authorization") String token,
+                                                                        @RequestParam UUID firmId) {
         logger.info(String.format("Requesting getPersonalsOfFirm firmId: %s ", firmId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonalsOfFirm(firmId));

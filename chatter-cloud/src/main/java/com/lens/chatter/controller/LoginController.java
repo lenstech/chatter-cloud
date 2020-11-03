@@ -23,7 +23,7 @@ public class LoginController {
 
     @ApiOperation(value = "Login with the username (email) and password", response = LoginResource.class)
     @PostMapping("")
-    public ResponseEntity login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<LoginResource> login(@RequestBody LoginDto loginDto) {
         logger.info(String.format("Requesting login user's mail: %s ", loginDto.getEmail()));
         return ResponseEntity.ok(loginService.login(loginDto));
     }

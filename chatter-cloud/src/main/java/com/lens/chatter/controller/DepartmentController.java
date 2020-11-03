@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -74,8 +75,8 @@ public class DepartmentController extends AbstractController<Department, UUID, D
 
     @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
     @GetMapping("/get-personals")
-    public ResponseEntity getPersonalsOfDepartment(@RequestHeader("Authorization") String token,
-                                                   @RequestParam UUID departmentId) {
+    public ResponseEntity<Set<MinimalUserResource>> getPersonalsOfDepartment(@RequestHeader("Authorization") String token,
+                                                                             @RequestParam UUID departmentId) {
         logger.info(String.format("Requesting getPersonalsOfDepartment departmentId: %s ", departmentId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonals(departmentId));
@@ -83,7 +84,7 @@ public class DepartmentController extends AbstractController<Department, UUID, D
 
     @ApiOperation(value = "Add Personal to a Department , it can be done by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
     @PutMapping("/add-personal")
-    public ResponseEntity addPersonalToDepartment(@RequestHeader("Authorization") String token,
+    public ResponseEntity<DepartmentResource> addPersonalToDepartment(@RequestHeader("Authorization") String token,
                                                   @RequestParam UUID personalUserId,
                                                   @RequestParam UUID departmentId) {
         logger.info(String.format("Requesting addPersonalToDepartment departmentId: %s ,personalUserId: %s ", departmentId, personalUserId));
@@ -93,7 +94,7 @@ public class DepartmentController extends AbstractController<Department, UUID, D
 
     @ApiOperation(value = "Remove Personal from a Department , it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/remove-personal")
-    public ResponseEntity removePersonalFromDepartment(@RequestHeader("Authorization") String token,
+    public ResponseEntity<DepartmentResource> removePersonalFromDepartment(@RequestHeader("Authorization") String token,
                                                        @RequestParam UUID personalUserId,
                                                        @RequestParam UUID departmentId) {
         logger.info(String.format("Requesting removePersonalFromDepartment departmentId: %s ,personalUserId: %s ", departmentId, personalUserId));
