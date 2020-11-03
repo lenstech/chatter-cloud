@@ -1,6 +1,8 @@
 package com.lens.chatter.constant;
 
 
+import static com.lens.chatter.constant.GeneralConstants.DTO_DATE_TIME_FORMAT;
+
 /**
  * Created by Emir Gökdemir
  * on 13 Eki 2019
@@ -25,6 +27,7 @@ public class ErrorConstants {
     //Unauthorization Exception
     public static final String NOT_AUTHORIZED_FOR_OPERATION = "You are not authorized for this operation!";
     public static final String USER_NOT_EXIST = "User could not be found!";
+    public static final String THIS_OPERATION_IS_NOT_BELONG_TO_THIS_USER = "This Operation is not belong to this user!";
 
     public static final String ID_IS_NOT_EXIST = "Id is not exist";
     public static final String USER_ID_IS_NOT_EXIST = "User id is not exist";
@@ -50,4 +53,9 @@ public class ErrorConstants {
     public static final String PRODUCT_NOT_EXIST = "Product Not Exist";
     public static final String PRODUCT_PHOTO_NOT_EXIST = "Product Photo Not Exist";
     public static final String PRODUCT_PHOTO_ALREADY_EXIST = "Product photo already exist";
+
+    //Search - Filter
+    public static final String SEARCH_PARAMETER_NOT_FOUND = "Search Parameter is not found!";
+    public static final String DATE_FORMAT_IS_NOT_CORRECT = "Date format is not correct, It should be as: "
+            + DTO_DATE_TIME_FORMAT + " format";
 }

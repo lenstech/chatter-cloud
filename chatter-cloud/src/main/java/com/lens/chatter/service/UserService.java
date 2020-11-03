@@ -45,4 +45,6 @@ public class UserService extends AbstractService<User, UUID, RegisterDto, Minima
     public MinimalUserResource findUserByIdToMinRes(UUID id) {
         return minimalUserMapper.toResource(fromIdToEntity(id));
     }
+
+    //todo: userSearch
 }

@@ -34,6 +34,7 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
             return getConverter().toResource(getRepository().save(saveOperations(entity, dto, userId)));
         } catch (Exception e) {
             throw new BadRequestException(ID_IS_NOT_EXIST);
+            //todo düzgün handle et.
         }
     }
 

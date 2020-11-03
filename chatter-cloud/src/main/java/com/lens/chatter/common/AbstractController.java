@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -54,7 +55,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
 
     @ApiOperation(value = "Create Object, it can be done by authorization")
     @PostMapping
-    public RES save(@RequestHeader("Authorization") String token, @RequestBody DTO dto) {
+    public RES save(@RequestHeader("Authorization") String token, @RequestBody @Valid DTO dto) {
         setEntityName();
         logger.info(String.format("Saving the " + entityName + "Dto with id: %s.", dto));
         setSaveRole();
@@ -128,7 +129,7 @@ public abstract class AbstractController<T extends AbstractEntity, ID extends Se
     @ApiOperation(value = "Update Object, it can be done by authorization")
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public RES update(@RequestHeader("Authorization") String token,
-                      @RequestBody DTO dto,
+                      @RequestBody @Valid DTO dto,
                       @RequestParam ID objectId) {
         setEntityName();
         logger.info(String.format("Request to update a " + entityName + " object record with id: %s.", objectId));
