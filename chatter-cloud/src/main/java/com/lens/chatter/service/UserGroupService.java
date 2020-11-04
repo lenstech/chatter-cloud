@@ -3,7 +3,6 @@ package com.lens.chatter.service;
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
 import com.lens.chatter.enums.Role;
-import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.mapper.UserGroupMapper;
 import com.lens.chatter.model.dto.user.UserGroupDto;
@@ -53,7 +52,8 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
 
     @Transactional
     public UserGroupResource addUsers(UUID groupId, List<UUID> userIds) {
-        UserGroup group = repository.findById(groupId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
+
+        UserGroup group = fromIdToEntity(groupId);
         Set<User> users = group.getUsers();
         users.addAll(userRepository.findByIdIn(userIds));
         group.setUsers(users);
@@ -62,7 +62,7 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
 
     @Transactional
     public UserGroupResource removeUsers(UUID groupId, List<UUID> userIds) {
-        UserGroup group = repository.findById(groupId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
+        UserGroup group = fromIdToEntity(groupId);
         Set<User> users = group.getUsers();
         users.removeAll(userRepository.findByIdIn(userIds));
         group.setUsers(users);

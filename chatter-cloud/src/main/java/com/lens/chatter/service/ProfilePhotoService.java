@@ -6,7 +6,6 @@ import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.model.entity.ProfilePhoto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.repository.ProfilePhotoRepository;
-import com.lens.chatter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

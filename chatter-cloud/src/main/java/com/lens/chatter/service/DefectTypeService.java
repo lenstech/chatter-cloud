@@ -8,10 +8,7 @@ import com.lens.chatter.model.entity.DefectType;
 import com.lens.chatter.model.resource.product.DefectTypeResource;
 import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.DefectTypeRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -22,8 +19,6 @@ import java.util.UUID;
  */
 @Service
 public class DefectTypeService extends AbstractService<DefectType, UUID, DefectTypeDto, DefectTypeResource> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefectTypeService.class);
 
     @Autowired
     private DefectTypeRepository repository;

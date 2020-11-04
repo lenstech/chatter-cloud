@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FCMService {
 
-    private Logger logger = LoggerFactory.getLogger(FCMService.class);
+    private final Logger logger = LoggerFactory.getLogger(FCMService.class);
 
     private AndroidConfig setAndroidConfig(String topic) {
         return AndroidConfig.builder()

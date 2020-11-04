@@ -1,4 +1,4 @@
-package com.lens.chatter.utils;
+package com.lens.chatter.util;
 
 import lombok.experimental.UtilityClass;
 
@@ -22,9 +22,5 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, -days);
         return cal.getTime();
-    }
-
-    public static String getDateXDaysAgoWithFormat(Integer days, String pattern) {
-        return dateTimeFormatter(getDateXDaysAgo(days), pattern);
     }
 }

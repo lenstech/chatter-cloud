@@ -23,7 +23,7 @@ public class PushNotificationService {
 
     private Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
-    private FCMService fcmService;
+    private final FCMService fcmService;
 
     public PushNotificationService(FCMService fcmService) {
         this.fcmService = fcmService;
@@ -46,9 +46,8 @@ public class PushNotificationService {
     }
 
     private PushNotificationRequest getSamplePushNotificationRequest() {
-        PushNotificationRequest request = new PushNotificationRequest(defaults.get("title"),
+        return new PushNotificationRequest(defaults.get("title"),
                 defaults.get("message"),
                 defaults.get("topic"));
-        return request;
     }
 }

@@ -2,6 +2,7 @@ package com.lens.chatter.model.entity;
 
 import com.lens.chatter.common.AbstractEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.util.UUID;
  * Created by Emir Gökdemir
  * on 22 Şub 2020
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "department")

@@ -3,6 +3,7 @@ package com.lens.chatter.repository;
 import org.mapstruct.Named;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,7 +15,7 @@ import java.util.Set;
 public interface ChatterRepository<T, ID extends Serializable> extends JpaRepository<T, ID> {
 
     @Override
-    default Optional<T> findById(ID id) {
+    default Optional<T> findById(@Nullable ID id) {
         return Optional.ofNullable(findOneById(id));
     }
 

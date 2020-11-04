@@ -5,8 +5,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.function.Supplier;
-
 /**
  * Created by Emir Gökdemir
  * on 20 Şub 2020

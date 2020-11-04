@@ -5,7 +5,6 @@ import com.lens.chatter.enums.Role;
 import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.ResetPasswordService;
-import com.lens.chatter.service.TokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -25,9 +24,6 @@ import static com.lens.chatter.constant.HttpSuccessMessagesConstants.*;
 @RequestMapping(value = {"/reset-password"})
 @Api(value = "Reset Forgotten Password", tags = {"Password Reset"})
 public class ResetPasswordController {
-
-    @Autowired
-    private TokenService tokenService;
 
     @Autowired
     private JwtResolver jwtResolver;

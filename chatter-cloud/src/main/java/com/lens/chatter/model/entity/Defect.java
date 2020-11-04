@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.enums.LengthMeasureUnit;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import java.util.UUID;
  * Created by Emir Gökdemir
  * on 12 Nis 2020
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "defect")

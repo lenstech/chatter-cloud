@@ -45,8 +45,7 @@ public class FilterMapper implements Converter<FilterDto, Filter, FilterResource
     }
 
     public List<SearchCriteria> jsonToList(String criteriaListJson) {
-        Type type = new TypeToken<List<SearchCriteria>>() {
-        }.getType();
+        Type type = new TypeToken<List<SearchCriteria>>(){}.getType();
         return gson.fromJson(criteriaListJson, type);
     }
 
@@ -55,7 +54,7 @@ public class FilterMapper implements Converter<FilterDto, Filter, FilterResource
         if (entities == null) {
             return null;
         }
-        List<FilterResource> list = new ArrayList<FilterResource>(entities.size());
+        List<FilterResource> list = new ArrayList<>(entities.size());
         for (Filter filter : entities) {
             list.add(toResource(filter));
         }
@@ -68,7 +67,7 @@ public class FilterMapper implements Converter<FilterDto, Filter, FilterResource
             return null;
         }
 
-        Set<FilterResource> set = new HashSet<FilterResource>(Math.max((int) (entities.size() / .75f) + 1, 16));
+        Set<FilterResource> set = new HashSet<>();
         for (Filter filter : entities) {
             set.add(toResource(filter));
         }

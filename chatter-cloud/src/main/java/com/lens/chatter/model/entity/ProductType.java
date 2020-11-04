@@ -3,6 +3,7 @@ package com.lens.chatter.model.entity;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.enums.LengthMeasureUnit;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.UUID;
  * on 9 Nis 2020
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "product_type")

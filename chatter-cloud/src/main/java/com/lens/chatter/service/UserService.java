@@ -6,7 +6,6 @@ import com.lens.chatter.mapper.MinimalUserMapper;
 import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.entity.User;
-import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.model.resource.user.MinimalUserResource;
 import com.lens.chatter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,6 @@ public class UserService extends AbstractService<User, UUID, RegisterDto, Minima
     @Override
     public Converter<RegisterDto, User, MinimalUserResource> getConverter() {
         return minimalUserMapper;
-    }
-
-    public MinimalUserResource findUserByIdToMinRes(UUID id) {
-        return minimalUserMapper.toResource(fromIdToEntity(id));
     }
 
     //todo: userSearch

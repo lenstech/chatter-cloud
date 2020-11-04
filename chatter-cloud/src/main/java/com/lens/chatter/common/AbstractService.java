@@ -11,9 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.lens.chatter.constant.ErrorConstants.*;
 import static com.lens.chatter.constant.GeneralConstants.PAGE_SIZE;
@@ -22,7 +20,7 @@ import static com.lens.chatter.constant.GeneralConstants.PAGE_SIZE;
  * Created by Emir Gökdemir
  * on 23 Şub 2020
  */
-public abstract class AbstractService<T extends AbstractEntity, ID extends Serializable, DTO, RES> {
+public abstract class AbstractService<T extends AbstractEntity<ID>, ID extends Serializable, DTO, RES> {
 
     public abstract ChatterRepository<T, ID> getRepository();
 
@@ -131,8 +129,7 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
         return entity;
     }
 
-    protected void deleteOperations(ID id, UUID userId) {
-    }
+    protected void deleteOperations(ID id, UUID userId){}
 
     @Named("fromIdToEntity")
     public T fromIdToEntity(ID id) {
@@ -140,6 +137,14 @@ public abstract class AbstractService<T extends AbstractEntity, ID extends Seria
             return getRepository().findById(id).orElseThrow(() -> new NotFoundException(ID_IS_NOT_EXIST));
         } catch (NullPointerException e) {
             throw new NotFoundException(ID_IS_NOT_EXIST);
+        }
+    }
+    @Named("fromIdsToEntities")
+    public Set<T> toDefect(Set<ID> ids) {
+        if (ids == null) {
+            return new HashSet<>();
+        } else {
+            return getRepository().findByIdIn(ids);
         }
     }
 }

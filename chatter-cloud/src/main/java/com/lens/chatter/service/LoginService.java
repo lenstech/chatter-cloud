@@ -2,7 +2,6 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.UnauthorizedException;
-import com.lens.chatter.mapper.LoginMapper;
 import com.lens.chatter.mapper.UserMapper;
 import com.lens.chatter.model.dto.user.LoginDto;
 import com.lens.chatter.model.entity.User;
@@ -28,9 +27,6 @@ public class LoginService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private LoginMapper mapper;
 
     @Autowired
     private UserMapper userMapper;

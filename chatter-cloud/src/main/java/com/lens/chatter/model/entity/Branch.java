@@ -2,6 +2,7 @@ package com.lens.chatter.model.entity;
 
 import com.lens.chatter.common.AbstractEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,6 +16,7 @@ import java.util.UUID;
  * on 29 Şub 2020
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "branch")

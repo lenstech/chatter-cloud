@@ -1,13 +1,11 @@
 package com.lens.chatter.model.entity;
 
 import com.lens.chatter.common.AbstractEntity;
-import com.lens.chatter.model.other.SearchCriteria;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,6 +13,7 @@ import java.util.UUID;
  * on 2 Kas 2020
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "filter")

@@ -25,7 +25,7 @@ import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULL
  * on 29 Şub 2020
  */
 @Component
-public abstract class AbstractController<T extends AbstractEntity, ID extends Serializable, DTO, RES> {
+public abstract class AbstractController<T extends AbstractEntity<ID>, ID extends Serializable, DTO, RES> {
 
     protected abstract AbstractService<T, ID, DTO, RES> getService();
 

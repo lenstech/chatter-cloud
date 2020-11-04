@@ -6,7 +6,7 @@ import com.lens.chatter.model.dto.user.InviteMailDto;
 import com.lens.chatter.model.entity.User;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
-import com.lens.chatter.utils.MailUtil;
+import com.lens.chatter.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -62,11 +62,12 @@ public class TokenService {
     }
 
     public void sendInviteTokenToMail(UUID senderId, InviteMailDto inviteMailDto) {
+        //todo: sender bilgileri eklenecek.
         String email = inviteMailDto.getMail();
         if (email == null) {
             throw new BadRequestException(ErrorConstants.PROVIDE_VALID_MAIL);
         }
-        UUID departmentId = inviteMailDto .getDepartmentId();
+        UUID departmentId = inviteMailDto.getDepartmentId();
         if (departmentId == null) {
             throw new BadRequestException(ErrorConstants.ID_CANNOT_BE_EMPTY);
         }

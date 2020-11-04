@@ -8,11 +8,7 @@ import com.lens.chatter.model.entity.Product;
 import com.lens.chatter.model.resource.product.ProductResource;
 import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.ProductRepository;
-import com.lens.chatter.repository.ProductTypeRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -23,8 +19,6 @@ import java.util.UUID;
  */
 @Service
 public class ProductService extends AbstractService<Product, UUID, ProductDto, ProductResource> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
     @Autowired
     private ProductRepository repository;

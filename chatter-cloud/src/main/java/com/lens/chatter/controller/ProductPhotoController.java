@@ -63,4 +63,17 @@ public class ProductPhotoController {
         }
         return ResponseEntity.ok(HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED);
     }
+
+    @DeleteMapping
+    @ApiOperation("Delete photo of product by photoId")
+    public ResponseEntity<String> deletePhoto(@RequestParam("photoId") UUID photoId,
+                                                     @RequestHeader("Authorization") String token) {
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        try {
+            service.deletePhoto(photoId);
+        } catch (Exception e) {
+            return ResponseEntity.ok(HttpSuccessMessagesConstants.DELETION_DID_NOT_OCCURRED);
+        }
+        return ResponseEntity.ok(HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED);
+    }
 }

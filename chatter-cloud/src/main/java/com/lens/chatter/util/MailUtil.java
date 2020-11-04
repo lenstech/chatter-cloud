@@ -1,14 +1,7 @@
-package com.lens.chatter.utils;
-
-/**
- * Created by Emir Gökdemir
- * on 28 Haz 2020
- */
+package com.lens.chatter.util;
 
 import com.lens.chatter.exception.BadRequestException;
-import com.lens.chatter.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;

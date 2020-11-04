@@ -24,13 +24,12 @@ public class ErrorConstants {
     public static final String OLD_PASSWORD_IS_WRONG = "Old password is wrong!";
     public static final String PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS = "Please confirm your mail address!";
 
-    //Unauthorization Exception
+    //UnAuthorization Exception
     public static final String NOT_AUTHORIZED_FOR_OPERATION = "You are not authorized for this operation!";
     public static final String USER_NOT_EXIST = "User could not be found!";
     public static final String THIS_OPERATION_IS_NOT_BELONG_TO_THIS_USER = "This Operation is not belong to this user!";
 
     public static final String ID_IS_NOT_EXIST = "Id is not exist";
-    public static final String USER_ID_IS_NOT_EXIST = "User id is not exist";
 
     //Department
     public static final String USER_ALREADY_ADDED_TO_DEPARTMENT = "User already added to department!";
@@ -43,9 +42,6 @@ public class ErrorConstants {
     //General
     public static final String DTO_CANNOT_BE_EMPTY = "Dto cannot be Empty";
     public static final String ID_CANNOT_BE_EMPTY = "Id cannot be Empty";
-
-    //Photo
-    public static final String THERE_IS_NO_PROFILE_PHOTO_OF_THIS_USER = "There is no photo of this user!";
 
     //Exist
     public static final String PROVIDE_VALID_MAIL = "Please Provide Valid Mail Address";

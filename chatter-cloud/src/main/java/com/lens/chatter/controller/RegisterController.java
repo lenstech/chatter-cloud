@@ -6,7 +6,6 @@ import com.lens.chatter.model.dto.user.InviteMailDto;
 import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.resource.user.InviteMailResource;
 import com.lens.chatter.model.resource.user.LoginResource;
-import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.RegisterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,9 +37,6 @@ public class RegisterController {
     private AuthorizationConfig authorizationConfig;
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
-
-    @Autowired
-    private JwtResolver resolver;
 
     @ApiOperation(value = "Register a user with the needed information", response = LoginResource.class)
     @PostMapping("/user")

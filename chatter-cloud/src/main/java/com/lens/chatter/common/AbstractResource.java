@@ -3,7 +3,6 @@ package com.lens.chatter.common;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

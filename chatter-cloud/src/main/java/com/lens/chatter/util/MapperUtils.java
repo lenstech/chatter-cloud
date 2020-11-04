@@ -1,8 +1,7 @@
-package com.lens.chatter.utils;
+package com.lens.chatter.util;
 
 import com.lens.chatter.model.entity.Defect;
 import com.lens.chatter.repository.DefectRepository;
-import com.lens.chatter.repository.ProductTypeRepository;
 import lombok.experimental.UtilityClass;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import java.util.UUID;
 public class MapperUtils {
     @Autowired
     private DefectRepository defectRepository;
-
-    @Autowired
-    private ProductTypeRepository productTypeRepository;
 
     @Named("toDefect")
     public Set<Defect> toDefect(Set<UUID> defectIds) {

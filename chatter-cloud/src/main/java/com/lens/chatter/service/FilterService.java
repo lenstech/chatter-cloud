@@ -15,8 +15,6 @@ import com.lens.chatter.repository.ChatterRepository;
 import com.lens.chatter.repository.FilterRepository;
 import com.lens.chatter.repository.ProductRepository;
 import com.lens.chatter.repository.specifications.ProductSpecification;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,8 +30,6 @@ import static com.lens.chatter.constant.GeneralConstants.PAGE_SIZE;
  */
 @Service
 public class FilterService extends AbstractService<Filter, UUID, FilterDto, FilterResource> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FilterService.class);
 
     @Autowired
     private FilterRepository repository;
@@ -88,7 +84,6 @@ public class FilterService extends AbstractService<Filter, UUID, FilterDto, Filt
         if (!filter.getUser().getId().equals(userId)){
             throw new BadRequestException(ErrorConstants.THIS_OPERATION_IS_NOT_BELONG_TO_THIS_USER);
         }
-        filter.getCriteriaListJson();
         return search(new SearchDto(mapper.jsonToList(filter.getCriteriaListJson())),pageNo);
     }
 }

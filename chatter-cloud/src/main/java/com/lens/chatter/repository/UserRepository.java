@@ -4,7 +4,6 @@ import com.lens.chatter.model.entity.Department;
 import com.lens.chatter.model.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -15,8 +14,6 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends ChatterRepository<User, UUID> {
 
-    User findUserById(UUID id);
-
     Set<User> findByIdIn(Collection<UUID> ids);
 
     User findByEmail(String email);
@@ -26,9 +23,6 @@ public interface UserRepository extends ChatterRepository<User, UUID> {
     Boolean existsByEmail(String email);
 
     Set<User> findUsersByDepartment(Department department);
-
-    @Query(value = "select * from users where name like '%:name%'", nativeQuery = true)
-    List<User> findUsersByName(String name);
 
     List<User> findAll();
 

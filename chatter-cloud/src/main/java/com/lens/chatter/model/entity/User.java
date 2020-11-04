@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lens.chatter.common.AbstractEntity;
 import com.lens.chatter.enums.Role;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.eclipse.persistence.annotations.Index;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.UUID;
  * on 12 Eki 2019
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
@@ -57,10 +59,4 @@ public class User extends AbstractEntity<UUID> {
     @Column(name = "confirmed")
     private boolean confirmed = false;
 
-
-    public String toStringForSearch() {
-        return (" " + email +
-                " " + name +
-                " " + surname).toLowerCase(/*Locale.ENGLISH*/);
-    }
 }

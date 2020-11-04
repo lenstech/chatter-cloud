@@ -1,5 +1,6 @@
 package com.lens.chatter.common;
 
+import com.lens.chatter.exception.BadRequestException;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
