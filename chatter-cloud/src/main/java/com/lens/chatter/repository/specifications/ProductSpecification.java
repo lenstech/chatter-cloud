@@ -2,16 +2,14 @@ package com.lens.chatter.repository.specifications;
 
 import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.BadRequestException;
+import com.lens.chatter.model.entity.Defect;
 import com.lens.chatter.model.entity.Product;
 import com.lens.chatter.model.other.SearchCriteria;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -42,7 +40,7 @@ public class ProductSpecification implements Specification<Product> {
     @Override
     public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
-        List<Predicate> predicates = new ArrayList<>();
+        List<Predicate> restrictions = new ArrayList<>();
 
         if (list.isEmpty()) {
             throw new BadRequestException(ErrorConstants.SEARCH_PARAMETER_NOT_FOUND);
@@ -51,54 +49,65 @@ public class ProductSpecification implements Specification<Product> {
 
             switch (criteria.getOperation()) {
                 case MATCH:
-                    predicates.add(builder.like(builder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                    restrictions.add(builder.like(builder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%"));
                     break;
-                case MATCH_IN_CATEGORY:
+                case MATCH_KEYS_NAME:
                     //Specific Case
-                    predicates.add(builder.like(builder.lower(root.get(criteria.getKey()).get("name")), "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                    restrictions.add(builder.like(builder.lower(root.get(criteria.getKey()).get("name")), "%" + criteria.getValue().toString().toLowerCase() + "%"));
                     break;
+                case MATCH_DEFECT_TYPES_KEY: {
+                    //Specific Case
+                    Join<Product, Defect> join = root.join("defects");
+                    restrictions.add(builder.like(join.get("defectType").get(criteria.getKey()), "%" + criteria.getValue().toString() + "%"));
+                    break;
+                }
+                case MATCH_PRODUCT_TYPES_KEY: {
+                    //Specific Case
+                    restrictions.add(builder.like(root.get("productType").get(criteria.getKey()), "%" + criteria.getValue().toString() + "%"));
+                    break;
+                }
                 case EQUAL:
-                    predicates.add(builder.equal(root.get(criteria.getKey()), criteria.getValue()));
+                    restrictions.add(builder.equal(root.get(criteria.getKey()), criteria.getValue()));
                     break;
                 case FROM:
-                    predicates.add(builder.greaterThanOrEqualTo(root.get(criteria.getKey()), ZonedDateTime.parse(criteria.getValue().toString())));
+                    restrictions.add(builder.greaterThanOrEqualTo(root.get(criteria.getKey()), ZonedDateTime.parse(criteria.getValue().toString())));
                     break;
                 case TO:
-                    predicates.add(builder.lessThanOrEqualTo(root.get(criteria.getKey()), ZonedDateTime.parse(criteria.getValue().toString())));
+                    restrictions.add(builder.lessThanOrEqualTo(root.get(criteria.getKey()), ZonedDateTime.parse(criteria.getValue().toString())));
                     break;
                 case GREATER_THAN:
-                    predicates.add(builder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString()));
+                    restrictions.add(builder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString()));
                     break;
                 case LESS_THAN:
-                    predicates.add(builder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString()));
+                    restrictions.add(builder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString()));
                     break;
                 case GREATER_THAN_EQUAL:
-                    predicates.add(builder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString()));
+                    restrictions.add(builder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString()));
                     break;
                 case LESS_THAN_EQUAL:
-                    predicates.add(builder.lessThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString()));
+                    restrictions.add(builder.lessThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString()));
                     break;
                 case NOT_EQUAL:
-                    predicates.add(builder.notEqual(root.get(criteria.getKey()), criteria.getValue()));
+                    restrictions.add(builder.notEqual(root.get(criteria.getKey()), criteria.getValue()));
                     break;
                 case MATCH_END:
-                    predicates.add(builder.like(builder.lower(root.get(criteria.getKey())), criteria.getValue().toString().toLowerCase() + "%"));
+                    restrictions.add(builder.like(builder.lower(root.get(criteria.getKey())), criteria.getValue().toString().toLowerCase() + "%"));
                     break;
                 case MATCH_START:
-                    predicates.add(builder.like(builder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase()));
+                    restrictions.add(builder.like(builder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase()));
                     break;
                 case IN:
-                    predicates.add(builder.in(root.get(criteria.getKey())).value(criteria.getValue()));
+                    restrictions.add(builder.in(root.get(criteria.getKey())).value(criteria.getValue()));
                     break;
                 case NOT_IN:
-                    predicates.add(builder.not(root.get(criteria.getKey())).in(criteria.getValue()));
+                    restrictions.add(builder.not(root.get(criteria.getKey())).in(criteria.getValue()));
                     break;
                 case BETWEEN_TIME:
                     SimpleDateFormat formatter = new SimpleDateFormat(DTO_DATE_TIME_FORMAT);
                     try {
                         ZonedDateTime startTime = ZonedDateTime.ofInstant(formatter.parse(criteria.getStartTime()).toInstant(), ZoneId.systemDefault());
                         ZonedDateTime endTime = ZonedDateTime.ofInstant(formatter.parse(criteria.getEndTime()).toInstant(), ZoneId.systemDefault());
-                        predicates.add(builder.between(root.get(criteria.getKey()), startTime, endTime));
+                        restrictions.add(builder.between(root.get(criteria.getKey()), startTime, endTime));
                     } catch (ParseException e) {
                         e.printStackTrace();
                         throw new BadRequestException(ErrorConstants.DATE_FORMAT_IS_NOT_CORRECT);
@@ -109,6 +118,6 @@ public class ProductSpecification implements Specification<Product> {
             }
         }
 
-        return builder.and(predicates.toArray(new Predicate[0]));
+        return builder.and(restrictions.toArray(new Predicate[0]));
     }
 }

@@ -19,6 +19,8 @@ public enum SearchOperator {
     NOT_IN,
     FROM,
     TO,
-    MATCH_IN_CATEGORY,
+    MATCH_KEYS_NAME,
+    MATCH_DEFECT_TYPES_KEY,
     BETWEEN_TIME,
+    MATCH_PRODUCT_TYPES_KEY
 }

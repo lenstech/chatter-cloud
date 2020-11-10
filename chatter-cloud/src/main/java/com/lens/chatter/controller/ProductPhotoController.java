@@ -51,7 +51,7 @@ public class ProductPhotoController {
 
     }
 
-    @DeleteMapping
+    @DeleteMapping("/product")
     @ApiOperation("Delete photo of product by productId")
     public ResponseEntity<String> deleteProductPhoto(@RequestParam("productId") UUID productId,
                                                      @RequestHeader("Authorization") String token) {

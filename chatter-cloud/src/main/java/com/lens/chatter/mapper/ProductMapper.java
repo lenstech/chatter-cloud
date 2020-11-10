@@ -18,6 +18,6 @@ public interface ProductMapper extends Converter<ProductDto, Product, ProductRes
     @Override
     @Mapping(source = "productTypeId", target = "productType", qualifiedByName = "findOneById")
     @Mapping(source = "branchId", target = "branch", qualifiedByName = "findOneById")
-    @Mapping(source = "defectIds", target = "defects", qualifiedByName = "fromIdsToEntities")
+//    @Mapping(source = "defectIds", target = "defects", qualifiedByName = "fromIdsToEntities")
     Product toEntity(ProductDto productDto);
 }

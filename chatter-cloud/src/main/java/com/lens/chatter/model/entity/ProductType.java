@@ -16,7 +16,7 @@ import java.util.UUID;
  * on 9 Nis 2020
  */
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = "product", callSuper = true)
 @Data
 @Entity
 @Table(name = "product_type")

@@ -27,8 +27,4 @@ public interface ChatterRepository<T, ID extends Serializable> extends JpaReposi
 
     @Named("findByIdIn")
     Set<T> findByIdIn(Collection<ID> ids);
-
-    void deleteById(ID id);
-
-    void delete(T entity);
 }
