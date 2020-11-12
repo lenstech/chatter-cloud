@@ -5,7 +5,7 @@ package com.lens.chatter.enums;
  * on 11 Kas 2020
  */
 
-public enum  StatisticsTime {
+public enum StatisticsInterval {
     DAILY,
     WEEKLY,
     MONTHLY

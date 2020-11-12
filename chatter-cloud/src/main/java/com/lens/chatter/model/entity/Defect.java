@@ -40,4 +40,6 @@ public class Defect extends AbstractEntity<UUID> {
     @JsonIgnore
     @JoinColumn(name = "product_id")
     private Product product;
+
+    private Integer region = 0;
 }

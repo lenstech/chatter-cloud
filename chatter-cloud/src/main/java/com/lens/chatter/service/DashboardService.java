@@ -1,7 +1,8 @@
 package com.lens.chatter.service;
 
-import com.lens.chatter.enums.StatisticsTime;
+import com.lens.chatter.enums.StatisticsInterval;
 import com.lens.chatter.model.dto.product.SearchDto;
+import com.lens.chatter.model.other.DefectRegionCount;
 import com.lens.chatter.model.other.DefectTypeCount;
 import com.lens.chatter.model.other.ProductTypeCount;
 import com.lens.chatter.model.other.SearchCriteria;
@@ -48,19 +49,25 @@ public class DashboardService {
         spec.addAll(searchDto.getFilterCriteria());
     }
 
-    public List<DefectTypeCount> getTimeFilteredDefectTypeStatistics(StatisticsTime time) {
+    public List<DefectTypeCount> getTimeFilteredDefectTypeStatistics(StatisticsInterval time) {
         Instant begin = findTheTime(time);
         float total = defectRepository.countDefectsByCreatedDateBetween(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now());
         return defectRepository.getStatisticsByDefectType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total == 0L ? 1 : total);
     }
 
-    public List<ProductTypeCount> getTimeFilteredProductTypeStatistics(StatisticsTime time) {
+    public List<DefectRegionCount> getTimeFilteredDefectRegionStatistics(StatisticsInterval time) {
+        Instant begin = findTheTime(time);
+        float total = defectRepository.countDefectsByCreatedDateBetween(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now());
+        return defectRepository.getRegionStatisticsByDefectType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total == 0L ? 1 : total);
+    }
+
+    public List<ProductTypeCount> getTimeFilteredProductTypeStatistics(StatisticsInterval time) {
         Instant begin = findTheTime(time);
         float total = productRepository.countProductsByCreatedDateBetween(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now());
         return productRepository.getStatisticsByProductType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total == 0L ? 1 : total);
     }
 
-    private Instant findTheTime(StatisticsTime time) {
+    private Instant findTheTime(StatisticsInterval time) {
         switch (time) {
             case DAILY:
                 return DateUtils.getTheBeginningOfDay();

@@ -54,4 +54,8 @@ public class ErrorConstants {
     public static final String SEARCH_PARAMETER_NOT_FOUND = "Search Parameter is not found!";
     public static final String DATE_FORMAT_IS_NOT_CORRECT = "Date format is not correct, It should be as: "
             + DTO_DATE_TIME_FORMAT + " format";
+
+    //Defect
+    public static final String DEFECT_SHOULD_BE_INSIDE_THE_PRODUCT = "Defect should be inside the product";
+
 }

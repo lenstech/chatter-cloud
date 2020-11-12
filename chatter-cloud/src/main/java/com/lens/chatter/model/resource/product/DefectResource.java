@@ -24,5 +24,6 @@ public class DefectResource extends AbstractResource {
     private Double size = 1D;
     private DefectType defectType;
     private LengthMeasureUnit measureUnit;
+    private Integer region;
 
 }

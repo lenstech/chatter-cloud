@@ -29,7 +29,8 @@ public class ProductType extends AbstractEntity<UUID> {
 
     private Float width;
 
-    private Float height;
+    // Not used for 2d products
+    private Float height=0f;
 
     private Float length;
 

@@ -2,7 +2,8 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
-import com.lens.chatter.enums.StatisticsTime;
+import com.lens.chatter.enums.StatisticsInterval;
+import com.lens.chatter.model.other.DefectRegionCount;
 import com.lens.chatter.model.other.DefectTypeCount;
 import com.lens.chatter.model.other.ProductTypeCount;
 import com.lens.chatter.service.DashboardService;
@@ -37,21 +38,27 @@ public class DashboardController {
     @ApiOperation(value = "Get Time Filtered Defect Type Statistics, it can be seen by basic user.", response = DefectTypeCount.class, responseContainer = "List")
     @GetMapping("/defect-type")
     public ResponseEntity<List<DefectTypeCount>> getTimeFilteredDefectTypeStatistics(@RequestHeader("Authorization") String token,
-                                                                        @RequestParam StatisticsTime statisticsTime) {
-        logger.info(String.format("Requesting getDepartmentsOfBranch statisticsTime: %s.", statisticsTime));
+                                                                        @RequestParam StatisticsInterval statisticsInterval) {
+        logger.info(String.format("Requesting getDepartmentsOfBranch statisticsInterval: %s.", statisticsInterval));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(service.getTimeFilteredDefectTypeStatistics(statisticsTime));
+        return ResponseEntity.ok(service.getTimeFilteredDefectTypeStatistics(statisticsInterval));
+    }
+
+    @ApiOperation(value = "Get Time Filtered Defect Region Statistics, it can be seen by basic user.", response = DefectTypeCount.class, responseContainer = "List")
+    @GetMapping("/defect-region")
+    public ResponseEntity<List<DefectRegionCount>> getTimeFilteredDefectRegionStatistics(@RequestHeader("Authorization") String token,
+                                                                                         @RequestParam StatisticsInterval statisticsInterval) {
+        logger.info(String.format("Requesting getDepartmentsOfBranch statisticsInterval: %s.", statisticsInterval));
+        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.getTimeFilteredDefectRegionStatistics(statisticsInterval));
     }
     
     @ApiOperation(value = "Get Time Filtered Product Type Statistics, it can be seen by basic user.", response = ProductTypeCount.class, responseContainer = "List")
     @GetMapping("/product-type")
     public ResponseEntity<List<ProductTypeCount>> getTimeFilteredProductTypeStatistics(@RequestHeader("Authorization") String token,
-                                                                                   @RequestParam StatisticsTime statisticsTime) {
-        logger.info(String.format("Requesting getDepartmentsOfBranch statisticsTime: %s.", statisticsTime));
+                                                                                   @RequestParam StatisticsInterval statisticsInterval) {
+        logger.info(String.format("Requesting getDepartmentsOfBranch statisticsInterval: %s.", statisticsInterval));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        return ResponseEntity.ok(service.getTimeFilteredProductTypeStatistics(statisticsTime));
+        return ResponseEntity.ok(service.getTimeFilteredProductTypeStatistics(statisticsInterval));
     }
-
-    // todo:  defect-location oranları
-
 }

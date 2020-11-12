@@ -1,6 +1,7 @@
 package com.lens.chatter.repository;
 
 import com.lens.chatter.model.entity.Defect;
+import com.lens.chatter.model.other.DefectRegionCount;
 import com.lens.chatter.model.other.DefectTypeCount;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,5 +20,14 @@ public interface DefectRepository extends ChatterRepository<Defect, UUID> {
             " where d.createdDate between ?1 and ?2 " +
             " group by d.defectType.id ")
     List<DefectTypeCount> getStatisticsByDefectType(ZonedDateTime startTime, ZonedDateTime endTime, float total);
+
+
+    @Query("select new com.lens.chatter.model.other.DefectRegionCount(d.region, count(d), (1.0f*count(d))/ ?3 ) " +
+            " from Defect d " +
+            " where d.createdDate between ?1 and ?2 " +
+            " group by d.region ")
+    List<DefectRegionCount> getRegionStatisticsByDefectType(ZonedDateTime startTime, ZonedDateTime endTime, float total);
+
+
 }
 
