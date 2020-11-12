@@ -42,4 +42,6 @@ public class Defect extends AbstractEntity<UUID> {
     private Product product;
 
     private Integer region = 0;
+
+    private String note;
 }

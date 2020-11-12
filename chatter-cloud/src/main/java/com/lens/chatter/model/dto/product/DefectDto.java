@@ -21,6 +21,7 @@ public class DefectDto {
     private Double yCoordinate = 0D;
     private Double zCoordinate = 0D;
     private Double size = 1D;
+    private String note;
     private UUID defectTypeId;
     private LengthMeasureUnit measureUnit;
     private UUID productId;
