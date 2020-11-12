@@ -49,6 +49,9 @@ public class ErrorConstants {
     public static final String PRODUCT_NOT_EXIST = "Product Not Exist";
     public static final String PRODUCT_PHOTO_NOT_EXIST = "Product Photo Not Exist";
     public static final String PRODUCT_PHOTO_ALREADY_EXIST = "Product photo already exist";
+    public static final String DEFECT_PHOTO_ALREADY_EXIST = "Product photo already exist";
+    public static final String DEFECT_NOT_EXIST = "Defect Not Exist";
+    public static final String DEFECT_PHOTO_NOT_EXIST = "Defect Photo Not Exist";
 
     //Search - Filter
     public static final String SEARCH_PARAMETER_NOT_FOUND = "Search Parameter is not found!";
