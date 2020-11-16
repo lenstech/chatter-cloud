@@ -42,6 +42,11 @@ public class LoginService {
                 throw new UnauthorizedException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
             }
             String token = jwtGenerator.generateLoginToken(user.getId(), user.getRole());
+            String  firebaseToken = dto.getFirebaseToken();
+            if (firebaseToken != null) {
+                user.setFirebaseToken(dto.getFirebaseToken());
+                userRepository.save(user);
+            }
             CompleteUserResource userResource = userMapper.toResource(user);
             return new LoginResource(userResource, token);
         } else {

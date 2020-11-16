@@ -83,13 +83,13 @@ public class RegisterService {
 
 
     @Transactional
-    public void confirmRegister(String confirmationToken) {
+    public void confirmRegister(String confirmationToken, String firebaseToken) {
         UUID id = jwtResolver.getIdFromToken(confirmationToken);
         User user = userService.fromIdToEntity(id);
-        if (user == null) {
-            throw new BadRequestException(ErrorConstants.USER_NOT_EXIST);
-        }
         user.setConfirmed(true);
+        if (firebaseToken != null) {
+            user.setFirebaseToken(firebaseToken);
+        }
         userRepository.save(user);
     }
 

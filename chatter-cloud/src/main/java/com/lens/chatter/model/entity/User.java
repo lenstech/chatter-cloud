@@ -59,4 +59,6 @@ public class User extends AbstractEntity<UUID> {
     @Column(name = "confirmed")
     private boolean confirmed = false;
 
+    private String firebaseToken;
+
 }

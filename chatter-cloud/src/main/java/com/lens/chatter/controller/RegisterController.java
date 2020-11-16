@@ -46,8 +46,8 @@ public class RegisterController {
 
     @ApiOperation(value = "Confirm a registration by using the link from the user's confirmation mail", response = String.class)
     @GetMapping("/confirm-register")
-    public ResponseEntity<String> confirmRegister(@RequestHeader("Authorization") String confirmationToken) {
-        registerService.confirmRegister(confirmationToken);
+    public ResponseEntity<String> confirmRegister(@RequestHeader("Authorization") String confirmationToken, @RequestHeader("FirebaseToken") String firebaseToken){
+        registerService.confirmRegister(confirmationToken, firebaseToken);
         return ResponseEntity.ok(YOUR_MAIL_WAS_CONFIRMED);
     }
 
