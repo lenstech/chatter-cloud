@@ -72,34 +72,6 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
         return mapper;
     }
 
-    @Override
-    public BranchResource save(BranchDto dto, UUID userId) {
-        LOGGER.debug(String.format("Saving the dto [%s].", dto));
-        Branch branch = getConverter().toEntity(dto);
-        branch.setFirm(firmRepository.findFirmById(dto.getFirmId()));
-        return getConverter().toResource(getRepository().save(branch));
-    }
-
-    @Transactional
-    @Override
-    public BranchResource put(UUID branchId, BranchDto dto, UUID userId) {
-        LOGGER.debug(String.format("Request to update the record [%s].", branchId));
-        Branch old = getRepository().findById(branchId).orElseThrow(() -> new BadRequestException(ID_IS_NOT_EXIST));
-        if (dto == null) {
-            LOGGER.error(DTO_CANNOT_BE_EMPTY);
-            throw new BadRequestException(DTO_CANNOT_BE_EMPTY);
-        }
-        if (branchId == null) {
-            LOGGER.error(ID_CANNOT_BE_EMPTY);
-            throw new BadRequestException(ID_CANNOT_BE_EMPTY);
-        }
-        Branch branch = getConverter().toEntity(dto);
-        branch.setId(old.getId());
-        branch.setCreatedDate(old.getCreatedDate());
-        branch.setFirm(firmRepository.findFirmById(dto.getFirmId()));
-        return mapper.toResource(getRepository().save(branch));
-    }
-
     @Transactional
     public BranchResource addDepartment(UUID departmentId, UUID branchId) {
         Branch branch = repository.findBranchById(branchId);
