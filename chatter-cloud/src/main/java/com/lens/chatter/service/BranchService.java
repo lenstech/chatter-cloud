@@ -2,6 +2,7 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
+import com.lens.chatter.enums.ChannelType;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.BranchMapper;
 import com.lens.chatter.mapper.DepartmentMapper;
@@ -61,6 +62,9 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
 
     @Autowired
     private FirmRepository firmRepository;
+
+    @Autowired
+    private CreateMessageGroupService createMessageGroupService;
 
     @Override
     public BranchRepository getRepository() {
@@ -126,4 +130,9 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
         return fromIdToEntity(branchId).getDailyShiftQuantity();
     }
 
+    @Override
+    protected Branch afterSaveOperations(Branch entity) {
+        createMessageGroupService.saveFirebaseChannel(entity.getId(), entity.getFirm().getId(), entity.getName(), ChannelType.BRANCH);
+        return entity;
+    }
 }

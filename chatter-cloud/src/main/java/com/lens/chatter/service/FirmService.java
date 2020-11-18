@@ -2,6 +2,7 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
+import com.lens.chatter.enums.ChannelType;
 import com.lens.chatter.mapper.BranchMapper;
 import com.lens.chatter.mapper.FirmMapper;
 import com.lens.chatter.mapper.MinimalUserMapper;
@@ -92,7 +93,7 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
 
     @Override
     protected Firm afterSaveOperations(Firm entity) {
-        createMessageGroupService.saveFirebaseFirm(entity);
+        createMessageGroupService.saveFirebaseChannel(entity.getId(), entity.getId(), entity.getName(), ChannelType.FIRM);
         return entity;
     }
 }

@@ -26,6 +26,7 @@ public abstract class AbstractService<T extends AbstractEntity<ID>, ID extends S
 
     public abstract Converter<DTO, T, RES> getConverter();
 
+    @Transactional
     public RES save(DTO dto, UUID userId) {
         try {
             T entity = getConverter().toEntity(dto);
@@ -133,7 +134,8 @@ public abstract class AbstractService<T extends AbstractEntity<ID>, ID extends S
         return entity;
     }
 
-    protected void deleteOperations(ID id, UUID userId){}
+    protected void deleteOperations(ID id, UUID userId) {
+    }
 
     @Named("fromIdToEntity")
     public T fromIdToEntity(ID id) {
@@ -143,6 +145,7 @@ public abstract class AbstractService<T extends AbstractEntity<ID>, ID extends S
             throw new NotFoundException(ID_IS_NOT_EXIST);
         }
     }
+
     @Named("fromIdsToEntities")
     public Set<T> toDefect(Set<ID> ids) {
         if (ids == null) {

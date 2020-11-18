@@ -2,6 +2,7 @@ package com.lens.chatter.service;
 
 import com.lens.chatter.common.AbstractService;
 import com.lens.chatter.common.Converter;
+import com.lens.chatter.enums.ChannelType;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.DepartmentMapper;
 import com.lens.chatter.mapper.MinimalUserMapper;
@@ -51,6 +52,9 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
     @Autowired
     private MinimalUserMapper userMapper;
 
+    @Autowired
+    private CreateMessageGroupService createMessageGroupService;
+
     @Override
     public DepartmentRepository getRepository() {
         return repository;
@@ -60,7 +64,6 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
     public Converter<DepartmentDto, Department, DepartmentResource> getConverter() {
         return mapper;
     }
-
 
     @Override
     public DepartmentResource save(DepartmentDto dto, UUID userId) {
@@ -117,5 +120,11 @@ public class DepartmentService extends AbstractService<Department, UUID, Departm
     public Set<MinimalUserResource> getPersonals(UUID departmentId) {
         Department department = repository.findDepartmentById(departmentId);
         return userMapper.toResources(userRepository.findUsersByDepartment(department));
+    }
+
+    @Override
+    protected Department afterSaveOperations(Department entity) {
+        createMessageGroupService.saveFirebaseChannel(entity.getId(), entity.getBranch().getFirm().getId(), entity.getName(), ChannelType.DEPARTMENT);
+        return entity;
     }
 }
