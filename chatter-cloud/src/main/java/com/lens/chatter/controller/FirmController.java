@@ -48,7 +48,7 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
 
     @Override
     public void setSaveRole() {
-        super.saveRole = Role.BASIC_USER;
+        super.saveRole = Role.ADMIN;
     }
 
     @Override
@@ -63,12 +63,12 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
 
     @Override
     public void setUpdateRole() {
-        super.updateRole = Role.BASIC_USER;
+        super.updateRole = Role.FIRM_ADMIN;
     }
 
     @Override
     public void setDeleteRole() {
-        super.deleteRole = Role.BASIC_USER;
+        super.deleteRole = Role.ADMIN;
     }
 
     @Override

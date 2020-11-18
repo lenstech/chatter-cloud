@@ -51,6 +51,9 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
     @Autowired
     private BranchMapper branchMapper;
 
+    @Autowired
+    private CreateMessageGroupService createMessageGroupService;
+
     @Override
     public ChatterRepository<Firm, UUID> getRepository() {
         return repository;
@@ -65,7 +68,7 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
         return branchMapper.toResources(branchRepository.findBranchesByFirmId(firmId));
     }
 
-    public Page<MinimalUserResource> getPersonalsOfFirm(UUID firmId, int pageNumber, String sortBy, Boolean desc){
+    public Page<MinimalUserResource> getPersonalsOfFirm(UUID firmId, int pageNumber, String sortBy, Boolean desc) {
         PageRequest pageable;
         if (desc == null) {
             desc = true;
@@ -83,8 +86,13 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
         }
     }
 
-    public List<MinimalUserResource> getPersonalsOfFirm(UUID branchId){
+    public List<MinimalUserResource> getPersonalsOfFirm(UUID branchId) {
         return minimalUserMapper.toResources(userRepository.findUsersByDepartmentBranchFirmId(branchId));
     }
 
+    @Override
+    protected Firm afterSaveOperations(Firm entity) {
+        createMessageGroupService.saveFirebaseFirm(entity);
+        return entity;
+    }
 }

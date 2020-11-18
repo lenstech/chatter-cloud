@@ -38,7 +38,7 @@ public class UserController extends AbstractController<User, UUID, RegisterDto, 
 
     @Override
     public void setSaveRole() {
-        super.saveRole = Role.BASIC_USER;
+        super.saveRole = Role.FIRM_ADMIN;
     }
 
     @Override
@@ -53,12 +53,12 @@ public class UserController extends AbstractController<User, UUID, RegisterDto, 
 
     @Override
     public void setUpdateRole() {
-        super.updateRole = Role.BASIC_USER;
+        super.updateRole = Role.FIRM_ADMIN;
     }
 
     @Override
     public void setDeleteRole() {
-        super.deleteRole = Role.BASIC_USER;
+        super.deleteRole = Role.FIRM_ADMIN;
     }
 
     @Override

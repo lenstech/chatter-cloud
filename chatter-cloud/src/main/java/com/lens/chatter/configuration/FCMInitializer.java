@@ -23,10 +23,8 @@ public class FCMInitializer {
     @PostConstruct
     public void initialize() {
         try {
-
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream()))
-//                    .setDatabaseUrl("https://lens-petsapp.firebaseio.com")
                     .setDatabaseUrl("https://lens-chatter.firebaseio.com")
                     .build();
             if (FirebaseApp.getApps().isEmpty()) {

@@ -29,7 +29,7 @@ public abstract class AbstractService<T extends AbstractEntity<ID>, ID extends S
     public RES save(DTO dto, UUID userId) {
         try {
             T entity = getConverter().toEntity(dto);
-            return getConverter().toResource(getRepository().save(saveOperations(entity, dto, userId)));
+            return getConverter().toResource(afterSaveOperations(getRepository().save(saveOperations(entity, dto, userId))));
         } catch (Exception e) {
             throw new BadRequestException(ID_IS_NOT_EXIST);
             //todo düzgün handle et.
@@ -126,6 +126,10 @@ public abstract class AbstractService<T extends AbstractEntity<ID>, ID extends S
     }
 
     protected T saveOperations(T entity, DTO dto, UUID userId) {
+        return entity;
+    }
+
+    protected T afterSaveOperations(T entity) {
         return entity;
     }
 

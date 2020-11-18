@@ -73,7 +73,7 @@ public class FCMService {
                 + ", Token: " + request.getToken()
                 + ", Title: " + request.getTitle()
                 + ", Body: " + request.getBody()
-                +" and response: " + response);
+                + " and response: " + response);
         return response;
     }
 
