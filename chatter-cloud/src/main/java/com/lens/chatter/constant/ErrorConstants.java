@@ -61,4 +61,5 @@ public class ErrorConstants {
     //Defect
     public static final String DEFECT_SHOULD_BE_INSIDE_THE_PRODUCT = "Defect should be inside the product";
 
+    public static final String USER_CHANNELS_CANNOT_BE_CREATED = "User Channels can not be created!";
 }
