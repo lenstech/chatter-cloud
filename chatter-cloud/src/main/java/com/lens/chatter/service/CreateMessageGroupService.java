@@ -28,10 +28,9 @@ public class CreateMessageGroupService {
 
     private final Logger logger = LoggerFactory.getLogger(CreateMessageGroupService.class);
 
-    final Firestore firestore = FirestoreClient.getFirestore();
-
     public void saveFirebaseChannel(UUID id, UUID firmId, String name, ChannelType channelType) {
         logger.info(String.format("Requesting saveFirebaseChannel " + channelType.toValue() + "'s id: %s ", id));
+        Firestore firestore = FirestoreClient.getFirestore();
         DocumentReference documentReference = firestore.collection("firms").document(firmId.toString());
         CollectionReference channelReference = documentReference.collection("channels");
         ApiFuture<DocumentReference> future = channelReference.add(new FirebaseDefaultChannel(name, channelType.getInitial() + "-" + id, new ArrayList<>()));
