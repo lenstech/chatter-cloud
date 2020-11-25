@@ -14,7 +14,6 @@ import com.lens.chatter.repository.DepartmentRepository;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
 import com.lens.chatter.security.JwtResolver;
-import com.lens.chatter.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,9 +49,6 @@ public class RegisterService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
-
-    @Autowired
-    private MailUtil mailUtil;
 
     @Autowired
     private JwtGenerator jwtGenerator;

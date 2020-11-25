@@ -26,12 +26,6 @@ import static com.lens.chatter.constant.MailConstants.*;
 public class TokenService {
 
     @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    private Environment environment;
-
-    @Autowired
     private JwtGenerator jwtGenerator;
 
     @Autowired

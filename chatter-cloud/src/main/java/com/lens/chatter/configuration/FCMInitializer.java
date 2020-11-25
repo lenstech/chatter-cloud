@@ -18,8 +18,8 @@ import java.util.Date;
 
 @Service
 public class FCMInitializer {
-    @Value("${app.firebase-configuration-file}")
-    private String firebaseConfigPath;
+//    @Value("${app.firebase-configuration-file}")
+//    private String firebaseConfigPath;
 
     @PostConstruct
     public void initialize() {
