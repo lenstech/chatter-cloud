@@ -1,6 +1,7 @@
 package com.lens.chatter.enums;
 
 public enum Role {
+    NOT_AUTH(0),
     BASIC_USER(1),
     DEPARTMENT_ADMIN(2),
     BRANCH_ADMIN(3),

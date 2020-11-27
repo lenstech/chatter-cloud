@@ -69,11 +69,6 @@ public abstract class AbstractController<T extends AbstractEntity<ID>, ID extend
         setEntityName();
         logger.info(String.format("Requesting " + entityName + " id: %s records.", objectId));
         setGetRole();
-        if (getRole == null) {
-            return getService().get(objectId);
-        } else if (token == null) {
-            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
-        }
         authorizationConfig.permissionCheck(token, getRole);
         return getService().get(objectId);
     }
@@ -84,11 +79,6 @@ public abstract class AbstractController<T extends AbstractEntity<ID>, ID extend
     public List<RES> get(@RequestHeader(value = "Authorization", required = false) String token, @RequestBody List<ID> objectIds) {
         logger.debug("Requesting  multiple " + entityName + " records.");
         setGetRole();
-        if (getRole == null) {
-            return getService().getMultiple(objectIds);
-        } else if (token == null) {
-            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
-        }
         authorizationConfig.permissionCheck(token, getRole);
         return getService().getMultiple(objectIds);
     }
@@ -99,11 +89,6 @@ public abstract class AbstractController<T extends AbstractEntity<ID>, ID extend
         setEntityName();
         setGetAllRole();
         logger.info("Requesting all records of " + entityName + ".");
-        if (getAllRole == null) {
-            return getService().getAll();
-        } else if (token == null) {
-            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
-        }
         authorizationConfig.permissionCheck(token, getAllRole);
         return getService().getAll();
     }
@@ -117,11 +102,6 @@ public abstract class AbstractController<T extends AbstractEntity<ID>, ID extend
         setEntityName();
         setGetAllRole();
         logger.info("Requesting all records" + entityName + " by page.");
-        if (getAllRole == null) {
-            return getService().getAllWithPage(pageNo, sortBy, desc);
-        } else if (token == null) {
-            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
-        }
         authorizationConfig.permissionCheck(token, getAllRole);
         return getService().getAllWithPage(pageNo, sortBy, desc);
     }
