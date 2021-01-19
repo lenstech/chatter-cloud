@@ -37,33 +37,29 @@ public class UserController extends AbstractController<User, UUID, RegisterDto, 
     }
 
     @Override
-    public void setSaveRole() {
-        super.saveRole = Role.FIRM_ADMIN;
+    public Role getSaveRole() {
+        return Role.FIRM_ADMIN;
     }
 
     @Override
-    public void setGetRole() {
-        super.getRole = Role.BASIC_USER;
+    public Role getGetRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetAllRole() {
-        super.getAllRole = Role.BASIC_USER;
+    public Role getGetAllRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setUpdateRole() {
-        super.updateRole = Role.FIRM_ADMIN;
+    public Role getUpdateRole() {
+        return Role.FIRM_ADMIN;
     }
 
     @Override
-    public void setDeleteRole() {
-        super.deleteRole = Role.FIRM_ADMIN;
+    public Role getDeleteRole() {
+        return Role.FIRM_ADMIN;
     }
 
-    @Override
-    public void setEntityName() {
-        entityName = "User";
-    }
 }
 

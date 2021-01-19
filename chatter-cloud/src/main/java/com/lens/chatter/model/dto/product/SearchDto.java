@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchDto {
 
+    @NotNull(message = "Width should be assign")
     private List<SearchCriteria> filterCriteria; //map as (field: "value")
 
 }

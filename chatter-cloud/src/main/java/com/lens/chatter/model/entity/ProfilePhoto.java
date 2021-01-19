@@ -26,4 +26,10 @@ public class ProfilePhoto extends AbstractEntity<UUID> {
     @Lob
     private byte[] file;
 
+    public ProfilePhoto(User user) {
+        this.user = user;
+    }
+
+    public ProfilePhoto() {
+    }
 }

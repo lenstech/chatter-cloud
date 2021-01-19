@@ -40,19 +40,21 @@ public class DefectService extends AbstractService<Defect, UUID, DefectDto, Defe
     }
 
     @Override
-    protected Defect putOperations(Defect oldEntity, Defect newEntity, UUID userId) {
-        newEntity.setRegion(checkDefectLocationAndFindRegion(newEntity));
-        return super.putOperations(oldEntity, newEntity, userId);
+    protected void updateOperationsAfterConvert(Defect entity, DefectDto dto, UUID userId) {
+        entity.setRegion(checkDefectLocationAndFindRegion(entity));
     }
 
     @Override
     protected Defect saveOperations(Defect entity, DefectDto defectDto, UUID userId) {
         entity.setRegion(checkDefectLocationAndFindRegion(entity));
-        return super.saveOperations(entity, defectDto, userId);
+        return entity;
     }
 
-    private int checkDefectLocationAndFindRegion(Defect entity) {
+    private Integer checkDefectLocationAndFindRegion(Defect entity) {
         ProductType type = entity.getProduct().getProductType();
+        if (type.getWidth() == null || type.getLength() == null) {
+            return null;
+        }
         if (type.getWidth() < entity.getYCoordinate() ||
                 type.getLength() < entity.getXCoordinate()) {
             throw new BadRequestException(ErrorConstants.DEFECT_SHOULD_BE_INSIDE_THE_PRODUCT);

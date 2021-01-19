@@ -13,6 +13,11 @@ public interface UserGroupMapper extends Converter<UserGroupDto, UserGroup, User
 
     @Override
     @Mapping(source = "managerId", target = "manager", qualifiedByName = "fromIdToEntity",
-            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     UserGroup toEntity(UserGroupDto userGroupDto);
+
+    @Override
+    @Mapping(source = "managerId", target = "manager", qualifiedByName = "fromIdToEntity",
+            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void toEntityForUpdate(UserGroupDto userGroupDto, @MappingTarget UserGroup userGroup);
 }

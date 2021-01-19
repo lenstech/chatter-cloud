@@ -9,11 +9,11 @@ import com.lens.chatter.model.resource.user.CompleteUserResource;
 import com.lens.chatter.model.resource.user.LoginResource;
 import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
-import com.lens.chatter.security.JwtResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
@@ -21,9 +21,6 @@ public class LoginService {
 
     @Autowired
     private JwtGenerator jwtGenerator;
-
-    @Autowired
-    private JwtResolver jwtResolver;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,7 +39,7 @@ public class LoginService {
                 throw new UnauthorizedException(ErrorConstants.PLEASE_CONFIRM_YOUR_EMAIL_ADDRESS);
             }
             String token = jwtGenerator.generateLoginToken(user.getId(), user.getRole());
-            String  firebaseToken = dto.getFirebaseToken();
+            String firebaseToken = dto.getFirebaseToken();
             if (firebaseToken != null) {
                 user.setFirebaseToken(dto.getFirebaseToken());
                 userRepository.save(user);
@@ -54,9 +51,11 @@ public class LoginService {
         }
     }
 
-    public LoginResource updateToken(String token) {
-        UUID userId = jwtResolver.getIdFromToken(token);
+    @Transactional
+    public LoginResource updateToken(UUID userId, String firebaseToken) {
         User user = userService.fromIdToEntity(userId);
-        return new LoginResource(userMapper.toResource(user),jwtGenerator.generateLoginToken(userId, user.getRole()));
+        user.setFirebaseToken(firebaseToken);
+        userRepository.save(user);
+        return new LoginResource(userMapper.toResource(user), jwtGenerator.generateLoginToken(userId, user.getRole()));
     }
 }

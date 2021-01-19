@@ -45,7 +45,8 @@ public class FilterMapper implements Converter<FilterDto, Filter, FilterResource
     }
 
     public List<SearchCriteria> jsonToList(String criteriaListJson) {
-        Type type = new TypeToken<List<SearchCriteria>>(){}.getType();
+        Type type = new TypeToken<List<SearchCriteria>>() {
+        }.getType();
         return gson.fromJson(criteriaListJson, type);
     }
 
@@ -73,5 +74,11 @@ public class FilterMapper implements Converter<FilterDto, Filter, FilterResource
         }
 
         return set;
+    }
+
+    @Override
+    public void toEntityForUpdate(FilterDto filterDto, Filter filter) {
+        filter.setCriteriaListJson(gson.toJson(filterDto.getFilterCriteria()));
+        filter.setName(filterDto.getName());
     }
 }

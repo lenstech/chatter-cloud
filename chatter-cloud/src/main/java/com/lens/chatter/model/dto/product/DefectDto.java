@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -22,7 +23,9 @@ public class DefectDto {
     private Double zCoordinate = 0D;
     private Double size = 1D;
     private String note;
+    @NotNull
     private UUID defectTypeId;
     private LengthMeasureUnit measureUnit;
+    @NotNull
     private UUID productId;
 }

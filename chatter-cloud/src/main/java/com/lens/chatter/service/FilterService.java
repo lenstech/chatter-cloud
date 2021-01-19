@@ -70,20 +70,17 @@ public class FilterService extends AbstractService<Filter, UUID, FilterDto, Filt
     }
 
     @Override
-    protected Filter putOperations(Filter oldEntity, Filter newEntity, UUID userId) {
-        try {
-            newEntity.setUser(oldEntity.getUser());
-        } catch (NullPointerException e){
-            newEntity.setUser(userService.fromIdToEntity(userId));
+    protected void updateOperationsAfterConvert(Filter entity, FilterDto updatedDto, UUID userId) {
+        if (entity.getUser() == null) {
+            entity.setUser(userService.fromIdToEntity(userId));
         }
-        return newEntity;
     }
 
-    public Page<ProductResource> searchBySavedFilter(UUID filterId, UUID userId, Integer pageNo){
+    public Page<ProductResource> searchBySavedFilter(UUID filterId, UUID userId, Integer pageNo) {
         Filter filter = fromIdToEntity(filterId);
-        if (!filter.getUser().getId().equals(userId)){
+        if (!filter.getUser().getId().equals(userId)) {
             throw new BadRequestException(ErrorConstants.THIS_OPERATION_IS_NOT_BELONG_TO_THIS_USER);
         }
-        return search(new SearchDto(mapper.jsonToList(filter.getCriteriaListJson())),pageNo);
+        return search(new SearchDto(mapper.jsonToList(filter.getCriteriaListJson())), pageNo);
     }
 }

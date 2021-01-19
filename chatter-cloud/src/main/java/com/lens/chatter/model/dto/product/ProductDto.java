@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -25,11 +26,13 @@ public class ProductDto {
 
     private ZonedDateTime productionTime;
 
+    @NotNull
     private UUID productTypeId;
 
     @Nullable
     private Set<UUID> defectIds;
 
+    @NotNull
     private Integer shift;
 
     private UUID branchId;

@@ -33,13 +33,11 @@ import java.util.UUID;
 @Api(value = "Firm", tags = {"Firm Operations"})
 public class FirmController extends AbstractController<Firm, UUID, FirmDto, FirmResource> {
 
+    private static final Logger logger = LoggerFactory.getLogger(FirmController.class);
     @Autowired
     private FirmService service;
-
     @Autowired
     private AuthorizationConfig authorizationConfig;
-
-    private static final Logger logger = LoggerFactory.getLogger(FirmController.class);
 
     @Override
     protected AbstractService<Firm, UUID, FirmDto, FirmResource> getService() {
@@ -47,33 +45,28 @@ public class FirmController extends AbstractController<Firm, UUID, FirmDto, Firm
     }
 
     @Override
-    public void setSaveRole() {
-        super.saveRole = Role.ADMIN;
+    public Role getSaveRole() {
+        return Role.ADMIN;
     }
 
     @Override
-    public void setGetRole() {
-        super.getRole = Role.BASIC_USER;
+    public Role getGetRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetAllRole() {
-        super.getAllRole = Role.BASIC_USER;
+    public Role getGetAllRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setUpdateRole() {
-        super.updateRole = Role.FIRM_ADMIN;
+    public Role getUpdateRole() {
+        return Role.FIRM_ADMIN;
     }
 
     @Override
-    public void setDeleteRole() {
-        super.deleteRole = Role.ADMIN;
-    }
-
-    @Override
-    public void setEntityName() {
-        super.entityName = "Firm";
+    public Role getDeleteRole() {
+        return Role.ADMIN;
     }
 
     @ApiOperation(value = "Get all Branches of a Firm, it can be seen by basic user", response = BranchResource.class, responseContainer = "List")

@@ -33,13 +33,11 @@ import java.util.UUID;
 @Api(value = "Branch", tags = {"Branch Operations"})
 public class BranchController extends AbstractController<Branch, UUID, BranchDto, BranchResource> {
 
+    private static final Logger logger = LoggerFactory.getLogger(BranchController.class);
     @Autowired
     private BranchService service;
-
     @Autowired
     private AuthorizationConfig authorizationConfig;
-
-    private static final Logger logger = LoggerFactory.getLogger(BranchController.class);
 
     @Override
     protected AbstractService<Branch, UUID, BranchDto, BranchResource> getService() {
@@ -47,40 +45,35 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     }
 
     @Override
-    public void setSaveRole() {
-        super.saveRole = Role.FIRM_ADMIN;
+    public Role getSaveRole() {
+        return Role.FIRM_ADMIN;
     }
 
     @Override
-    public void setGetRole() {
-        super.getRole = Role.BASIC_USER;
+    public Role getGetRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetAllRole() {
-        super.getAllRole = Role.BASIC_USER;
+    public Role getGetAllRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setUpdateRole() {
-        super.updateRole = Role.BRANCH_ADMIN;
+    public Role getUpdateRole() {
+        return Role.BRANCH_ADMIN;
     }
 
     @Override
-    public void setEntityName() {
-        super.entityName = "Branch";
-    }
-
-    @Override
-    public void setDeleteRole() {
-        super.deleteRole = Role.FIRM_ADMIN;
+    public Role getDeleteRole() {
+        return Role.FIRM_ADMIN;
     }
 
 
     @ApiOperation(value = "Get all Departments of a Branch , it can be seen by only Admin", response = DepartmentResource.class, responseContainer = "Set")
     @GetMapping("/get-departments")
     public ResponseEntity<Set<DepartmentResource>> getDepartmentsOfBranch(@RequestHeader("Authorization") String token,
-                                                      @RequestParam UUID branchId) {
+                                                                          @RequestParam UUID branchId) {
         logger.info(String.format("Requesting getDepartmentsOfBranch branchId: %s.", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getDepartments(branchId));
@@ -89,8 +82,8 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     @ApiOperation(value = "Add Department to a Branch , it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/add-department")
     public ResponseEntity<BranchResource> addDepartmentToBranch(@RequestHeader("Authorization") String token,
-                                                @RequestParam UUID departmentId,
-                                                @RequestParam UUID branchId) {
+                                                                @RequestParam UUID departmentId,
+                                                                @RequestParam UUID branchId) {
         logger.info(String.format("Requesting addDepartmentToBranch branchId: %s , departmentId: %s", branchId, departmentId));
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
         return ResponseEntity.ok(service.addDepartment(branchId, departmentId));
@@ -99,8 +92,8 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     @ApiOperation(value = "Remove Department from Branch, it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/remove-department")
     public ResponseEntity<BranchResource> removeDepartmentFromBranch(@RequestHeader("Authorization") String token,
-                                                     @RequestParam UUID departmentId,
-                                                     @RequestParam UUID branchId) {
+                                                                     @RequestParam UUID departmentId,
+                                                                     @RequestParam UUID branchId) {
         logger.info(String.format("Requesting removeDepartmentFromBranch branchId: %s , departmentId: %s", branchId, departmentId));
         authorizationConfig.permissionCheck(token, Role.BRANCH_ADMIN);
         return ResponseEntity.ok(service.removeDepartment(branchId, departmentId));
@@ -121,7 +114,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     @ApiOperation(value = "Get all Users of a Branch page by page, it can be seen by basic user", response = MinimalUserResource.class, responseContainer = "List")
     @GetMapping("/get-users")
     public ResponseEntity<List<MinimalUserResource>> getPersonalsOfBranch(@RequestHeader("Authorization") String token,
-                                                     @RequestParam UUID branchId) {
+                                                                          @RequestParam UUID branchId) {
         logger.info(String.format("Requesting getPersonalsOfBranch branchId: %s ", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getPersonalsOfBranch(branchId));
@@ -130,7 +123,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
     @ApiOperation(value = "Get shift quantity of a Branch")
     @GetMapping("/get-daily-shift-quantity")
     public ResponseEntity<Integer> getDailyShiftQuantity(@RequestHeader("Authorization") String token,
-                                                     @RequestParam UUID branchId) {
+                                                         @RequestParam UUID branchId) {
         logger.info(String.format("Requesting getDailyShiftQuantity branchId: %s ", branchId));
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok(service.getDailyShiftQuantity(branchId));

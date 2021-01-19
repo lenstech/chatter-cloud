@@ -1,6 +1,5 @@
 package com.lens.chatter.service;
 
-import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.mapper.InviteMailMapper;
 import com.lens.chatter.mapper.UserMapper;
@@ -79,14 +78,12 @@ public class RegisterService {
 
 
     @Transactional
-    public void confirmRegister(String confirmationToken, String firebaseToken) {
-        UUID id = jwtResolver.getIdFromToken(confirmationToken);
-        User user = userService.fromIdToEntity(id);
+    public LoginResource confirmRegister(UUID userId, String firebaseToken) {
+        User user = userService.fromIdToEntity(userId);
         user.setConfirmed(true);
-        if (firebaseToken != null) {
-            user.setFirebaseToken(firebaseToken);
-        }
+        user.setFirebaseToken(firebaseToken);
         userRepository.save(user);
+        return new LoginResource(mapper.toResource(user), jwtGenerator.generateLoginToken(user.getId(), user.getRole()));
     }
 
     public void sendInviteMail(String token, InviteMailDto inviteMailDto) {

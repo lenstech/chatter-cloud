@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -20,6 +21,6 @@ public class UserGroupDto {
 
     private Boolean isPrivate;
 
+    @NotNull(message = "ManagerId should be assign")
     private UUID managerId;
-
 }

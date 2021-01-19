@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.lens.chatter.constant.HttpSuccessMessagesConstants.*;
+import java.util.UUID;
+
+import static com.lens.chatter.constant.HttpSuccessMessagesConstants.MAIL_SEND_YOUR_EMAIL;
+import static com.lens.chatter.constant.HttpSuccessMessagesConstants.PASSWORD_WAS_CHANGED;
 
 /**
  * Created by Emir Gökdemir
@@ -25,16 +28,13 @@ import static com.lens.chatter.constant.HttpSuccessMessagesConstants.*;
 @Api(value = "Reset Forgotten Password", tags = {"Password Reset"})
 public class ResetPasswordController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ResetPasswordController.class);
     @Autowired
     private JwtResolver jwtResolver;
-
     @Autowired
     private ResetPasswordService resetPasswordService;
-
     @Autowired
     private AuthorizationConfig authorizationConfig;
-
-    private static final Logger logger = LoggerFactory.getLogger(ResetPasswordController.class);
 
     @ApiOperation(value = "Send a reset password URL to the email of the user", response = String.class)
     @GetMapping("/mail-request")
@@ -47,9 +47,11 @@ public class ResetPasswordController {
     @ApiOperation(value = "User can reset his password by new password and the token sent his mail address ", response = LoginResource.class)
     @PutMapping("/confirm-and-change")
     public ResponseEntity<LoginResource> changePassword(@RequestParam("password") String password,
-                                                        @RequestHeader("Authorization") String confirmationToken) {
-        logger.info(String.format("Requesting changePassword with userId: %s ", jwtResolver.getIdFromToken(confirmationToken)));
-        return ResponseEntity.ok(resetPasswordService.changePassword(password, confirmationToken));
+                                                        @RequestHeader("Authorization") String resetPasswordToken,
+                                                        @RequestHeader("FirebaseToken") String firebaseToken) {
+        UUID userId = jwtResolver.getIdFromToken(resetPasswordToken);
+        logger.info(String.format("Requesting resetPassword with userId: %s ", userId));
+        return ResponseEntity.ok(resetPasswordService.changePassword(password, userId));
     }
 
     @ApiOperation(value = "ADMIN or FIRM_ADMIN can reset an user password by its mail address and new password", response = String.class)

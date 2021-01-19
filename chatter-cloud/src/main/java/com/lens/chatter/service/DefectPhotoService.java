@@ -3,11 +3,8 @@ package com.lens.chatter.service;
 import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.constant.HttpSuccessMessagesConstants;
 import com.lens.chatter.exception.BadRequestException;
-import com.lens.chatter.exception.NotFoundException;
-import com.lens.chatter.model.entity.Defect;
 import com.lens.chatter.model.entity.DefectPhoto;
 import com.lens.chatter.repository.DefectPhotoRepository;
-import com.lens.chatter.repository.DefectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,24 +21,14 @@ import java.util.UUID;
 public class DefectPhotoService {
 
     @Autowired
-    private DefectRepository defectRepository;
+    private DefectPhotoRepository repository;
 
     @Autowired
-    private DefectPhotoRepository repository;
+    private DefectService defectService;
 
     @Transactional
     public String uploadDefectPhoto(MultipartFile file, UUID defectId) {
-        Defect defect = defectRepository.findById(defectId).orElse(null);
-        if (defect == null) {
-            throw new NotFoundException(ErrorConstants.DEFECT_NOT_EXIST);
-        }
-        DefectPhoto photo;
-        if (repository.existsByDefectId(defectId)) {
-            throw new BadRequestException(ErrorConstants.DEFECT_PHOTO_ALREADY_EXIST);
-        } else {
-            photo = new DefectPhoto();
-            photo.setDefect(defect);
-        }
+        DefectPhoto photo = repository.findDefectPhotoByDefectId(defectId).orElse(new DefectPhoto(defectService.fromIdToEntity(defectId)));
         try {
             photo.setFile(file.getBytes());
         } catch (IOException e) {
@@ -53,7 +40,7 @@ public class DefectPhotoService {
 
     @Transactional
     public byte[] getPhoto(UUID defectId) {
-        DefectPhoto photo = repository.findDefectPhotoByDefectId(defectId);
+        DefectPhoto photo = repository.findDefectPhotoByDefectId(defectId).orElse(null);
         if (photo == null) {
             throw new BadRequestException(ErrorConstants.DEFECT_PHOTO_NOT_EXIST);
         }
@@ -62,7 +49,9 @@ public class DefectPhotoService {
 
     @Transactional
     public void deletePhotoByDefectId(UUID defectId) {
-        repository.deleteDefectPhotoByDefectId(defectId);
+        if (repository.existsByDefectId(defectId)) {
+            repository.deleteDefectPhotoByDefectId(defectId);
+        }
     }
 
     @Transactional

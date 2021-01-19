@@ -1,10 +1,7 @@
 package com.lens.chatter.service;
 
-import com.lens.chatter.constant.ErrorConstants;
 import com.lens.chatter.constant.HttpSuccessMessagesConstants;
-import com.lens.chatter.exception.UnauthorizedException;
 import com.lens.chatter.model.entity.ProfilePhoto;
-import com.lens.chatter.model.entity.User;
 import com.lens.chatter.repository.ProfilePhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,15 +24,9 @@ public class ProfilePhotoService {
     @Autowired
     private ProfilePhotoRepository repository;
 
-    public String uploadImage(MultipartFile file, UUID idFromToken) {
-        User user = userService.fromIdToEntity(idFromToken);
-        if (user == null) {
-            throw new UnauthorizedException(ErrorConstants.USER_NOT_EXIST);
-        }
-        ProfilePhoto photo = new ProfilePhoto();
-        photo.setUser(user);
-
-
+    @Transactional
+    public String uploadImage(MultipartFile file, UUID userId) {
+        ProfilePhoto photo = repository.findProfilePhotoByUserId(userId).orElse(new ProfilePhoto(userService.fromIdToEntity(userId)));
         try {
             photo.setFile(file.getBytes());
         } catch (IOException e) {
@@ -47,10 +38,17 @@ public class ProfilePhotoService {
 
     @Transactional
     public byte[] getPhoto(UUID userId) {
-        ProfilePhoto photo = repository.findProfilePhotoByUserId(userId);
+        ProfilePhoto photo = repository.findProfilePhotoByUserId(userId).orElse(null);
         if (photo == null) {
             return null;
         }
         return photo.getFile();
+    }
+
+    @Transactional
+    public void deleteSelfProfilePhoto(UUID userId) {
+        if (repository.existsByUserId(userId)) {
+            repository.deleteUserPhotoByUserId(userId);
+        }
     }
 }

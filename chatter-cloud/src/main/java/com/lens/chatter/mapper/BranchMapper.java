@@ -7,6 +7,7 @@ import com.lens.chatter.model.resource.organization.BranchResource;
 import com.lens.chatter.service.FirmService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -14,10 +15,14 @@ import org.mapstruct.ReportingPolicy;
  * on 29 Şub 2020
  */
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE , uses = {FirmMapper.class, FirmService.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {FirmMapper.class, FirmService.class})
 public interface BranchMapper extends Converter<BranchDto, Branch, BranchResource> {
 
     @Override
-    @Mapping(source = "firmId", target = "firm", qualifiedByName = "findOneById")
+    @Mapping(source = "firmId", target = "firm", qualifiedByName = "fromIdToEntity")
     Branch toEntity(BranchDto branchDto);
+
+    @Override
+    @Mapping(source = "firmId", target = "firm", qualifiedByName = "fromIdToEntity")
+    void toEntityForUpdate(BranchDto branchDto, @MappingTarget Branch branch);
 }

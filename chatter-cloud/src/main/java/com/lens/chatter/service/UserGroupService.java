@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.lens.chatter.constant.ErrorConstants.*;
+import static com.lens.chatter.constant.ErrorConstants.NOT_AUTHORIZED_FOR_OPERATION;
 
 /**
  * Created by Emir Gökdemir
@@ -74,26 +74,16 @@ public class UserGroupService extends AbstractService<UserGroup, UUID, UserGroup
     }
 
     @Override
-    protected UserGroup putOperations(UserGroup oldEntity, UserGroup newEntity, UUID userId) {
-        newEntity.setUsers(oldEntity.getUsers());
-        User user = userService.fromIdToEntity(userId);
-        if (newEntity.getManager() == null){
-            if(oldEntity.getManager() != null){
-                newEntity.setManager(oldEntity.getManager());
-            } else {
-                newEntity.setManager(userService.fromIdToEntity(userId));
-            }
-        } else if ( newEntity.getManager() != oldEntity.getManager()){
-            if (!userId.equals(oldEntity.getManager().getId()) && !user.getRole().equals(Role.FIRM_ADMIN) ){
-                throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
-            }
+    protected void updateOperationsBeforeConvert(UserGroup entity, UserGroupDto dto, UUID userId) {
+        User operator = userService.fromIdToEntity(userId);
+        if (!dto.getManagerId().equals(userId) || operator.getRole().toValue() < Role.BRANCH_ADMIN.toValue()) {
+            throw new UnauthorizedException(NOT_AUTHORIZED_FOR_OPERATION);
         }
-        return newEntity;
     }
 
     @Override
     protected UserGroup saveOperations(UserGroup entity, UserGroupDto userGroupDto, UUID userId) {
-        if (entity.getManager() == null){
+        if (entity.getManager() == null) {
             entity.setManager(userService.fromIdToEntity(userId));
         }
         return entity;

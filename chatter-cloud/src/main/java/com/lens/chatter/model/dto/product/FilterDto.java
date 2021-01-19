@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -19,8 +20,10 @@ import java.util.List;
 @AllArgsConstructor
 public class FilterDto {
 
+    @NotNull
     private String name;
 
+    @NotNull
     private List<SearchCriteria> filterCriteria; //map as (field: "value")
 
 }

@@ -16,7 +16,7 @@ import java.util.UUID;
  * on 5 Nis 2020
  */
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "users")
 @Data
 @Entity
 @Table(name = "user_group")

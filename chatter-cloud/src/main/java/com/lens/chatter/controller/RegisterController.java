@@ -6,6 +6,7 @@ import com.lens.chatter.model.dto.user.InviteMailDto;
 import com.lens.chatter.model.dto.user.RegisterDto;
 import com.lens.chatter.model.resource.user.InviteMailResource;
 import com.lens.chatter.model.resource.user.LoginResource;
+import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.RegisterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,9 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 import static com.lens.chatter.constant.HttpSuccessMessagesConstants.INVITATION_MAIL_IS_SENT;
-import static com.lens.chatter.constant.HttpSuccessMessagesConstants.YOUR_MAIL_WAS_CONFIRMED;
 
 /**
  * Created by Emir Gökdemir
@@ -30,13 +31,13 @@ import static com.lens.chatter.constant.HttpSuccessMessagesConstants.YOUR_MAIL_W
 @Api(value = "Registration", tags = {"Registration"})
 public class RegisterController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
     @Autowired
     private RegisterService registerService;
-
     @Autowired
     private AuthorizationConfig authorizationConfig;
-
-    private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
+    @Autowired
+    private JwtResolver resolver;
 
     @ApiOperation(value = "Register a user with the needed information", response = LoginResource.class)
     @PostMapping("/user")
@@ -46,9 +47,10 @@ public class RegisterController {
 
     @ApiOperation(value = "Confirm a registration by using the link from the user's confirmation mail", response = String.class)
     @GetMapping("/confirm-register")
-    public ResponseEntity<String> confirmRegister(@RequestHeader("Authorization") String confirmationToken, @RequestHeader("FirebaseToken") String firebaseToken){
-        registerService.confirmRegister(confirmationToken, firebaseToken);
-        return ResponseEntity.ok(YOUR_MAIL_WAS_CONFIRMED);
+    public ResponseEntity<LoginResource> confirmRegister(@RequestHeader("Authorization") String confirmationToken, @RequestHeader("FirebaseToken") String firebaseToken) {
+        UUID userId = resolver.getIdFromToken(confirmationToken);
+        logger.info(String.format("Requesting confirmRegister with userId: %s ", userId));
+        return ResponseEntity.ok(registerService.confirmRegister(userId, firebaseToken));
     }
 
     @ApiOperation(value = "Send registration mail", response = String.class)

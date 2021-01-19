@@ -2,6 +2,7 @@ package com.lens.chatter.controller;
 
 import com.lens.chatter.model.dto.user.LoginDto;
 import com.lens.chatter.model.resource.user.LoginResource;
+import com.lens.chatter.security.JwtResolver;
 import com.lens.chatter.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,15 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/login")
 @Api(value = "Login", tags = {"Login"})
 public class LoginController {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private LoginService loginService;
-
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    @Autowired
+    private JwtResolver resolver;
 
     @ApiOperation(value = "Login with the username (email) and password", response = LoginResource.class)
     @PostMapping("")
@@ -31,8 +35,9 @@ public class LoginController {
 
     @ApiOperation(value = "Update token of user by using old non-expired token", response = LoginResource.class)
     @GetMapping("/update-token")
-    public ResponseEntity<LoginResource> tokenUpdate(@RequestHeader("Authorization") String token) {
-        logger.info("Requesting tokenUpdate");
-        return ResponseEntity.ok(loginService.updateToken(token));
+    public ResponseEntity<LoginResource> tokenUpdate(@RequestHeader("Authorization") String token, @RequestHeader("FirebaseToken") String firebaseToken) {
+        UUID userId = resolver.getIdFromToken(token);
+        logger.info(String.format("Requesting updateToken userId: %s ", userId));
+        return ResponseEntity.ok(loginService.updateToken(userId, firebaseToken));
     }
 }

@@ -45,6 +45,7 @@ public class ProductPhotoController {
     @ApiOperation("Get photo of product by productId")
     public ResponseEntity<byte[]> getProductPhoto(@RequestParam("productId") UUID productId,
                                                   @RequestHeader("Authorization") String token) {
+        UUID userId = authorizationConfig.permissionCheck(token, Role.BASIC_USER);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"PetsApp Product Photo\"" + productId)
                 .body(service.getPhoto(productId));
@@ -56,24 +57,20 @@ public class ProductPhotoController {
     public ResponseEntity<String> deleteProductPhoto(@RequestParam("productId") UUID productId,
                                                      @RequestHeader("Authorization") String token) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        try {
-            service.deletePhotoByProductId(productId);
-        } catch (Exception e) {
-            return ResponseEntity.ok(HttpSuccessMessagesConstants.DELETION_DID_NOT_OCCURRED);
-        }
+        service.deletePhotoByProductId(productId);
         return ResponseEntity.ok(HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED);
     }
 
-    @DeleteMapping
-    @ApiOperation("Delete photo of product by photoId")
-    public ResponseEntity<String> deletePhoto(@RequestParam("photoId") UUID photoId,
-                                                     @RequestHeader("Authorization") String token) {
-        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        try {
-            service.deletePhoto(photoId);
-        } catch (Exception e) {
-            return ResponseEntity.ok(HttpSuccessMessagesConstants.DELETION_DID_NOT_OCCURRED);
-        }
-        return ResponseEntity.ok(HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED);
-    }
+//    @DeleteMapping
+//    @ApiOperation("Delete photo of product by photoId")
+//    public ResponseEntity<String> deletePhoto(@RequestParam("photoId") UUID photoId,
+//                                                     @RequestHeader("Authorization") String token) {
+//        authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+//        try {
+//            service.deletePhoto(photoId);
+//        } catch (Exception e) {
+//            return ResponseEntity.ok(HttpSuccessMessagesConstants.DELETION_DID_NOT_OCCURRED);
+//        }
+//        return ResponseEntity.ok(HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED);
+//    }
 }

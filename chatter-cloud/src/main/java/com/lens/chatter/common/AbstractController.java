@@ -2,14 +2,16 @@ package com.lens.chatter.common;
 
 import com.lens.chatter.configuration.AuthorizationConfig;
 import com.lens.chatter.enums.Role;
-import com.lens.chatter.exception.UnauthorizedException;
+import com.lens.chatter.exception.BadRequestException;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +19,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-import static com.lens.chatter.constant.ErrorConstants.NOT_AUTHORIZED_FOR_OPERATION;
 import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED;
 
 /**
@@ -27,70 +28,58 @@ import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULL
 @Component
 public abstract class AbstractController<T extends AbstractEntity<ID>, ID extends Serializable, DTO, RES> {
 
-    protected abstract AbstractService<T, ID, DTO, RES> getService();
-
-    private static final Logger logger = LoggerFactory.getLogger(AbstractController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AuthorizationConfig authorizationConfig;
 
-    public abstract void setSaveRole();
+    protected abstract AbstractService<T, ID, DTO, RES> getService();
 
-    public abstract void setGetRole();
+    public abstract Role getSaveRole();
 
-    public abstract void setGetAllRole();
+    public abstract Role getGetRole();
 
-    public abstract void setUpdateRole();
+    public abstract Role getGetAllRole();
 
-    public abstract void setDeleteRole();
+    public abstract Role getUpdateRole();
 
-    public abstract void setEntityName();
-
-    protected Role saveRole;
-    protected Role getRole;
-    protected Role getAllRole;
-    protected Role updateRole;
-    protected Role deleteRole;
-    protected String entityName;
+    public abstract Role getDeleteRole();
 
     @ApiOperation(value = "Create Object, it can be done by authorization")
     @PostMapping
-    public RES save(@RequestHeader("Authorization") String token, @RequestBody @Valid DTO dto) {
-        setEntityName();
-        logger.info(String.format("Saving the " + entityName + "Dto with id: %s.", dto));
-        setSaveRole();
-        UUID userId = authorizationConfig.permissionCheck(token, saveRole);
+    public RES save(@RequestHeader("Authorization") String token, @Valid @RequestBody DTO dto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            logger.info(message);
+            throw new BadRequestException(message);
+        }
+        UUID userId = authorizationConfig.permissionCheck(token, getSaveRole());
+        logger.info(String.format("Saving the Dto with userId: %s.", userId));
         return getService().save(dto, userId);
     }
 
     @ApiOperation(value = "Get Object")
     @GetMapping
     public RES get(@RequestHeader(value = "Authorization", required = false) String token, @RequestParam ID objectId) {
-        setEntityName();
-        logger.info(String.format("Requesting " + entityName + " id: %s records.", objectId));
-        setGetRole();
-        authorizationConfig.permissionCheck(token, getRole);
-        return getService().get(objectId);
+        logger.info(String.format("Requesting  id: %s records.", objectId));
+        UUID userId = authorizationConfig.permissionCheck(token, getGetRole());
+        return getService().get(objectId, userId);
     }
-
 
     @ApiOperation(value = "Get Multiple Object")
     @PostMapping("/multiple")
     public List<RES> get(@RequestHeader(value = "Authorization", required = false) String token, @RequestBody List<ID> objectIds) {
-        logger.debug("Requesting  multiple " + entityName + " records.");
-        setGetRole();
-        authorizationConfig.permissionCheck(token, getRole);
+        logger.info("Requesting  multiple records.");
+        authorizationConfig.permissionCheck(token, getGetRole());
         return getService().getMultiple(objectIds);
     }
 
     @ApiOperation(value = "Get All Object", responseContainer = "List")
     @GetMapping("/all")
     public List<RES> getAll(@RequestHeader(value = "Authorization", required = false) String token) {
-        setEntityName();
-        setGetAllRole();
-        logger.info("Requesting all records of " + entityName + ".");
-        authorizationConfig.permissionCheck(token, getAllRole);
-        return getService().getAll();
+        UUID userId = authorizationConfig.permissionCheck(token, getGetAllRole());
+        logger.info(String.format("Requesting all records with userId %s", userId));
+        return getService().getAll(userId);
     }
 
     @ApiOperation(value = "Get All Object", responseContainer = "List")
@@ -98,23 +87,25 @@ public abstract class AbstractController<T extends AbstractEntity<ID>, ID extend
     public Page<RES> getAllWithPage(@RequestHeader(value = "Authorization", required = false) String token,
                                     @PathVariable("page") int pageNo,
                                     @RequestParam(required = false) String sortBy,
-                                    @RequestParam(required = false) Boolean desc) {
-        setEntityName();
-        setGetAllRole();
-        logger.info("Requesting all records" + entityName + " by page.");
-        authorizationConfig.permissionCheck(token, getAllRole);
-        return getService().getAllWithPage(pageNo, sortBy, desc);
+                                    @RequestParam(required = false) Sort.Direction direction) {
+        UUID userId = authorizationConfig.permissionCheck(token, getGetAllRole());
+        logger.info(String.format("Requesting all records with userId %s by page", userId));
+        return getService().getAllWithPage(pageNo, sortBy, direction, userId);
     }
 
     @ApiOperation(value = "Update Object, it can be done by authorization")
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public RES update(@RequestHeader("Authorization") String token,
                       @RequestBody @Valid DTO dto,
+                      BindingResult bindingResult,
                       @RequestParam ID objectId) {
-        setEntityName();
-        logger.info(String.format("Request to update a " + entityName + " object record with id: %s.", objectId));
-        setUpdateRole();
-        UUID userId = authorizationConfig.permissionCheck(token, updateRole);
+        if (bindingResult.hasErrors()) {
+            String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            logger.info(message);
+            throw new BadRequestException(message);
+        }
+        logger.info(String.format("Request to update a object record with id: %s.", objectId));
+        UUID userId = authorizationConfig.permissionCheck(token, getUpdateRole());
         return getService().put(objectId, dto, userId);
     }
 
@@ -122,10 +113,8 @@ public abstract class AbstractController<T extends AbstractEntity<ID>, ID extend
     @DeleteMapping
     public String delete(@RequestHeader("Authorization") String token,
                          @RequestParam ID objectId) {
-        setEntityName();
-        logger.info(String.format("Request to delete a " + entityName + "object record with id: %s.", objectId));
-        setDeleteRole();
-        UUID userId = authorizationConfig.permissionCheck(token, deleteRole);
+        logger.info(String.format("Request to delete an object record with id: %s.", objectId));
+        UUID userId = authorizationConfig.permissionCheck(token, getDeleteRole());
         getService().delete(objectId, userId);
         return SUCCESSFULLY_DELETED;
     }

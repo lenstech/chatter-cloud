@@ -26,4 +26,11 @@ public class DefectPhoto extends AbstractEntity<UUID> {
     @Lob
     private byte[] file;
 
+    public DefectPhoto(Defect defect) {
+        this.defect = defect;
+    }
+
+    public DefectPhoto() {
+
+    }
 }

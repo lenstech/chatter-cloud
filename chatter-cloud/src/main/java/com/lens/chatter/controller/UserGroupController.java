@@ -31,45 +31,37 @@ import java.util.UUID;
 @Api(value = "User Group", tags = {"User Group Operations"})
 public class UserGroupController extends AbstractController<UserGroup, UUID, UserGroupDto, UserGroupResource> {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserGroupController.class);
     @Autowired
     private UserGroupService service;
-
     @Autowired
     private AuthorizationConfig authorizationConfig;
-
     @Autowired
     private JwtResolver jwtResolver;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserGroupController.class);
-
     @Override
-    public void setSaveRole() {
-        super.saveRole = Role.BASIC_USER;
+    public Role getSaveRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetRole() {
-        super.getRole = Role.BASIC_USER;
+    public Role getGetRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetAllRole() {
-        super.getAllRole = Role.BASIC_USER;
+    public Role getGetAllRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setUpdateRole() {
-        super.updateRole = Role.BASIC_USER;
+    public Role getUpdateRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setDeleteRole() {
-        super.deleteRole = Role.BASIC_USER;
-    }
-
-    @Override
-    public void setEntityName() {
-        entityName = "UserGroup";
+    public Role getDeleteRole() {
+        return Role.BASIC_USER;
     }
 
     @Override

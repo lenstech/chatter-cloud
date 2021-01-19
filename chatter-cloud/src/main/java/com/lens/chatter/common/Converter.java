@@ -1,5 +1,7 @@
 package com.lens.chatter.common;
 
+import org.mapstruct.MappingTarget;
+
 import java.util.List;
 import java.util.Set;
 
@@ -15,4 +17,7 @@ public interface Converter<DTO, Entity, Resource> {
     List<Resource> toResources(List<Entity> entities);
 
     Set<Resource> toResources(Set<Entity> entities);
+
+    void toEntityForUpdate(DTO dto, @MappingTarget Entity entity);
+
 }

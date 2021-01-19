@@ -27,11 +27,13 @@ public class ProductType extends AbstractEntity<UUID> {
 
     private String description;
 
+    @NotNull(message = "Width should be assign")
     private Float width;
 
     // Not used for 2d products
-    private Float height=0f;
+    private Float height = 0f;
 
+    @NotNull(message = "Length should be assign")
     private Float length;
 
     private String color;

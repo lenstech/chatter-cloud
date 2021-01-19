@@ -10,6 +10,6 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {DepartmentService.class})
 public interface InviteMailMapper {
 
-    @Mapping(source = "departmentId", target = "department", qualifiedByName = "resourceFromId")
+    @Mapping(source = "departmentId", target = "department", qualifiedByName = "get")
     InviteMailResource DtoToResource(InviteMailDto inviteMailDto);
 }

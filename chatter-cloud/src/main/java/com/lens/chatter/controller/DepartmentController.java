@@ -30,13 +30,11 @@ import java.util.UUID;
 @Api(value = "Department", tags = {"Department Operations"})
 public class DepartmentController extends AbstractController<Department, UUID, DepartmentDto, DepartmentResource> {
 
+    private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
     @Autowired
     private DepartmentService service;
-
     @Autowired
     private AuthorizationConfig authorizationConfig;
-
-    private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
     @Override
     protected AbstractService<Department, UUID, DepartmentDto, DepartmentResource> getService() {
@@ -44,33 +42,28 @@ public class DepartmentController extends AbstractController<Department, UUID, D
     }
 
     @Override
-    public void setSaveRole() {
-        super.saveRole = Role.BASIC_USER;
+    public Role getSaveRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetRole() {
-        super.getRole = Role.BASIC_USER;
+    public Role getGetRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setGetAllRole() {
-        super.getAllRole = Role.BASIC_USER;
+    public Role getGetAllRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setUpdateRole() {
-        super.updateRole = Role.BASIC_USER;
+    public Role getUpdateRole() {
+        return Role.BASIC_USER;
     }
 
     @Override
-    public void setDeleteRole() {
-        super.deleteRole = Role.BASIC_USER;
-    }
-
-    @Override
-    public void setEntityName() {
-        super.entityName = "Department";
+    public Role getDeleteRole() {
+        return Role.BASIC_USER;
     }
 
     @ApiOperation(value = "Get all Personal of a Department , it can be seen by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
@@ -85,8 +78,8 @@ public class DepartmentController extends AbstractController<Department, UUID, D
     @ApiOperation(value = "Add Personal to a Department , it can be done by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
     @PutMapping("/add-personal")
     public ResponseEntity<DepartmentResource> addPersonalToDepartment(@RequestHeader("Authorization") String token,
-                                                  @RequestParam UUID personalUserId,
-                                                  @RequestParam UUID departmentId) {
+                                                                      @RequestParam UUID personalUserId,
+                                                                      @RequestParam UUID departmentId) {
         logger.info(String.format("Requesting addPersonalToDepartment departmentId: %s ,personalUserId: %s ", departmentId, personalUserId));
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.addPersonal(departmentId, personalUserId));
@@ -95,8 +88,8 @@ public class DepartmentController extends AbstractController<Department, UUID, D
     @ApiOperation(value = "Remove Personal from a Department , it can be done by only Admin", response = DepartmentResource.class)
     @PutMapping("/remove-personal")
     public ResponseEntity<DepartmentResource> removePersonalFromDepartment(@RequestHeader("Authorization") String token,
-                                                       @RequestParam UUID personalUserId,
-                                                       @RequestParam UUID departmentId) {
+                                                                           @RequestParam UUID personalUserId,
+                                                                           @RequestParam UUID departmentId) {
         logger.info(String.format("Requesting removePersonalFromDepartment departmentId: %s ,personalUserId: %s ", departmentId, personalUserId));
         authorizationConfig.permissionCheck(token, Role.DEPARTMENT_ADMIN);
         return ResponseEntity.ok(service.removePersonal(departmentId, personalUserId));
