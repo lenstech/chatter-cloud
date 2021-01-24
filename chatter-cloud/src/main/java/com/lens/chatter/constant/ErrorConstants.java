@@ -62,4 +62,7 @@ public class ErrorConstants {
     public static final String DEFECT_SHOULD_BE_INSIDE_THE_PRODUCT = "Defect should be inside the product";
 
     public static final String USER_CHANNELS_CANNOT_BE_CREATED = "User Channels can not be created!";
+    public static final String PRODUCT_TYPE_DIMENSIONS_ARE_NULL = "Product Type dimensions are null";
+    public static final String THIS_FILTER_IS_NOT_BELONG_TO_THIS_USER = "This filter is not belong to this user!";
+    public static final String INVALID_FILTER_OBJECTS = "Invalid Filter Objects";
 }

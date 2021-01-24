@@ -23,6 +23,9 @@ import java.util.UUID;
 @Service
 public class DefectService extends AbstractService<Defect, UUID, DefectDto, DefectResource> {
 
+    public static final int yAxisPieceCount = 2;
+    public static final int xAxisPieceCount = 3;
+
     @Autowired
     private DefectRepository repository;
 
@@ -53,7 +56,7 @@ public class DefectService extends AbstractService<Defect, UUID, DefectDto, Defe
     private Integer checkDefectLocationAndFindRegion(Defect entity) {
         ProductType type = entity.getProduct().getProductType();
         if (type.getWidth() == null || type.getLength() == null) {
-            return null;
+            throw new BadRequestException(ErrorConstants.PRODUCT_TYPE_DIMENSIONS_ARE_NULL);
         }
         if (type.getWidth() < entity.getYCoordinate() ||
                 type.getLength() < entity.getXCoordinate()) {
@@ -61,8 +64,8 @@ public class DefectService extends AbstractService<Defect, UUID, DefectDto, Defe
         } else if (entity.getZCoordinate() != null && type.getHeight() < entity.getZCoordinate()) {
             throw new BadRequestException(ErrorConstants.DEFECT_SHOULD_BE_INSIDE_THE_PRODUCT);
         }
-        double region = Math.ceil(type.getLength() * 3 / entity.getXCoordinate()) +
-                (3 * Math.floor(type.getWidth() / (2 * entity.getYCoordinate())));
+        double region = Math.ceil(entity.getXCoordinate() * xAxisPieceCount / type.getLength()) +
+                (xAxisPieceCount *  Math.floor( yAxisPieceCount *entity.getYCoordinate() / (type.getWidth())));
         return (int) region;
     }
 }

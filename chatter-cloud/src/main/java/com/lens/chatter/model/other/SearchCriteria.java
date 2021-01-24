@@ -18,6 +18,6 @@ public class SearchCriteria {
     private String key;
     private Object value;
     private SearchOperator operation;
-    private String startTime = "1970-01-01 00:00:00";
-    private String endTime = "2100-01-01 00:00:00";
+    private String start;
+    private String end;
 }

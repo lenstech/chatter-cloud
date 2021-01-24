@@ -60,7 +60,12 @@ public class FilterService extends AbstractService<Filter, UUID, FilterDto, Filt
         PageRequest pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         ProductSpecification spec = new ProductSpecification();
         spec.addAll(searchDto.getFilterCriteria());
-        return productRepository.findAll(spec, pageable).map(productMapper::toResource);
+        try {
+            return productRepository.findAll(spec, pageable).map(productMapper::toResource);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            throw new BadRequestException(ErrorConstants.INVALID_FILTER_OBJECTS);
+        }
     }
 
     @Override
@@ -79,7 +84,7 @@ public class FilterService extends AbstractService<Filter, UUID, FilterDto, Filt
     public Page<ProductResource> searchBySavedFilter(UUID filterId, UUID userId, Integer pageNo) {
         Filter filter = fromIdToEntity(filterId);
         if (!filter.getUser().getId().equals(userId)) {
-            throw new BadRequestException(ErrorConstants.THIS_OPERATION_IS_NOT_BELONG_TO_THIS_USER);
+            throw new BadRequestException(ErrorConstants.THIS_FILTER_IS_NOT_BELONG_TO_THIS_USER);
         }
         return search(new SearchDto(mapper.jsonToList(filter.getCriteriaListJson())), pageNo);
     }

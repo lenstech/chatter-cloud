@@ -26,5 +26,6 @@ public class Filter extends AbstractEntity<UUID> {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Column(length = 2047)
     private String criteriaListJson;
 }

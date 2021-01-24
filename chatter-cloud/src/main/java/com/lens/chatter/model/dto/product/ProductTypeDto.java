@@ -18,11 +18,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductTypeDto {
+
+    @NotNull(message = "Name should be assign")
     private String name;
+
     private String description;
 
     @NotNull(message = "Width should be assign")
-
     private Float width;
 
     private Float height;

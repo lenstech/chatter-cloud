@@ -71,7 +71,30 @@ public class FilterController extends AbstractController<Filter, UUID, FilterDto
         return Role.BASIC_USER;
     }
 
-    @ApiOperation(value = "Search for Product, time format should be " + DTO_DATE_TIME_FORMAT, responseContainer = "List")
+    @ApiOperation(value = "Search for Product, time format should be " + DTO_DATE_TIME_FORMAT + "and operation should be:" +
+            "   BETWEEN_AREA,\n" +
+            "    BETWEEN_AREA_DEFECTS,\n" +
+            "    BETWEEN_TIME,\n" +
+            "    EQUAL,\n" +
+            "    EQUAL_DEFECTS_DEFECT_TYPE_KEY,\n" +
+            "    EQUAL_FOR_SPECIFIC,\n" +
+            "    FROM,\n" +
+            "    GREATER_THAN,\n" +
+            "    GREATER_THAN_EQUAL,\n" +
+            "    IN,\n" +
+            "    LESS_THAN,\n" +
+            "    LESS_THAN_EQUAL,\n" +
+            "    MATCH,\n" +
+            "    MATCH_DEFECTS_DEFECT_TYPE_KEY,\n" +
+            "    MATCH_DEFECT_KEY,\n" +
+            "    MATCH_DEFECT_TYPE_KEY,\n" +
+            "    MATCH_END,\n" +
+            "    MATCH_FOR_SPECIFIC,\n" +
+            "    MATCH_PRODUCT_TYPE_KEY,\n" +
+            "    MATCH_START,\n" +
+            "    NOT_EQUAL,\n" +
+            "    NOT_IN,\n" +
+            "    TO", responseContainer = "List")
     @PostMapping("/search/{pageNo}")
     public ResponseEntity<Page<ProductResource>> searchProducts(@RequestHeader("Authorization") String token,
                                                                 @PathVariable int pageNo,
@@ -85,7 +108,7 @@ public class FilterController extends AbstractController<Filter, UUID, FilterDto
     public ResponseEntity<Page<ProductResource>> searchProductsBySavedFilter(@RequestHeader("Authorization") String token,
                                                                              @PathVariable int pageNo,
                                                                              @RequestParam UUID filterId) {
-
-        return ResponseEntity.ok(service.searchBySavedFilter(filterId, jwtResolver.getIdFromToken(token), pageNo));
+        UUID userId = authorizationConfig.permissionCheck(token, Role.BASIC_USER);
+        return ResponseEntity.ok(service.searchBySavedFilter(filterId, userId, pageNo));
     }
 }

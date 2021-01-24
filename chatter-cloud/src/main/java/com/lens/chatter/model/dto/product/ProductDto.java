@@ -24,15 +24,16 @@ public class ProductDto {
 
     private String productionNo;
 
+    @NotNull(message = "ProductionTime cannot be null")
     private ZonedDateTime productionTime;
 
-    @NotNull
+    @NotNull(message = "productTypeId cannot be null")
     private UUID productTypeId;
 
     @Nullable
     private Set<UUID> defectIds;
 
-    @NotNull
+    @NotNull(message = "shift cannot be null")
     private Integer shift;
 
     private UUID branchId;

@@ -35,7 +35,6 @@ public class DashboardService {
 
     @Autowired
     private ProductRepository productRepository;
-    //daily production
 
     @Autowired
     private DefectRepository defectRepository;
@@ -49,26 +48,35 @@ public class DashboardService {
         spec.addAll(searchDto.getFilterCriteria());
     }
 
-    public List<DefectTypeCount> getTimeFilteredDefectTypeStatistics(StatisticsInterval time) {
-        Instant begin = findTheTime(time);
+    public List<DefectTypeCount> getTimeFilteredDefectTypeStatistics(StatisticsInterval interval) {
+        Instant begin = findTheTime(interval);
         float total = defectRepository.countDefectsByCreatedDateBetween(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now());
-        return defectRepository.getStatisticsByDefectType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total == 0L ? 1 : total);
+        if (total == 0f) {
+            return new ArrayList<>();
+        }
+        return defectRepository.getStatisticsByDefectType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total);
     }
 
-    public List<DefectRegionCount> getTimeFilteredDefectRegionStatistics(StatisticsInterval time) {
-        Instant begin = findTheTime(time);
+    public List<DefectRegionCount> getTimeFilteredDefectRegionStatistics(StatisticsInterval interval) {
+        Instant begin = findTheTime(interval);
         float total = defectRepository.countDefectsByCreatedDateBetween(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now());
-        return defectRepository.getRegionStatisticsByDefectType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total == 0L ? 1 : total);
+        if (total == 0f) {
+            return new ArrayList<>();
+        }
+        return defectRepository.getRegionStatisticsByDefectType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total);
     }
 
-    public List<ProductTypeCount> getTimeFilteredProductTypeStatistics(StatisticsInterval time) {
-        Instant begin = findTheTime(time);
+    public List<ProductTypeCount> getTimeFilteredProductTypeStatistics(StatisticsInterval interval) {
+        Instant begin = findTheTime(interval);
         float total = productRepository.countProductsByCreatedDateBetween(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now());
-        return productRepository.getStatisticsByProductType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total == 0L ? 1 : total);
+        if (total == 0f) {
+            return new ArrayList<>();
+        }
+        return productRepository.getStatisticsByProductType(ZonedDateTime.ofInstant(begin, ZoneId.systemDefault()), ZonedDateTime.now(), total);
     }
 
-    private Instant findTheTime(StatisticsInterval time) {
-        switch (time) {
+    private Instant findTheTime(StatisticsInterval interval) {
+        switch (interval) {
             case DAILY:
                 return DateUtils.getTheBeginningOfDay();
             case WEEKLY:

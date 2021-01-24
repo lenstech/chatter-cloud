@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/product")
-@Api(value = "Product", tags = {"Product Operations"})
+@Api(value = "Product", tags = {"Product Operations -> ProductTimeExample(ISO_DATE_TIME): 2021-01-26T14:08:58.899Z"})
 public class ProductController extends AbstractController<Product, UUID, ProductDto, ProductResource> {
 
     @Autowired
