@@ -28,5 +28,7 @@ public enum SearchOperator {
     MATCH_START,
     NOT_EQUAL,
     NOT_IN,
+    IN_DEFECT_DEFECT_TYPE,
+    IN_PRODUCT_TYPE,
     TO
 }

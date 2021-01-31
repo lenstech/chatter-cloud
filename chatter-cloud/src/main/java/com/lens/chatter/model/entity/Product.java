@@ -14,7 +14,7 @@ import java.util.UUID;
  * Created by Emir Gökdemir
  * on 9 Nis 2020
  */
-@EqualsAndHashCode(exclude="defects", callSuper = true)
+@EqualsAndHashCode(exclude = "defects", callSuper = true)
 @Data
 @Entity
 @Table(name = "product")

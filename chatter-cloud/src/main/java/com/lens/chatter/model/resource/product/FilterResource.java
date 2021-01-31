@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FilterResource  extends AbstractResource {
+public class FilterResource extends AbstractResource {
     private String name;
 
     private MinimalUserResource user;

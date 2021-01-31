@@ -2,7 +2,6 @@ package com.lens.chatter.common;
 
 
 import com.lens.chatter.constant.ErrorConstants;
-import com.lens.chatter.constant.GeneralConstants;
 import com.lens.chatter.exception.BadRequestException;
 import com.lens.chatter.model.other.SearchCriteria;
 import lombok.Getter;
@@ -12,11 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -52,7 +49,7 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
         List<Predicate> restrictions = new ArrayList<>();
-
+        List<String> values = new ArrayList<>();
         if (list.isEmpty()) {
             throw new BadRequestException(ErrorConstants.SEARCH_PARAMETER_NOT_FOUND);
         }
@@ -74,7 +71,7 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
                     restrictions.add(builder.like(builder.lower(root.join("defects", JoinType.LEFT).get("defectType").get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%"));
                     break;
                 case EQUAL_DEFECTS_DEFECT_TYPE_KEY:
-                    restrictions.add(builder.equal(root.join("defects", JoinType.LEFT).get("defectType").get(criteria.getKey()),  criteria.getValue()));
+                    restrictions.add(builder.equal(root.join("defects", JoinType.LEFT).get("defectType").get(criteria.getKey()), criteria.getValue()));
                     break;
                 case MATCH_DEFECT_KEY:
                     restrictions.add(builder.like(builder.lower(root.get("defect").get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%"));
@@ -113,7 +110,13 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
                     restrictions.add(builder.like(builder.lower(root.get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase()));
                     break;
                 case IN:
-                    restrictions.add(builder.in(root.get(criteria.getKey())).value(criteria.getValue()));
+                    restrictions.add(builder.in(root.get(criteria.getKey())).value(Arrays.asList((String[]) criteria.getValue())));
+                    break;
+                case IN_DEFECT_DEFECT_TYPE:
+                    restrictions.add(builder.in(root.join("defects", JoinType.LEFT).get("defectType").get(criteria.getKey())).value(Arrays.asList((String[]) criteria.getValue())));
+                    break;
+                case IN_PRODUCT_TYPE:
+                    restrictions.add(builder.in(root.get("productType").get(criteria.getKey())).value(criteria.getValue()));
                     break;
                 case NOT_IN:
                     restrictions.add(builder.not(root.get(criteria.getKey())).in(criteria.getValue()));
@@ -143,15 +146,9 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
                     if (criteria.getEnd() == null) {
                         criteria.setEnd("2100-01-01 00:00:00");
                     }
-                    SimpleDateFormat formatter = new SimpleDateFormat(GeneralConstants.DTO_DATE_TIME_FORMAT);
-                    try {
-                        ZonedDateTime startTime = ZonedDateTime.ofInstant(formatter.parse(criteria.getStart()).toInstant(), ZoneId.systemDefault());
-                        ZonedDateTime endTime = ZonedDateTime.ofInstant(formatter.parse(criteria.getEnd()).toInstant(), ZoneId.systemDefault());
-                        restrictions.add(builder.between(root.get(criteria.getKey()), startTime, endTime));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        throw new BadRequestException(ErrorConstants.DATE_FORMAT_IS_NOT_CORRECT);
-                    }
+                    ZonedDateTime startTime = ZonedDateTime.parse(criteria.getStart());
+                    ZonedDateTime endTime = ZonedDateTime.parse(criteria.getEnd());
+                    restrictions.add(builder.between(root.get(criteria.getKey()), startTime, endTime));
                     break;
                 default:
                     break;

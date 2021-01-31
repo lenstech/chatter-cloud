@@ -18,14 +18,11 @@ import com.lens.chatter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import static com.lens.chatter.constant.GeneralConstants.PAGE_SIZE;
 
 /**
  * Created by Emir Gökdemir
@@ -70,21 +67,8 @@ public class FirmService extends AbstractService<Firm, UUID, FirmDto, FirmResour
     }
 
     public Page<MinimalUserResource> getPersonalsOfFirm(UUID firmId, int pageNumber, String sortBy, Boolean desc) {
-        PageRequest pageable;
-        if (desc == null) {
-            desc = true;
-        }
-        try {
-            if (desc) {
-                pageable = PageRequest.of(pageNumber, PAGE_SIZE, Sort.Direction.DESC, sortBy);
-            } else {
-                pageable = PageRequest.of(pageNumber, PAGE_SIZE, Sort.Direction.ASC, sortBy);
-            }
-            return userRepository.findUsersByDepartmentBranchFirmId(pageable, firmId).map(minimalUserMapper::toResource);
-        } catch (Exception e) {
-            pageable = PageRequest.of(pageNumber, PAGE_SIZE);
-            return userRepository.findUsersByDepartmentBranchFirmId(pageable, firmId).map(minimalUserMapper::toResource);
-        }
+        PageRequest pageable = getPageable(pageNumber, sortBy, desc);
+        return userRepository.findUsersByDepartmentBranchFirmId(pageable, firmId).map(minimalUserMapper::toResource);
     }
 
     public List<MinimalUserResource> getPersonalsOfFirm(UUID branchId) {

@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ChannelType {
     DEPARTMENT("Department", "d"),
     BRANCH("Branch", "b"),
-    FIRM("Firm","f");
+    FIRM("Firm", "f");
 
     private final String value;
     private final String initial;

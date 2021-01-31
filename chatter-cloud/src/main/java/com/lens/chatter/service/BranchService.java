@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.lens.chatter.constant.ErrorConstants.*;
-import static com.lens.chatter.constant.GeneralConstants.PAGE_SIZE;
+import static com.lens.chatter.constant.ErrorConstants.DEPARTMENT_ALREADY_ADDED_TO_BRANCH;
+import static com.lens.chatter.constant.ErrorConstants.DEPARTMENT_IS_NOT_EXIST;
 
 /**
  * Created by Emir Gökdemir
@@ -104,29 +103,16 @@ public class BranchService extends AbstractService<Branch, UUID, BranchDto, Bran
         return departmentMapper.toResources(departmentRepository.findDepartmentsByBranchId(branchId));
     }
 
-    public Page<MinimalUserResource> getPersonalsOfBranch(UUID branchId, int pageNumber, String sortBy, Boolean desc){
-        PageRequest pageable;
-        if (desc == null) {
-            desc = true;
-        }
-        try {
-            if (desc) {
-                pageable = PageRequest.of(pageNumber, PAGE_SIZE, Sort.Direction.DESC, sortBy);
-            } else {
-                pageable = PageRequest.of(pageNumber, PAGE_SIZE, Sort.Direction.ASC, sortBy);
-            }
-            return userRepository.findUsersByDepartmentBranchId(pageable, branchId).map(minimalUserMapper::toResource);
-        } catch (Exception e) {
-            pageable = PageRequest.of(pageNumber, PAGE_SIZE);
-            return userRepository.findUsersByDepartmentBranchId(pageable, branchId).map(minimalUserMapper::toResource);
-        }
+    public Page<MinimalUserResource> getPersonalsOfBranch(UUID branchId, int pageNumber, String sortBy, Boolean desc) {
+        PageRequest pageable = getPageable(pageNumber, sortBy, desc);
+        return userRepository.findUsersByDepartmentBranchId(pageable, branchId).map(minimalUserMapper::toResource);
     }
 
-    public List<MinimalUserResource> getPersonalsOfBranch(UUID branchId){
+    public List<MinimalUserResource> getPersonalsOfBranch(UUID branchId) {
         return minimalUserMapper.toResources(userRepository.findUsersByDepartmentBranchId(branchId));
     }
 
-    public Integer getDailyShiftQuantity(UUID branchId){
+    public Integer getDailyShiftQuantity(UUID branchId) {
         return fromIdToEntity(branchId).getDailyShiftQuantity();
     }
 

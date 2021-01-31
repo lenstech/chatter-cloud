@@ -8,8 +8,6 @@ import com.lens.chatter.repository.UserRepository;
 import com.lens.chatter.security.JwtGenerator;
 import com.lens.chatter.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

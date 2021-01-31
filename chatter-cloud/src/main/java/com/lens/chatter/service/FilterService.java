@@ -57,7 +57,7 @@ public class FilterService extends AbstractService<Filter, UUID, FilterDto, Filt
     }
 
     public Page<ProductResource> search(SearchDto searchDto, int pageNumber) {
-        PageRequest pageable = PageRequest.of(pageNumber, PAGE_SIZE);
+        PageRequest pageable = getPageable(pageNumber);
         ProductSpecification spec = new ProductSpecification();
         spec.addAll(searchDto.getFilterCriteria());
         try {

@@ -2,10 +2,8 @@ package com.lens.chatter.util;
 
 import lombok.experimental.UtilityClass;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Emir Gökdemir
@@ -15,11 +13,11 @@ import java.util.Date;
 public class DateUtils {
 
     // get today and clear time of day
-    public static Instant getTheBeginningOfDay(){
+    public static Instant getTheBeginningOfDay() {
         return getTheBeginningOfDayByCalendar().toInstant();
     }
 
-    private static Calendar getTheBeginningOfDayByCalendar(){
+    private static Calendar getTheBeginningOfDayByCalendar() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
         cal.clear(Calendar.MINUTE);

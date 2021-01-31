@@ -40,7 +40,6 @@ public class DashboardService {
     private DefectRepository defectRepository;
 
     public void getTimeFilteredProductionStatistics(int pageNo) {
-        PageRequest pageable = PageRequest.of(pageNo, PAGE_SIZE);
         SearchCriteria criteria = new SearchCriteria();
         List<SearchCriteria> criterias = new ArrayList<>();
         SearchDto searchDto = new SearchDto();

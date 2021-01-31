@@ -3,7 +3,6 @@ package com.lens.chatter.util;
 import com.lens.chatter.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Message;

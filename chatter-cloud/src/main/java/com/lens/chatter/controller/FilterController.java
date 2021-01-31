@@ -71,7 +71,7 @@ public class FilterController extends AbstractController<Filter, UUID, FilterDto
         return Role.BASIC_USER;
     }
 
-    @ApiOperation(value = "Search for Product, time format should be " + DTO_DATE_TIME_FORMAT + "and operation should be:" +
+    @ApiOperation(value = "Search for Product, time format should be as ISO_ZONED_DATE_TIME (ex:2011-12-03T10:15:30+01:00[Europe/Paris]) and operation should be:" +
             "   BETWEEN_AREA,\n" +
             "    BETWEEN_AREA_DEFECTS,\n" +
             "    BETWEEN_TIME,\n" +
@@ -94,6 +94,8 @@ public class FilterController extends AbstractController<Filter, UUID, FilterDto
             "    MATCH_START,\n" +
             "    NOT_EQUAL,\n" +
             "    NOT_IN,\n" +
+            "    IN_DEFECT_DEFECT_TYPE,\n" +
+            "    IN_PRODUCT_TYPE,\n" +
             "    TO", responseContainer = "List")
     @PostMapping("/search/{pageNo}")
     public ResponseEntity<Page<ProductResource>> searchProducts(@RequestHeader("Authorization") String token,

@@ -2,7 +2,6 @@ package com.lens.chatter.model.resource.product;
 
 import com.lens.chatter.common.AbstractResource;
 import com.lens.chatter.enums.LengthMeasureUnit;
-import com.lens.chatter.model.entity.DefectType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
