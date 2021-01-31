@@ -2,7 +2,11 @@ blank_issues_enabled: false
 contact_links:
   - name: Feature Request
     about: Request a new feature
-    url: https://github.com/lenstech/chatter-cloud/issues/new?assignees=gokdeemir&labels=Backend%2C+medium&template=feature_request.md&title=%5BFEATURE%5D&projects=lenstech/6,lenstech/16
+    url: https://github.com/lenstech/chatter-cloud/issues/new?assignees=gokdeemir&labels=Backend%2C+medium%2C+feature&template=feature_request.md&title=%5BFEATURE%5D&projects=lenstech/6,lenstech/16
   - name: Bug Report
     about: Create a report of the issue you've encountered.
-    url: https://github.com/lenstech/chatter-cloud/issues/new?assignees=gokdeemir&labels=bug%2C+Backend%2C+low&template=bug_report.md&title=%5BBUG%5D&projects=lenstech/6,lenstech/16
+    url: https://github.com/lenstech/chatter-cloud/issues/new?assignees=gokdeemir&labels=bug%2C+Backend%2C+medium&template=bug_report.md&title=%5BBUG%5D&projects=lenstech/6,lenstech/16
+  - name: Enhancement
+    about: Create a report of the issue you've encountered.
+    url: https://github.com/lenstech/chatter-cloud/issues/new?assignees=gokdeemir&labels=enhancement%2C+Backend%2C+medium&template=bug_report.md&title=%5BBUG%5D&projects=lenstech/6,lenstech/16
+
