@@ -45,7 +45,7 @@ public class RegisterController {
         return ResponseEntity.ok(registerService.register(registerDto));
     }
 
-    @ApiOperation(value = "Confirm a registration by using the link from the user's confirmation mail", response = String.class)
+    @ApiOperation(value = "Confirm a registration by using the link from the user's confirmation mail", response = LoginResource.class)
     @GetMapping("/confirm-register")
     public ResponseEntity<LoginResource> confirmRegister(@RequestHeader("Authorization") String confirmationToken, @RequestHeader("FirebaseToken") String firebaseToken) {
         UUID userId = resolver.getIdFromToken(confirmationToken);

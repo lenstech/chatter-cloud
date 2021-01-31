@@ -44,7 +44,7 @@ public class DashboardController {
         return ResponseEntity.ok(service.getTimeFilteredDefectTypeStatistics(statisticsInterval));
     }
 
-    @ApiOperation(value = "Get Time Filtered Defect Region Statistics, it can be seen by basic user.", response = DefectTypeCount.class, responseContainer = "List")
+    @ApiOperation(value = "Get Time Filtered Defect Region Statistics, it can be seen by basic user.", response = DefectRegionCount.class, responseContainer = "List")
     @GetMapping("/defect-region")
     public ResponseEntity<List<DefectRegionCount>> getTimeFilteredDefectRegionStatistics(@RequestHeader("Authorization") String token,
                                                                                          @RequestParam StatisticsInterval statisticsInterval) {

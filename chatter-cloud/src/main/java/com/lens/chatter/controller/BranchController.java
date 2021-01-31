@@ -79,7 +79,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
         return ResponseEntity.ok(service.getDepartments(branchId));
     }
 
-    @ApiOperation(value = "Add Department to a Branch , it can be done by only Admin", response = DepartmentResource.class)
+    @ApiOperation(value = "Add Department to a Branch , it can be done by only Admin", response = BranchResource.class)
     @PutMapping("/add-department")
     public ResponseEntity<BranchResource> addDepartmentToBranch(@RequestHeader("Authorization") String token,
                                                                 @RequestParam UUID departmentId,
@@ -89,7 +89,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
         return ResponseEntity.ok(service.addDepartment(branchId, departmentId));
     }
 
-    @ApiOperation(value = "Remove Department from Branch, it can be done by only Admin", response = DepartmentResource.class)
+    @ApiOperation(value = "Remove Department from Branch, it can be done by only Admin", response = BranchResource.class)
     @PutMapping("/remove-department")
     public ResponseEntity<BranchResource> removeDepartmentFromBranch(@RequestHeader("Authorization") String token,
                                                                      @RequestParam UUID departmentId,
@@ -120,7 +120,7 @@ public class BranchController extends AbstractController<Branch, UUID, BranchDto
         return ResponseEntity.ok(service.getPersonalsOfBranch(branchId));
     }
 
-    @ApiOperation(value = "Get shift quantity of a Branch")
+    @ApiOperation(value = "Get shift quantity of a Branch", response = Integer.class)
     @GetMapping("/get-daily-shift-quantity")
     public ResponseEntity<Integer> getDailyShiftQuantity(@RequestHeader("Authorization") String token,
                                                          @RequestParam UUID branchId) {

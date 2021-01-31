@@ -6,7 +6,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import static com.lens.chatter.constant.ErrorConstants.MAIL_SEND_FAILED;
@@ -18,16 +20,18 @@ public class MailUtil {
     private JavaMailSender mailSender;
 
     public void sendTokenMail(String email, String activationToken, String subject, String text) {
+        sendMail(email, subject, String.format(text, activationToken));
+    }
+
+    public void sendMail(String email, String subject, String text) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setText(String.format(text, activationToken), true);
-            mimeMessageHelper.setTo(email);
-            mimeMessage.setSubject(subject);
+            mimeMessage.setRecipient(Message.RecipientType.BCC, new InternetAddress(email));
+            mimeMessage.setText(text, "UTF-8");
+            mimeMessage.setSubject(subject, "UTF-8");
         } catch (MessagingException messagingException) {
             throw new BadRequestException(MAIL_SEND_FAILED);
         }
         mailSender.send(mimeMessage);
     }
-
 }

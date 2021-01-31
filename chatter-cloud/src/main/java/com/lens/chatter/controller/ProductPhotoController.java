@@ -33,7 +33,7 @@ public class ProductPhotoController {
     private AuthorizationConfig authorizationConfig;
 
     @PostMapping("")
-    @ApiOperation("Upload photo of product by productId")
+    @ApiOperation(value = "Upload photo of product by productId", response =  String.class)
     public ResponseEntity<String> uploadProductPhoto(@RequestParam("file") MultipartFile file,
                                                      @RequestParam UUID productId,
                                                      @RequestHeader("Authorization") String token) {
@@ -53,7 +53,7 @@ public class ProductPhotoController {
     }
 
     @DeleteMapping("/product")
-    @ApiOperation("Delete photo of product by productId")
+    @ApiOperation(value = "Delete photo of product by productId", response =  String.class)
     public ResponseEntity<String> deleteProductPhoto(@RequestParam("productId") UUID productId,
                                                      @RequestHeader("Authorization") String token) {
         authorizationConfig.permissionCheck(token, Role.BASIC_USER);

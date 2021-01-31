@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
+import static com.lens.chatter.constant.HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED;
+
 /**
  * Created by Emir Gökdemir
  * on 5 Nis 2020
@@ -33,26 +35,29 @@ public class ProfilePhotoController {
     @Autowired
     private AuthorizationConfig authorizationConfig;
 
-    @PostMapping("/upload")
+    @PostMapping
+    @ApiOperation(value = "Upload photo of profile by token", response =  String.class)
     public ResponseEntity<String> uploadProfilePhoto(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) {
         UUID userId = authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        logger.info(String.format("Requesting uploadProfilePhoto user's id: %s ", userId));
-        return ResponseEntity.ok(service.uploadImage(file, userId));
+        logger.info(String.format("Requesting uploadProfilePhoto userId: %s ", userId));
+        return ResponseEntity.ok(service.uploadProfilePhoto(file, userId));
     }
 
-    @GetMapping(value = "/get", produces = MediaType.IMAGE_JPEG_VALUE)
+
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    @ApiOperation("Get photo of profile by userId")
     public ResponseEntity<byte[]> getProfilePhoto(@RequestParam("userId") UUID userId) {
-        logger.info(String.format("Requesting getProfilePhoto user's id: %s ", userId));
+        logger.info(String.format("Requesting getProfilePhoto with userId: %s ", userId));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Chatter Profile Photo\"")
                 .body(service.getPhoto(userId));
     }
 
-    @DeleteMapping()
-    @ApiOperation("Delete photo of defect by defectId")
-    public ResponseEntity<String> deleteDefectPhotobyDefectId(@RequestHeader("Authorization") String token) {
+    @DeleteMapping
+    @ApiOperation(value = "Delete photo of profile by token", response =  String.class)
+    public ResponseEntity<String> Id(@RequestHeader("Authorization") String token) {
         UUID userId = authorizationConfig.permissionCheck(token, Role.BASIC_USER);
-        service.deleteSelfProfilePhoto(userId);
-        return ResponseEntity.ok(HttpSuccessMessagesConstants.SUCCESSFULLY_DELETED);
-    }
+        logger.info(String.format("Requesting deleteProfilePhoto with userId: %s ", userId));
+        service.deletePhotoByUserId(userId);
+        return ResponseEntity.ok(SUCCESSFULLY_DELETED);    }
 }

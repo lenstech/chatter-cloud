@@ -75,7 +75,7 @@ public class DepartmentController extends AbstractController<Department, UUID, D
         return ResponseEntity.ok(service.getPersonals(departmentId));
     }
 
-    @ApiOperation(value = "Add Personal to a Department , it can be done by only Admin", response = MinimalUserResource.class, responseContainer = "Set")
+    @ApiOperation(value = "Add Personal to a Department , it can be done by only Admin", response = DepartmentResource.class, responseContainer = "Set")
     @PutMapping("/add-personal")
     public ResponseEntity<DepartmentResource> addPersonalToDepartment(@RequestHeader("Authorization") String token,
                                                                       @RequestParam UUID personalUserId,

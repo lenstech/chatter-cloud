@@ -25,7 +25,7 @@ public class ProfilePhotoService {
     private ProfilePhotoRepository repository;
 
     @Transactional
-    public String uploadImage(MultipartFile file, UUID userId) {
+    public String uploadProfilePhoto(MultipartFile file, UUID userId) {
         ProfilePhoto photo = repository.findProfilePhotoByUserId(userId).orElse(new ProfilePhoto(userService.fromIdToEntity(userId)));
         try {
             photo.setFile(file.getBytes());
@@ -46,7 +46,7 @@ public class ProfilePhotoService {
     }
 
     @Transactional
-    public void deleteSelfProfilePhoto(UUID userId) {
+    public void deletePhotoByUserId(UUID userId) {
         if (repository.existsByUserId(userId)) {
             repository.deleteUserPhotoByUserId(userId);
         }

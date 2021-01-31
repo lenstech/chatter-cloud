@@ -28,9 +28,6 @@ public class UserController extends AbstractController<User, UUID, RegisterDto, 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AuthorizationConfig authorizationConfig;
-
     @Override
     protected AbstractService<User, UUID, RegisterDto, MinimalUserResource> getService() {
         return userService;
